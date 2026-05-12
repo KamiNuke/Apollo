@@ -9,6 +9,15 @@ else()
     find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 endif()
 
+set(GLAD_SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/glad/include/glad/glad.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/glad/include/KHR/khrplatform.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c
+)
+set(GLAD_INCLUDE_DIRS
+        ${CMAKE_CURRENT_SOURCE_DIR}/glad/include
+)
+
 set(IMGUI_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imconfig.h
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui.h
@@ -38,5 +47,7 @@ set(IMGUI_INCLUDE_DIRS
 # Export to parent scope
 set(IMGUI_SOURCES ${IMGUI_SOURCES} PARENT_SCOPE)
 set(IMGUI_INCLUDE_DIRS ${IMGUI_INCLUDE_DIRS} PARENT_SCOPE)
+set(GLAD_SOURCES ${GLAD_SOURCES} PARENT_SCOPE)
+set(GLAD_INCLUDE_DIRS ${GLAD_INCLUDE_DIRS} PARENT_SCOPE)
 
 add_subdirectory(spdlog)

@@ -4,7 +4,9 @@ set(SOURCES
 
 set(BUILD_NAME sandbox)
 
-add_executable(${BUILD_NAME})
+add_executable(${BUILD_NAME}
+        src/sandboxmain.cpp
+        src/sandboxmain.h)
 
 target_sources(${BUILD_NAME} PRIVATE ${SOURCES})
 

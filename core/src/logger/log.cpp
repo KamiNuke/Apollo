@@ -8,6 +8,9 @@ namespace Apollo
     Log::LogRef Log::s_coreSink;
     Log::LogRef Log::s_userSink;
 
+    /*
+     * TODO: Make so it saves a new file each run Apollo_1.txt Apollo_2.txt etc...
+     */
     void Log::init()
     {
         std::vector<spdlog::sink_ptr> sinks;

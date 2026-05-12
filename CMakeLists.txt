@@ -20,5 +20,6 @@ endif()
 
 add_subdirectory(thirdparty)
 add_subdirectory(core)
+add_subdirectory(platform)
 add_subdirectory(sandbox)
 #add_subdirectory(editor)
