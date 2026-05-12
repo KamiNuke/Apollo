@@ -3,6 +3,9 @@ set(BUILD_NAME core)
 
 set(SOURCES
         ${IMGUI_SOURCES}
+        src/logger/log.cpp
+        src/logger/log.h
+        src/logger/log.cpp
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
