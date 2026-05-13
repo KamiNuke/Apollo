@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
+
 #include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 namespace Apollo
 {
@@ -20,13 +22,14 @@ namespace Apollo
     };
 } // Apollo
 
-// MACROS TO USE
+// ENGINE ONLY MACROS
 #define APOLLO_LOGGER_INFO(...) ::Apollo::Log::getCore()->info(__VA_ARGS__)
 #define APOLLO_LOGGER_TRACE(...) ::Apollo::Log::getCore()->trace(__VA_ARGS__)
 #define APOLLO_LOGGER_WARN(...) ::Apollo::Log::getCore()->warn(__VA_ARGS__)
 #define APOLLO_LOGGER_CRITICAL(...) ::Apollo::Log::getCore()->critical(__VA_ARGS__)
 #define APOLLO_LOGGER_ERROR(...) ::Apollo::Log::getCore()->error(__VA_ARGS__)
 
+// APPLICATION MACROS
 #define LOGGER_INFO(...) ::Apollo::Log::getUser()->info(__VA_ARGS__)
 #define LOGGER_TRACE(...) ::Apollo::Log::getUser()->trace(__VA_ARGS__)
 #define LOGGER_WARN(...) ::Apollo::Log::getUser()->warn(__VA_ARGS__)

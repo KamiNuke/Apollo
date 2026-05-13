@@ -3,7 +3,7 @@
 #include "glad/glad.h"
 #include "logger/log.h"
 #include "SDL3/SDL_video.h"
-
+#include "event/applicationevent.h"
 
 namespace Apollo
 {
@@ -26,7 +26,7 @@ namespace Apollo
 
     void Application::run()
     {
-        m_isRunning = true;
+        m_isRunning = false;
 
         while (m_isRunning)
         {

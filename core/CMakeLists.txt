@@ -13,6 +13,10 @@ set(SOURCES
         src/application.h
         src/main.h
         src/apollo.h
+        src/event/event.h
+        src/event/applicationevent.h
+        src/event/mouseevent.h
+        src/event/keyevent.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
