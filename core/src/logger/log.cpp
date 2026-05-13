@@ -20,7 +20,7 @@ namespace Apollo
         s_coreSink = std::make_shared<spdlog::logger>("Core", sinks.begin(), sinks.end());
         spdlog::register_logger(s_coreSink);
         s_coreSink->set_level(spdlog::level::trace);
-        s_coreSink->flush_on(spdlog::level::trace);
+        //s_coreSink->flush_on(spdlog::level::trace);
 
         s_userSink = std::make_shared<spdlog::logger>("Application", sinks.begin(), sinks.end());
         spdlog::register_logger(s_userSink);

@@ -1,11 +1,15 @@
 #pragma once
 #include <string>
 
+#include "event/event.h"
+
 namespace Apollo
 {
     class Window
     {
     public:
+        using EventCallbackFn = std::function<void(Event&)>;
+
         struct Properties
         {
             std::string title;
@@ -20,12 +24,16 @@ namespace Apollo
             }
         };
 
-        virtual ~Window() {}
+        virtual ~Window() = default;
 
-        virtual void update() {};
+        virtual void onUpdate() = 0;
 
         [[nodiscard]] virtual int getWidth() const = 0;
         [[nodiscard]] virtual int getHeight() const = 0;
+
+        virtual void setEventCallback(const EventCallbackFn& callback) = 0;
+        virtual void setVsync(bool enabled) = 0;
+        virtual bool isVsync() = 0;
 
         static Window* create(const Properties& props = Properties());
     private:

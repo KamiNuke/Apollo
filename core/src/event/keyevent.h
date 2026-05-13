@@ -6,41 +6,41 @@ namespace Apollo
     class KeyEvent : public Event
     {
     public:
-        inline int getKeyCode() const { return m_keyCode; }
+        inline unsigned int getKeyCode() const { return m_keyCode; }
 
         EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
     protected:
-        KeyEvent(int keyCode)
+        KeyEvent(unsigned int keyCode)
             : m_keyCode(keyCode) {}
 
-        int m_keyCode;
+        unsigned int m_keyCode;
     };
 
     class KeyPressedEvent : public KeyEvent
     {
     public:
-        KeyPressedEvent(int keyCode, int repeatCount)
+        KeyPressedEvent(unsigned int keyCode, bool repeat)
             : KeyEvent(keyCode),
-              m_repeatCount(repeatCount) {}
+              m_repeat(repeat) {}
 
-        inline int getRepeatCount() const { return m_repeatCount; }
+        [[nodiscard]] inline bool getRepeat() const { return m_repeat; }
 
-        std::string toString() const override
+        [[nodiscard]] std::string toString() const override
         {
             std::stringstream ss;
-            ss << "KeyPressedEvent: " << m_keyCode << " (" << m_repeatCount << " repeats)";
+            ss << "KeyPressedEvent: " << m_keyCode << " repeat:" << m_repeat;
             return ss.str();
         }
 
         EVENT_CLASS_TYPE(KeyPressed)
     private:
-        int m_repeatCount;
+        bool m_repeat;
     };
 
     class KeyReleasedEvent : public KeyEvent
     {
     public:
-        KeyReleasedEvent(int keyCode)
+        KeyReleasedEvent(unsigned int keyCode)
             : KeyEvent(keyCode) {}
 
         std::string toString() const override

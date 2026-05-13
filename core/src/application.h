@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "window.h"
+#include "event/applicationevent.h"
 
 namespace Apollo
 {
@@ -14,6 +15,7 @@ namespace Apollo
 
         void run();
 
+        void onEvent(Event& e);
         virtual void onUpdate() = 0;
         virtual void onRender() = 0;
 
@@ -24,9 +26,12 @@ namespace Apollo
 
         static Application& get();
     private:
+        bool onWindowClose(WindowCloseEvent& e);
+
+    private:
         std::unique_ptr<Window> m_window;
         static Application* s_instance;
 
-        bool m_isRunning;
+        bool m_isRunning = true;
     };
 } // Apollo

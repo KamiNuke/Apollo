@@ -1,6 +1,7 @@
 #pragma once
 #include "window.h"
 #include <SDL3/SDL.h>
+#include <memory>
 
 namespace Apollo::Platform
 {
@@ -8,20 +9,32 @@ namespace Apollo::Platform
     {
     public:
         GenericWindow(const Properties& props);
-
         ~GenericWindow() override;
 
-        void update() override;
+        void onUpdate() override;
 
         [[nodiscard]] int getWidth() const override;
         [[nodiscard]] int getHeight() const override;
+
+        void setEventCallback(const EventCallbackFn& callback) override;
+        void setVsync(bool enabled) override;
+        bool isVsync() override;
     private:
-        void init();
+        void init(const Properties& props);
         void shutdown();
 
     private:
-        SDL_Window* m_window;
-        SDL_GLContext m_gl_context;
-        Properties m_props;
+        SDL_Window* m_window = nullptr;
+        SDL_GLContext m_gl_context = nullptr;
+
+        struct WindowData
+        {
+            std::string title;
+            int width, height;
+            bool vSync;
+
+            EventCallbackFn eventCallback;
+        };
+        WindowData m_data;
     };
 } // Apollo
