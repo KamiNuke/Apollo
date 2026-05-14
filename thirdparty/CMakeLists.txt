@@ -51,3 +51,4 @@ set(GLAD_SOURCES ${GLAD_SOURCES} PARENT_SCOPE)
 set(GLAD_INCLUDE_DIRS ${GLAD_INCLUDE_DIRS} PARENT_SCOPE)
 
 add_subdirectory(spdlog)
+add_subdirectory(glm)

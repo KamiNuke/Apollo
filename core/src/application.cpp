@@ -1,27 +1,21 @@
 #include "application.h"
-
-#include "glad/glad.h"
 #include "logger/log.h"
-#include "SDL3/SDL_video.h"
+#include "glad/glad.h"
+#include "defines.h"
+#include "input.h"
 
 namespace Apollo
 {
-#define BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
 
     Application* Application::s_instance = nullptr;
 
     Application::Application(const Window::Properties& props)
     {
+        assert(!s_instance && "Application already exists");
         s_instance = this;
 
         m_window = std::unique_ptr<Window>(Window::create());
         m_window->setEventCallback(BIND_EVENT_FN(onEvent));
-
-        if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
-        {
-            APOLLO_LOGGER_CRITICAL("Failed to initialize GLAD");
-            abort();
-        }
     }
 
     Application::~Application()
@@ -32,7 +26,7 @@ namespace Apollo
     {
         while (m_isRunning)
         {
-            glClearColor(1, 0, 0, 1);
+            glClearColor(0,0,0,1);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_layerStack)
@@ -60,16 +54,13 @@ namespace Apollo
     void Application::pushLayer(Layer* layer)
     {
         m_layerStack.pushLayer(layer);
+        layer->onAttach();
     }
 
     void Application::pushOverlay(Layer* overlay)
     {
         m_layerStack.pushOverlay(overlay);
-    }
-
-    Application& Application::get()
-    {
-        return *s_instance;
+        overlay->onAttach();
     }
 
     bool Application::onWindowClose(WindowCloseEvent& e)

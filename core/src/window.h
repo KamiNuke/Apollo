@@ -35,6 +35,8 @@ namespace Apollo
         virtual void setVsync(bool enabled) = 0;
         virtual bool isVsync() = 0;
 
+        virtual void* getNativeWindow() const = 0;
+
         static Window* create(const Properties& props = Properties());
     private:
 

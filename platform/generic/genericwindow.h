@@ -1,4 +1,6 @@
 #pragma once
+#include "glad/glad.h"
+
 #include "window.h"
 #include <SDL3/SDL.h>
 #include <memory>
@@ -19,6 +21,9 @@ namespace Apollo::Platform
         void setEventCallback(const EventCallbackFn& callback) override;
         void setVsync(bool enabled) override;
         bool isVsync() override;
+
+        void* getNativeWindow() const override;
+
     private:
         void init(const Properties& props);
         void shutdown();

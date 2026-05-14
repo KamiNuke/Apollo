@@ -23,12 +23,14 @@ namespace Apollo
         void pushLayer(Layer* layer);
         void pushOverlay(Layer* overlay);
 
+        [[nodiscard]] inline Window& getWindow() const { return *m_window; }
+
         /*
          * Basically entry function for user apps. Define in order to use
          */
         Application* createApplication();
 
-        static Application& get();
+        static inline Application& get() { return *s_instance; };
     private:
         bool onWindowClose(WindowCloseEvent& e);
 

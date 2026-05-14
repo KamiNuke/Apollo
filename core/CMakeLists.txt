@@ -3,7 +3,6 @@ set(BUILD_NAME core)
 
 set(SOURCES
         ${IMGUI_SOURCES}
-        ${GLAD_SOURCES}
         src/logger/log.cpp
         src/logger/log.h
         src/logger/log.cpp
@@ -21,13 +20,15 @@ set(SOURCES
         src/layer.h
         src/layerstack.cpp
         src/layerstack.h
+        src/imgui/imguilayer.cpp
+        src/imgui/imguilayer.h
+        src/input.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
 
 target_link_libraries(${BUILD_NAME}
         PRIVATE
-        SDL3::SDL3
         spdlog::spdlog
         platform
 )
@@ -36,6 +37,5 @@ target_include_directories(${BUILD_NAME}
         PUBLIC
         src
         ${IMGUI_INCLUDE_DIRS}
-        ${GLAD_INCLUDE_DIRS}
 )
 

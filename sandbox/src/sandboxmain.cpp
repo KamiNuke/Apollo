@@ -8,12 +8,12 @@ public:
 
     void onUpdate() override
     {
-        LOGGER_INFO("TestLayer::onUpdate()");
+        //LOGGER_INFO("TestLayer::onUpdate()");
     }
 
     void onEvent(Apollo::Event& event) override
     {
-        LOGGER_TRACE("TestLayer::onEvent({0})", event);
+        //LOGGER_TRACE("TestLayer::onEvent({0})", event);
     }
 };
 
@@ -21,6 +21,7 @@ SandboxMain::SandboxMain(Apollo::Window::Properties props)
     : Application(props)
 {
     pushLayer(new TestLayer());
+    pushOverlay(new Apollo::ImguiLayer());
 }
 
 SandboxMain::~SandboxMain()
