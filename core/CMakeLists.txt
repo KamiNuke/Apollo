@@ -23,6 +23,8 @@ set(SOURCES
         src/imgui/imguilayer.cpp
         src/imgui/imguilayer.h
         src/input.h
+        src/keycodes.h
+        src/mousecodes.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

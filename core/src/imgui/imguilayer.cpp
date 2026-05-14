@@ -8,6 +8,7 @@
 #include "SDL3/SDL_timer.h"
 #include "SDL3/SDL_video.h"
 #include "defines.h"
+#include "../../../thirdparty/sdl/include/SDL3/SDL_events.h"
 #include "logger/log.h"
 
 namespace Apollo

@@ -1,8 +1,14 @@
 #include "application.h"
+
+#include <SDL3/SDL_keycode.h>
+
 #include "logger/log.h"
 #include "glad/glad.h"
 #include "defines.h"
 #include "input.h"
+#include "keycodes.h"
+#include "mousecodes.h"
+#include "../../thirdparty/sdl/include/SDL3/SDL_mouse.h"
 
 namespace Apollo
 {
@@ -49,6 +55,7 @@ namespace Apollo
                 break;
             (*it)->onEvent(e);
         }
+
     }
 
     void Application::pushLayer(Layer* layer)

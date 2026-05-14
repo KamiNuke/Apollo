@@ -11,8 +11,8 @@ namespace Apollo
     bool GenericInput::isKeyPressedImpl(int keycode)
     {
         const auto state = SDL_GetKeyboardState(nullptr);
-        const SDL_Scancode scancode = SDL_GetScancodeFromKey(keycode, nullptr);
-        return state[scancode];
+        //const SDL_Scancode scancode = SDL_GetScancodeFromKey(keycode, nullptr);
+        return state[keycode];
     }
 
     bool GenericInput::isMouseButtonPressedImpl(int button)

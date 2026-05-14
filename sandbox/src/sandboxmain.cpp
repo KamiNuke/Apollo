@@ -1,5 +1,7 @@
 #include "sandboxmain.h"
 
+#include "event/keyevent.h"
+
 class TestLayer : public Apollo::Layer
 {
 public:
@@ -8,12 +10,12 @@ public:
 
     void onUpdate() override
     {
-        //LOGGER_INFO("TestLayer::onUpdate()");
+
     }
 
     void onEvent(Apollo::Event& event) override
     {
-        //LOGGER_TRACE("TestLayer::onEvent({0})", event);
+       
     }
 };
 
