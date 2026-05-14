@@ -57,18 +57,8 @@ namespace Apollo
         EventDispatcher(Event& event)
             : m_event(event) {}
 
-        // template<typename T, typename F>
-        // bool dispatch(const F& func)
-        // {
-        //     if (m_event.getEventType() == T::getStaticType())
-        //     {
-        //         m_event.m_handled |= func(static_cast<T&>(&m_event));
-        //         return true;
-        //     }
-        //     return false;
-        // }
-
         template<typename T>
+        requires(std::is_base_of_v<Event, T>)
         bool dispatch(EventFn<T> func)
         {
             if (m_event.getEventType() == T::getStaticType())
