@@ -2,27 +2,20 @@
 
 #include "application.h"
 #include "imgui.h"
-#include "imgui_impl_sdl3.h"
-#include "imgui_impl_opengl3.h"
-#include "SDL3/SDL_time.h"
-#include "SDL3/SDL_timer.h"
 #include "SDL3/SDL_video.h"
-#include "defines.h"
-#include "../../../thirdparty/sdl/include/SDL3/SDL_events.h"
-#include "logger/log.h"
 
 namespace Apollo
 {
-    ImguiLayer::ImguiLayer()
+    ImGuiLayer::ImGuiLayer()
         : Layer("ImGuiLayer")
     {
     }
 
-    ImguiLayer::~ImguiLayer()
+    ImGuiLayer::~ImGuiLayer()
     {
     }
 
-    void ImguiLayer::onAttach()
+    void ImGuiLayer::onAttach()
     {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -47,37 +40,34 @@ namespace Apollo
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        // Setup Platform/Renderer backends
-        auto& window = Application::get().getWindow();
-        ImGui_ImplSDL3_InitForOpenGL(static_cast<SDL_Window*>(window.getNativeWindow()), SDL_GL_GetCurrentContext());
-        ImGui_ImplOpenGL3_Init("#version 330");
+        Application& app = Application::get();
+        app.getWindow().imGuiInit();
     }
 
-    void ImguiLayer::onDetach()
+    void ImGuiLayer::onDetach()
     {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplSDL3_Shutdown();
-        ImGui::DestroyContext();
+        Application& app = Application::get();
+        app.getWindow().imGuiShutdown();
     }
 
-    void ImguiLayer::onUpdate()
+    void ImGuiLayer::onImGuiRender()
+    {
+        static bool showDemo = true;
+        ImGui::ShowDemoWindow(&showDemo);
+    }
+
+    void ImGuiLayer::begin()
+    {
+        Application& app = Application::get();
+        app.getWindow().imGuiBegin();
+        ImGui::NewFrame();
+    }
+
+    void ImGuiLayer::end()
     {
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         Application& app = Application::get();
         io.DisplaySize = ImVec2(app.getWindow().getWidth(), app.getWindow().getHeight());
-
-        float time = SDL_GetTicks();
-        io.DeltaTime = m_time > 0.0f ? (time - m_time) : (1.0f / 60.0f);
-        m_time = time;
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL3_NewFrame();
-        ImGui::NewFrame();
-
-        static bool showDemo = true;
-        if (showDemo)
-            ImGui::ShowDemoWindow(&showDemo);
 
         // Update and Render additional Platform Windows
         // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
@@ -93,11 +83,6 @@ namespace Apollo
 
         // Rendering
         ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    }
-
-    void ImguiLayer::onEvent(Event& event)
-    {
-
+        app.getWindow().imGuiEnd();
     }
 } // Apollo

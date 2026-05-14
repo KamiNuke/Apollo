@@ -1,14 +1,11 @@
 #include "application.h"
 
-#include <SDL3/SDL_keycode.h>
-
 #include "logger/log.h"
 #include "glad/glad.h"
 #include "defines.h"
 #include "input.h"
 #include "keycodes.h"
 #include "mousecodes.h"
-#include "../../thirdparty/sdl/include/SDL3/SDL_mouse.h"
 
 namespace Apollo
 {
@@ -22,6 +19,9 @@ namespace Apollo
 
         m_window = std::unique_ptr<Window>(Window::create());
         m_window->setEventCallback(BIND_EVENT_FN(onEvent));
+
+        m_imGuiLayer = new ImGuiLayer();
+        pushOverlay(m_imGuiLayer);
     }
 
     Application::~Application()
@@ -37,6 +37,11 @@ namespace Apollo
 
             for (Layer* layer : m_layerStack)
                 layer->onUpdate();
+
+            m_imGuiLayer->begin();
+            for (Layer* layer : m_layerStack)
+                layer->onImGuiRender();
+            m_imGuiLayer->end();
 
             m_window->onUpdate();
         }

@@ -37,6 +37,12 @@ namespace Apollo
 
         virtual void* getNativeWindow() const = 0;
 
+        // ImGui stuff
+        virtual void imGuiInit() = 0;
+        virtual void imGuiShutdown() = 0;
+        virtual void imGuiBegin() = 0;
+        virtual void imGuiEnd() = 0;
+
         static Window* create(const Properties& props = Properties());
     private:
 

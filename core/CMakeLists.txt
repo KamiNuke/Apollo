@@ -2,7 +2,6 @@
 set(BUILD_NAME core)
 
 set(SOURCES
-        ${IMGUI_SOURCES}
         src/logger/log.cpp
         src/logger/log.h
         src/logger/log.cpp
@@ -38,6 +37,5 @@ target_link_libraries(${BUILD_NAME}
 target_include_directories(${BUILD_NAME}
         PUBLIC
         src
-        ${IMGUI_INCLUDE_DIRS}
 )
 

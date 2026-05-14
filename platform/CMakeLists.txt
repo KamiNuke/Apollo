@@ -3,6 +3,7 @@
 set(BUILD_NAME platform)
 
 set(SOURCES
+        ${IMGUI_SOURCES}
         generic/genericwindow.cpp
         generic/genericwindow.h
         ${GLAD_SOURCES}
@@ -36,4 +37,5 @@ target_include_directories(${BUILD_NAME}
         PUBLIC
         ${CMAKE_SOURCE_DIR}/core/src
         ${GLAD_INCLUDE_DIRS}
+        ${IMGUI_INCLUDE_DIRS}
 )

@@ -4,16 +4,18 @@
 
 namespace Apollo
 {
-    class ImguiLayer : public Layer
+    class ImGuiLayer : public Layer
     {
     public:
-        ImguiLayer();
-        ~ImguiLayer() override;
+        ImGuiLayer();
+        ~ImGuiLayer() override;
 
         void onAttach() override;
         void onDetach() override;
-        void onUpdate() override;
-        void onEvent(Event& event) override;
+        void onImGuiRender() override;
+
+        void begin();
+        void end();
     private:
         float m_time = 0.0f;
     };

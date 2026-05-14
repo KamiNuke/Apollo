@@ -4,6 +4,7 @@
 #include "layerstack.h"
 #include "window.h"
 #include "event/applicationevent.h"
+#include "imgui/imguilayer.h"
 
 namespace Apollo
 {
@@ -37,6 +38,8 @@ namespace Apollo
     private:
         std::unique_ptr<Window> m_window;
         static Application* s_instance;
+
+        ImGuiLayer* m_imGuiLayer;
         LayerStack m_layerStack;
 
         bool m_isRunning = true;

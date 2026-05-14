@@ -1,5 +1,6 @@
 #include "sandboxmain.h"
 
+#include "../../thirdparty/imgui/imgui.h"
 #include "event/keyevent.h"
 
 class TestLayer : public Apollo::Layer
@@ -13,9 +14,16 @@ public:
 
     }
 
+    void onImGuiRender() override
+    {
+        ImGui::Begin("TEST");
+        ImGui::Text("test");
+        ImGui::End();
+    }
+
     void onEvent(Apollo::Event& event) override
     {
-       
+
     }
 };
 
@@ -23,7 +31,6 @@ SandboxMain::SandboxMain(Apollo::Window::Properties props)
     : Application(props)
 {
     pushLayer(new TestLayer());
-    pushOverlay(new Apollo::ImguiLayer());
 }
 
 SandboxMain::~SandboxMain()

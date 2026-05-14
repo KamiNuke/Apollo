@@ -24,6 +24,11 @@ namespace Apollo::Platform
 
         void* getNativeWindow() const override;
 
+        void imGuiInit() override;
+        void imGuiShutdown() override;
+        void imGuiBegin() override;
+        void imGuiEnd() override;
+
     private:
         void init(const Properties& props);
         void shutdown();

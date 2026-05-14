@@ -4,6 +4,9 @@
 #include "event/keyevent.h"
 #include "event/mouseevent.h"
 #include "logger/log.h"
+#include "imgui.h"
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_sdl3.h"
 
 namespace Apollo
 {
@@ -31,6 +34,7 @@ namespace Apollo
         SDL_Event event;
         while( SDL_PollEvent( &event ) != 0 )
         {
+            ImGui_ImplSDL3_ProcessEvent(&event);
             switch (event.type)
             {
                 case SDL_EVENT_WINDOW_RESIZED:
@@ -129,6 +133,32 @@ namespace Apollo
     void* Platform::GenericWindow::getNativeWindow() const
     {
         return m_window;
+    }
+
+    void Platform::GenericWindow::imGuiInit()
+    {
+        // Setup Platform/Renderer backends
+        ImGui_ImplSDL3_InitForOpenGL(m_window, m_gl_context);
+        ImGui_ImplOpenGL3_Init("#version 330");
+    }
+
+    void Platform::GenericWindow::imGuiShutdown()
+    {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplSDL3_Shutdown();
+        ImGui::DestroyContext();
+    }
+
+    void Platform::GenericWindow::imGuiBegin()
+    {
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL3_NewFrame();
+    }
+
+    void Platform::GenericWindow::imGuiEnd()
+    {
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
     void Platform::GenericWindow::init(const Properties& props)
