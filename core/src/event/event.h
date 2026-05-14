@@ -45,8 +45,8 @@ namespace Apollo
         {
             return getCategoryFlags() & category;
         }
-    protected:
-        bool m_handled = false;
+
+        bool handled = false;
     };
 
     class EventDispatcher
@@ -63,7 +63,7 @@ namespace Apollo
         {
             if (m_event.getEventType() == T::getStaticType())
             {
-                m_event.m_handled = func(*(T*)&m_event);
+                m_event.handled = func(*(T*)&m_event);
                 return true;
             }
             return false;

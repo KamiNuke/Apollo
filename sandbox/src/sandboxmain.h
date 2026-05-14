@@ -2,21 +2,19 @@
 
 #include <apollo.h>
 
-namespace Apollo
+
+class SandboxMain : public Apollo::Application
 {
-    class SandboxMain : public Application
-    {
-    public:
-        SandboxMain(Window::Properties props);
+public:
+    SandboxMain(Apollo::Window::Properties props);
 
-        ~SandboxMain();
+    ~SandboxMain();
 
-        void onUpdate() override;
-        void onRender() override;
+    void onUpdate() override;
 
-    private:
+    void onRender() override;
 
-    };
+private:
+};
 
-    Application* createApplication();
-} // Apollo
+Apollo::Application* createApplication();

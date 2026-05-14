@@ -17,6 +17,10 @@ set(SOURCES
         src/event/applicationevent.h
         src/event/mouseevent.h
         src/event/keyevent.h
+        src/layer.cpp
+        src/layer.h
+        src/layerstack.cpp
+        src/layerstack.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

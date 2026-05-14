@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "layerstack.h"
 #include "window.h"
 #include "event/applicationevent.h"
 
@@ -19,6 +20,9 @@ namespace Apollo
         virtual void onUpdate() = 0;
         virtual void onRender() = 0;
 
+        void pushLayer(Layer* layer);
+        void pushOverlay(Layer* overlay);
+
         /*
          * Basically entry function for user apps. Define in order to use
          */
@@ -31,6 +35,7 @@ namespace Apollo
     private:
         std::unique_ptr<Window> m_window;
         static Application* s_instance;
+        LayerStack m_layerStack;
 
         bool m_isRunning = true;
     };
