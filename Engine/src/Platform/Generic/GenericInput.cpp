@@ -8,20 +8,20 @@ namespace Apollo
 {
     Input* Input::s_instance = new GenericInput();
 
-    bool GenericInput::isKeyPressedImpl(int keycode)
+    bool GenericInput::IsKeyPressedImpl(int keycode)
     {
         const auto state = SDL_GetKeyboardState(nullptr);
         //const SDL_Scancode scancode = SDL_GetScancodeFromKey(keycode, nullptr);
         return state[keycode];
     }
 
-    bool GenericInput::isMouseButtonPressedImpl(int button)
+    bool GenericInput::IsMouseButtonPressedImpl(int button)
     {
         auto state = SDL_GetMouseState(nullptr, nullptr);
         return (state & SDL_BUTTON_MASK(button)) != 0;
     }
 
-    glm::vec2 GenericInput::getMousePosImpl()
+    glm::vec2 GenericInput::GetMousePosImpl()
     {
         float x, y;
         SDL_GetMouseState(&x, &y);

@@ -6,8 +6,8 @@ namespace Apollo
     class GenericInput : public Input
     {
     protected:
-        bool isKeyPressedImpl(int keycode) override;
-        bool isMouseButtonPressedImpl(int button) override;
-        glm::vec2 getMousePosImpl() override;
+        bool IsKeyPressedImpl(int keycode) override;
+        bool IsMouseButtonPressedImpl(int button) override;
+        glm::vec2 GetMousePosImpl() override;
     };
 } // Apollo

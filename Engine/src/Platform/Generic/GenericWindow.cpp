@@ -7,29 +7,30 @@
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl3.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Apollo
 {
     static bool s_SDLInitialized = false;
 
-    Window* Window::create(const Properties& props)
+    Window* Window::Create(const Properties& props)
     {
         return new Platform::GenericWindow(props);
     }
 
     Platform::GenericWindow::GenericWindow(const Properties& props)
     {
-        init(props);
+        Init(props);
     }
 
     Platform::GenericWindow::~GenericWindow()
     {
-        shutdown();
+        Shutdown();
     }
 
-    void Platform::GenericWindow::onUpdate()
+    void Platform::GenericWindow::OnUpdate()
     {
-        SDL_GL_SwapWindow(m_window);
+        m_context->SwapBuffer();
 
         SDL_Event event;
         while( SDL_PollEvent( &event ) != 0 )
@@ -96,26 +97,26 @@ namespace Apollo
         }
     }
 
-    int Platform::GenericWindow::getWidth() const
+    int Platform::GenericWindow::GetWidth() const
     {
         int w;
         SDL_GetWindowSize(m_window, &w, nullptr);
         return w;
     }
     
-    int Platform::GenericWindow::getHeight() const
+    int Platform::GenericWindow::GetHeight() const
     {
         int h;
         SDL_GetWindowSize(m_window, nullptr, &h);
         return h;
     }
 
-    void Platform::GenericWindow::setEventCallback(const EventCallbackFn& callback)
+    void Platform::GenericWindow::SetEventCallback(const EventCallbackFn& callback)
     {
         m_data.eventCallback = callback;
     }
 
-    void Platform::GenericWindow::setVsync(bool enabled)
+    void Platform::GenericWindow::SetVsync(bool enabled)
     {
         if (enabled)
             SDL_GL_SetSwapInterval(1);
@@ -125,42 +126,40 @@ namespace Apollo
         m_data.vSync = enabled;
     }
 
-    bool Platform::GenericWindow::isVsync()
+    bool Platform::GenericWindow::IsVsync()
     {
         return m_data.vSync;
     }
 
-    void* Platform::GenericWindow::getNativeWindow() const
+    void* Platform::GenericWindow::GetNativeWindow() const
     {
         return m_window;
     }
 
-    void Platform::GenericWindow::imGuiInit()
+    void Platform::GenericWindow::ImGuiInit()
     {
-        // Setup Platform/Renderer backends
-        ImGui_ImplSDL3_InitForOpenGL(m_window, m_gl_context);
-        ImGui_ImplOpenGL3_Init("#version 330");
+        m_context->ImGuiInit();
     }
 
-    void Platform::GenericWindow::imGuiShutdown()
+    void Platform::GenericWindow::ImGuiShutdown()
     {
-        ImGui_ImplOpenGL3_Shutdown();
+        m_context->ImGuiShutdown();
         ImGui_ImplSDL3_Shutdown();
         ImGui::DestroyContext();
     }
 
-    void Platform::GenericWindow::imGuiBegin()
+    void Platform::GenericWindow::ImGuiBegin()
     {
-        ImGui_ImplOpenGL3_NewFrame();
+        m_context->ImGuiBegin();
         ImGui_ImplSDL3_NewFrame();
     }
 
-    void Platform::GenericWindow::imGuiEnd()
+    void Platform::GenericWindow::ImGuiEnd()
     {
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        m_context->ImGuiEnd();
     }
 
-    void Platform::GenericWindow::init(const Properties& props)
+    void Platform::GenericWindow::Init(const Properties& props)
     {
         m_data.title = props.title;
         m_data.width = props.width;
@@ -179,44 +178,24 @@ namespace Apollo
             s_SDLInitialized = true;
         }
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
         constexpr SDL_WindowFlags flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
         m_window = SDL_CreateWindow(m_data.title.c_str(), m_data.width, m_data.height, flags);
         if (!m_window)
         {
-            APOLLO_LOGGER_CRITICAL("Failed to create window: {0}", SDL_GetError());
+            APOLLO_LOGGER_CRITICAL("Failed to Create window: {0}", SDL_GetError());
             assert("SDL_CreateWindow() Failed");
         }
 
-        m_gl_context = SDL_GL_CreateContext(m_window);
-        if (!m_gl_context)
-        {
-            APOLLO_LOGGER_CRITICAL("Failed to create context: {0}", SDL_GetError());
-            assert("SDL_GL_CreateContext() failed");
-        }
-
-        SDL_GL_MakeCurrent(m_window, m_gl_context);
-
-        if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(SDL_GL_GetProcAddress)))
-        {
-            assert("Failed to initialize Glad");
-        }
+        m_context = std::make_unique<OpenGLContext>(m_window);
+        m_context->Init();
 
         SDL_ShowWindow(m_window);
-        setVsync(true);
+        SetVsync(true);
     }
 
-    void Platform::GenericWindow::shutdown()
+    void Platform::GenericWindow::Shutdown()
     {
-        SDL_GL_DestroyContext(m_gl_context);
+        m_context->Shutdown();
         SDL_DestroyWindow(m_window);
         SDL_Quit();
     }

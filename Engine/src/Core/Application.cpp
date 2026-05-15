@@ -15,40 +15,40 @@ namespace Apollo
         assert(!s_instance && "Application already exists");
         s_instance = this;
 
-        m_window = std::unique_ptr<Window>(Window::create());
-        m_window->setEventCallback(BIND_EVENT_FN(onEvent));
+        m_window = std::unique_ptr<Window>(Window::Create());
+        m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
         m_imGuiLayer = new ImGuiLayer();
-        pushOverlay(m_imGuiLayer);
+        PushOverlay(m_imGuiLayer);
     }
 
     Application::~Application()
     {
     }
 
-    void Application::run()
+    void Application::Run()
     {
         while (m_isRunning)
         {
-            glClearColor(0,0,0,1);
+            glClearColor(0.1f, 0.1f, 0.1f ,1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_layerStack)
-                layer->onUpdate();
+                layer->OnUpdate();
 
-            m_imGuiLayer->begin();
+            m_imGuiLayer->Begin();
             for (Layer* layer : m_layerStack)
-                layer->onImGuiRender();
-            m_imGuiLayer->end();
+                layer->OnImGuiRender();
+            m_imGuiLayer->End();
 
-            m_window->onUpdate();
+            m_window->OnUpdate();
         }
     }
 
-    void Application::onEvent(Event& e)
+    void Application::OnEvent(Event& e)
     {
         EventDispatcher dispatcher(e);
-        dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(onWindowClose));
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
         //APOLLO_LOGGER_TRACE("{0}", e);
 
@@ -56,24 +56,24 @@ namespace Apollo
         {
             if (e.handled)
                 break;
-            (*it)->onEvent(e);
+            (*it)->OnEvent(e);
         }
 
     }
 
-    void Application::pushLayer(Layer* layer)
+    void Application::PushLayer(Layer* layer)
     {
-        m_layerStack.pushLayer(layer);
-        layer->onAttach();
+        m_layerStack.PushLayer(layer);
+        layer->OnAttach();
     }
 
-    void Application::pushOverlay(Layer* overlay)
+    void Application::PushOverlay(Layer* overlay)
     {
-        m_layerStack.pushOverlay(overlay);
-        overlay->onAttach();
+        m_layerStack.PushOverlay(overlay);
+        overlay->OnAttach();
     }
 
-    bool Application::onWindowClose(WindowCloseEvent& e)
+    bool Application::OnWindowClose(WindowCloseEvent& e)
     {
         m_isRunning = false;
         return true;

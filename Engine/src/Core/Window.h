@@ -26,24 +26,24 @@ namespace Apollo
 
         virtual ~Window() = default;
 
-        virtual void onUpdate() = 0;
+        virtual void OnUpdate() = 0;
 
-        [[nodiscard]] virtual int getWidth() const = 0;
-        [[nodiscard]] virtual int getHeight() const = 0;
+        [[nodiscard]] virtual int GetWidth() const = 0;
+        [[nodiscard]] virtual int GetHeight() const = 0;
 
-        virtual void setEventCallback(const EventCallbackFn& callback) = 0;
-        virtual void setVsync(bool enabled) = 0;
-        virtual bool isVsync() = 0;
+        virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
+        virtual void SetVsync(bool enabled) = 0;
+        virtual bool IsVsync() = 0;
 
-        virtual void* getNativeWindow() const = 0;
+        virtual void* GetNativeWindow() const = 0;
 
         // ImGui stuff
-        virtual void imGuiInit() = 0;
-        virtual void imGuiShutdown() = 0;
-        virtual void imGuiBegin() = 0;
-        virtual void imGuiEnd() = 0;
+        virtual void ImGuiInit() = 0;
+        virtual void ImGuiShutdown() = 0;
+        virtual void ImGuiBegin() = 0;
+        virtual void ImGuiEnd() = 0;
 
-        static Window* create(const Properties& props = Properties());
+        static Window* Create(const Properties& props = Properties());
     private:
 
     };

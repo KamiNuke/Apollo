@@ -9,10 +9,10 @@ namespace Apollo
         MouseMovedEvent(const float x, const float y)
             : m_mouseX(x), m_mouseY(y) {}
 
-        [[nodiscard]] float getX() const { return m_mouseX; }
-        [[nodiscard]] float getY() const { return m_mouseY; }
+        [[nodiscard]] float GetX() const { return m_mouseX; }
+        [[nodiscard]] float GetY() const { return m_mouseY; }
 
-        [[nodiscard]] std::string toString() const override
+        [[nodiscard]] std::string ToString() const override
         {
             std::stringstream ss;
             ss << "MouseMovedEvent: " << m_mouseX << ", " << m_mouseY;
@@ -31,13 +31,13 @@ namespace Apollo
         MouseScrolledEvent(const float offsetX, const float offsetY)
             : m_offsetX(offsetX), m_offsetY(offsetY) {}
 
-        [[nodiscard]] float getOffsetX() const { return m_offsetX; }
-        [[nodiscard]] float getOffsetY() const { return m_offsetY; }
+        [[nodiscard]] float GetOffsetX() const { return m_offsetX; }
+        [[nodiscard]] float GetOffsetY() const { return m_offsetY; }
 
-        [[nodiscard]] std::string toString() const override
+        [[nodiscard]] std::string ToString() const override
         {
             std::stringstream ss;
-            ss << "MouseScrolledEvent: " << getOffsetX() << ", " << getOffsetY();
+            ss << "MouseScrolledEvent: " << GetOffsetX() << ", " << GetOffsetY();
             return ss.str();
         }
 
@@ -50,7 +50,7 @@ namespace Apollo
     class MouseButtonEvent : public Event
     {
     public:
-        [[nodiscard]] int getMouseButton() const { return m_button; }
+        [[nodiscard]] int GetMouseButton() const { return m_button; }
 
         EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
     protected:
@@ -66,7 +66,7 @@ namespace Apollo
         MouseButtonPressedEvent(int button)
             : MouseButtonEvent(button) {}
 
-        [[nodiscard]] std::string toString() const override
+        [[nodiscard]] std::string ToString() const override
         {
             std::stringstream ss;
             ss << "MouseButtonPressedEvent: " << m_button;
@@ -82,7 +82,7 @@ namespace Apollo
         MouseButtonReleasedEvent(int button)
             : MouseButtonEvent(button) {}
 
-        [[nodiscard]] std::string toString() const override
+        [[nodiscard]] std::string ToString() const override
         {
             std::stringstream ss;
             ss << "MouseButtonReleasedEvent: " << m_button;

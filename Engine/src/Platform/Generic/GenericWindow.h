@@ -5,10 +5,12 @@
 #include <SDL3/SDL.h>
 #include <memory>
 
+#include "Renderer/GraphicsContext.h"
+
 namespace Apollo::Platform
 {
     /*
-     * Uses SDL3 to create generic window
+     * Uses SDL3 to Create generic window
      */
     class GenericWindow : public Window
     {
@@ -16,29 +18,29 @@ namespace Apollo::Platform
         GenericWindow(const Properties& props);
         ~GenericWindow() override;
 
-        void onUpdate() override;
+        void OnUpdate() override;
 
-        [[nodiscard]] int getWidth() const override;
-        [[nodiscard]] int getHeight() const override;
+        [[nodiscard]] int GetWidth() const override;
+        [[nodiscard]] int GetHeight() const override;
 
-        void setEventCallback(const EventCallbackFn& callback) override;
-        void setVsync(bool enabled) override;
-        bool isVsync() override;
+        void SetEventCallback(const EventCallbackFn& callback) override;
+        void SetVsync(bool enabled) override;
+        bool IsVsync() override;
 
-        void* getNativeWindow() const override;
+        void* GetNativeWindow() const override;
 
-        void imGuiInit() override;
-        void imGuiShutdown() override;
-        void imGuiBegin() override;
-        void imGuiEnd() override;
+        void ImGuiInit() override;
+        void ImGuiShutdown() override;
+        void ImGuiBegin() override;
+        void ImGuiEnd() override;
 
     private:
-        void init(const Properties& props);
-        void shutdown();
+        void Init(const Properties& props);
+        void Shutdown();
 
     private:
         SDL_Window* m_window = nullptr;
-        SDL_GLContext m_gl_context = nullptr;
+        std::unique_ptr<GraphicsContext> m_context;
 
         struct WindowData
         {

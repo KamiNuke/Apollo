@@ -30,6 +30,9 @@ set(SOURCES
         src/Platform/Generic/GenericWindow.h
         src/Platform/Generic/GenericInput.cpp
         src/Platform/Generic/GenericInput.h
+        src/Renderer/GraphicsContext.h
+        src/Platform/OpenGL/OpenGLContext.cpp
+        src/Platform/OpenGL/OpenGLContext.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

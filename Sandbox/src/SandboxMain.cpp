@@ -9,19 +9,19 @@ public:
     TestLayer()
         : Layer("Test") {}
 
-    void onUpdate() override
+    void OnUpdate() override
     {
 
     }
 
-    void onImGuiRender() override
+    void OnImGuiRender() override
     {
         ImGui::Begin("TEST");
         ImGui::Text("test");
         ImGui::End();
     }
 
-    void onEvent(Apollo::Event& event) override
+    void OnEvent(Apollo::Event& event) override
     {
 
     }
@@ -30,24 +30,24 @@ public:
 SandboxMain::SandboxMain(Apollo::Window::Properties props)
     : Application(props)
 {
-    pushLayer(new TestLayer());
+    PushLayer(new TestLayer());
 }
 
 SandboxMain::~SandboxMain()
 {
 }
 
-void SandboxMain::onUpdate()
+void SandboxMain::OnUpdate()
 {
 }
 
-void SandboxMain::onRender()
+void SandboxMain::OnRender()
 {
 }
 
 namespace Apollo
 {
-    Application* createApplication()
+    Application* CreateApplication()
     {
         Apollo::Window::Properties props;
         props.title = "Sandbox";

@@ -15,25 +15,25 @@ namespace Apollo
 
         virtual ~Application();
 
-        void run();
+        void Run();
 
-        void onEvent(Event& e);
-        virtual void onUpdate() = 0;
-        virtual void onRender() = 0;
+        void OnEvent(Event& e);
+        virtual void OnUpdate() = 0;
+        virtual void OnRender() = 0;
 
-        void pushLayer(Layer* layer);
-        void pushOverlay(Layer* overlay);
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* overlay);
 
-        [[nodiscard]] inline Window& getWindow() const { return *m_window; }
+        [[nodiscard]] inline Window& GetWindow() const { return *m_window; }
 
         /*
          * Basically entry function for user apps. Define in order to use
          */
-        Application* createApplication();
+        Application* CreateApplication();
 
-        static inline Application& get() { return *s_instance; };
+        static inline Application& Get() { return *s_instance; };
     private:
-        bool onWindowClose(WindowCloseEvent& e);
+        bool OnWindowClose(WindowCloseEvent& e);
 
     private:
         std::unique_ptr<Window> m_window;

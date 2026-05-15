@@ -9,10 +9,10 @@ namespace Apollo
         WindowResizeEvent(int width, int height)
             : m_width(width), m_height(height) {}
 
-        [[nodiscard]] int getWidth() const { return m_width; }
-        [[nodiscard]] int getHeight() const { return m_height; }
+        [[nodiscard]] int GetWidth() const { return m_width; }
+        [[nodiscard]] int GetHeight() const { return m_height; }
 
-        [[nodiscard]] std::string toString() const override
+        [[nodiscard]] std::string ToString() const override
         {
             std::stringstream ss;
             ss << "WindowResizeEvent: " << m_width << ", " << m_height;

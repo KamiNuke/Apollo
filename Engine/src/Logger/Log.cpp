@@ -11,7 +11,7 @@ namespace Apollo
     /*
      * TODO: Make so it saves a new file each run Apollo_1.txt Apollo_2.txt etc...
      */
-    void Log::init()
+    void Log::Init()
     {
         std::vector<spdlog::sink_ptr> sinks;
         sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
@@ -28,12 +28,12 @@ namespace Apollo
         s_userSink->flush_on(spdlog::level::trace);
     }
 
-    Log::LogRef& Log::getCore()
+    Log::LogRef& Log::GetCore()
     {
         return s_coreSink;
     }
 
-    Log::LogRef& Log::getUser()
+    Log::LogRef& Log::GetUser()
     {
         return s_userSink;
     }

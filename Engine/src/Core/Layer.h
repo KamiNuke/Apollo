@@ -11,12 +11,12 @@ namespace Apollo
         Layer(const std::string& name = "Layer");
         virtual ~Layer();
 
-        virtual void onAttach() {}
-        virtual void onDetach() {}
-        virtual void onUpdate() {}
-        virtual void onImGuiRender() {}
-        virtual void onEvent(Event& event) {}
-        [[nodiscard]] const inline std::string& getName() const { return m_name; }
+        virtual void OnAttach() {}
+        virtual void OnDetach() {}
+        virtual void OnUpdate() {}
+        virtual void OnImGuiRender() {}
+        virtual void OnEvent(Event& event) {}
+        [[nodiscard]] const inline std::string& GetName() const { return m_name; }
     protected:
         std::string m_name;
     };

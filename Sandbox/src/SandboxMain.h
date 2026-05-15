@@ -9,10 +9,10 @@ public:
     SandboxMain(Apollo::Window::Properties props);
     ~SandboxMain();
 
-    void onUpdate() override;
-    void onRender() override;
+    void OnUpdate() override;
+    void OnRender() override;
 
 private:
 };
 
-Apollo::Application* createApplication();
+Apollo::Application* CreateApplication();

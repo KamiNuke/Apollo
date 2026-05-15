@@ -15,7 +15,7 @@ namespace Apollo
     {
     }
 
-    void ImGuiLayer::onAttach()
+    void ImGuiLayer::OnAttach()
     {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -40,34 +40,34 @@ namespace Apollo
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        Application& app = Application::get();
-        app.getWindow().imGuiInit();
+        Application& app = Application::Get();
+        app.GetWindow().ImGuiInit();
     }
 
-    void ImGuiLayer::onDetach()
+    void ImGuiLayer::OnDetach()
     {
-        Application& app = Application::get();
-        app.getWindow().imGuiShutdown();
+        Application& app = Application::Get();
+        app.GetWindow().ImGuiShutdown();
     }
 
-    void ImGuiLayer::onImGuiRender()
+    void ImGuiLayer::OnImGuiRender()
     {
         static bool showDemo = true;
         ImGui::ShowDemoWindow(&showDemo);
     }
 
-    void ImGuiLayer::begin()
+    void ImGuiLayer::Begin()
     {
-        Application& app = Application::get();
-        app.getWindow().imGuiBegin();
+        Application& app = Application::Get();
+        app.GetWindow().ImGuiBegin();
         ImGui::NewFrame();
     }
 
-    void ImGuiLayer::end()
+    void ImGuiLayer::End()
     {
         ImGuiIO& io = ImGui::GetIO(); (void)io;
-        Application& app = Application::get();
-        io.DisplaySize = ImVec2(app.getWindow().getWidth(), app.getWindow().getHeight());
+        Application& app = Application::Get();
+        io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
         // Update and Render additional Platform Windows
         // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
@@ -83,6 +83,6 @@ namespace Apollo
 
         // Rendering
         ImGui::Render();
-        app.getWindow().imGuiEnd();
+        app.GetWindow().ImGuiEnd();
     }
 } // Apollo

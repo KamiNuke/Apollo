@@ -25,10 +25,10 @@ namespace Apollo
     };
 
 #define EVENT_CLASS_TYPE(type) static EventType getStaticType() { return EventType::type; }\
-                                virtual EventType getEventType() const override { return getStaticType(); }\
-                                virtual const char* getName() const override { return #type; }
+                                virtual EventType GetEventType() const override { return getStaticType(); }\
+                                virtual const char* GetName() const override { return #type; }
 
-#define EVENT_CLASS_CATEGORY(category) virtual int getCategoryFlags() const override { return category; }
+#define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
     class Event
     {
@@ -36,14 +36,14 @@ namespace Apollo
     public:
         virtual ~Event() = default;
 
-        [[nodiscard]] virtual EventType getEventType() const = 0;
-        [[nodiscard]] virtual const char* getName() const = 0;
-        [[nodiscard]] virtual int getCategoryFlags() const = 0;
-        [[nodiscard]] virtual std::string toString() const { return getName(); }
+        [[nodiscard]] virtual EventType GetEventType() const = 0;
+        [[nodiscard]] virtual const char* GetName() const = 0;
+        [[nodiscard]] virtual int GetCategoryFlags() const = 0;
+        [[nodiscard]] virtual std::string ToString() const { return GetName(); }
 
         [[nodiscard]] inline bool isInCategory(const EventCategory category) const
         {
-            return getCategoryFlags() & category;
+            return GetCategoryFlags() & category;
         }
 
         bool handled = false;
@@ -59,9 +59,9 @@ namespace Apollo
 
         template<typename T>
         requires(std::is_base_of_v<Event, T>)
-        bool dispatch(EventFn<T> func)
+        bool Dispatch(EventFn<T> func)
         {
-            if (m_event.getEventType() == T::getStaticType())
+            if (m_event.GetEventType() == T::getStaticType())
             {
                 m_event.handled = func(*(T*)&m_event);
                 return true;
@@ -74,10 +74,10 @@ namespace Apollo
 
     inline std::ostream& operator<<(std::ostream& os, const Event& e)
     {
-        return os << e.toString();
+        return os << e.ToString();
     }
 
     inline std::string format_as(const Event& e) {
-        return e.toString();
+        return e.ToString();
     }
 } // Apollo

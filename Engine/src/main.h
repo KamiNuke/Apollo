@@ -5,15 +5,15 @@
 
 namespace Apollo
 {
-    extern Application* createApplication();
+    extern Application* CreateApplication();
 }
 
 int main(int argc, char* argv[])
 {
-    Apollo::Log::init();
+    Apollo::Log::Init();
 
-    Apollo::Application* app = Apollo::createApplication();
-    app->run();
+    Apollo::Application* app = Apollo::CreateApplication();
+    app->Run();
     delete app;
 
     return 0;
