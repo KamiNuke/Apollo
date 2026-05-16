@@ -53,6 +53,11 @@ namespace Apollo
         SDL_GL_SwapWindow(m_window);
     }
 
+    void OpenGLContext::SetViewportSize(int x, int y, int w, int h)
+    {
+        glViewport(x, y, w, h);
+    }
+
     void OpenGLContext::ImGuiInit()
     {
         ImGui_ImplSDL3_InitForOpenGL(m_window, m_gl_context);

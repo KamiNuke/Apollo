@@ -12,6 +12,7 @@ namespace Apollo
         void Init() override;
         void Shutdown() override;
         void SwapBuffer() override;
+        void SetViewportSize(int x, int y, int w, int h) override;
 
         void ImGuiInit() override;
         void ImGuiShutdown() override;

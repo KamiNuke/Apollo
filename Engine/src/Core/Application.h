@@ -5,6 +5,9 @@
 #include "Window.h"
 #include "Event/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Renderer/Buffer.h"
+#include "Renderer/Shader.h"
+#include "Renderer/VertexArray.h"
 
 namespace Apollo
 {
@@ -43,5 +46,10 @@ namespace Apollo
         LayerStack m_layerStack;
 
         bool m_isRunning = true;
+        std::shared_ptr<Shader> m_shader;
+        std::shared_ptr<VertexArray> m_vertexArray;
+
+        std::shared_ptr<VertexArray> m_squareVA;
+        std::shared_ptr<Shader> m_shader2;
     };
 } // Apollo

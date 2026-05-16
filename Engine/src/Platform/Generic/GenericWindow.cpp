@@ -43,6 +43,8 @@ namespace Apollo
                     m_data.width = event.window.data1;
                     m_data.height = event.window.data2;
 
+                    m_context->SetViewportSize(0, 0, event.window.data1, event.window.data2);
+
                     WindowResizeEvent resizeEvent(event.window.data1, event.window.data2);
                     m_data.eventCallback(resizeEvent);
                     break;

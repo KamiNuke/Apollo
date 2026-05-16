@@ -33,6 +33,24 @@ set(SOURCES
         src/Renderer/GraphicsContext.h
         src/Platform/OpenGL/OpenGLContext.cpp
         src/Platform/OpenGL/OpenGLContext.h
+        src/Renderer/Shader.cpp
+        src/Renderer/Shader.h
+        src/Renderer/Buffer.cpp
+        src/Renderer/Buffer.h
+        src/Platform/OpenGL/OpenGLBuffer.cpp
+        src/Platform/OpenGL/OpenGLBuffer.h
+        src/Renderer/Renderer.cpp
+        src/Renderer/Renderer.h
+        src/Platform/OpenGL/OpenGLVertexArray.cpp
+        src/Platform/OpenGL/OpenGLVertexArray.h
+        src/Renderer/VertexArray.cpp
+        src/Renderer/VertexArray.h
+        src/Renderer/RendererAPI.cpp
+        src/Renderer/RendererAPI.h
+        src/Renderer/RenderCommand.cpp
+        src/Renderer/RenderCommand.h
+        src/Platform/OpenGL/OpenGLRendererAPI.cpp
+        src/Platform/OpenGL/OpenGLRendererAPI.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
