@@ -6,14 +6,17 @@
 #include "glad/glad.h"
 #include "defines.h"
 #include "Input.h"
+#include "keycodes.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
+#include "SDL3/SDL_timer.h"
 
 namespace Apollo
 {
     Application* Application::s_instance = nullptr;
 
     Application::Application(const Window::Properties& props)
+        : m_camera(-1.6f, 1.6f, -1.6f, 1.6f)
     {
         assert(!s_instance && "Application already exists");
         s_instance = this;
@@ -97,11 +100,13 @@ namespace Apollo
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec3 aColor;
 
+            uniform mat4 uViewProjection;
+
             out vec3 vColor;
 
             void main()
             {
-                gl_Position = vec4(aPos, 1.0);
+                gl_Position = uViewProjection * vec4(aPos.x + 0.5, aPos.y, aPos.z, 1.0);
                 vColor = aColor;
             }
         )";
@@ -122,22 +127,24 @@ namespace Apollo
             #version 330 core
             layout (location = 0) in vec3 aPos;
 
-            out vec3 vColor;
+            uniform mat4 uViewProjection;
+
+            out vec3 ourColor;
 
             void main()
             {
-                gl_Position = vec4(aPos, 1.0);
-                vColor = aPos;
+                gl_Position = uViewProjection * vec4(aPos, 1.0f);
+                ourColor = aPos;
             }
         )";
 
         std::string fragSrc2 = R"(
             #version 330 core
-            in vec3 vColor;
+            in vec3 ourColor;
             out vec4 FragColor;
             void main()
             {
-                FragColor = vec4(vColor, 1.0);
+                FragColor = vec4(ourColor, 1.0f);
             }
         )";
 
@@ -155,10 +162,32 @@ namespace Apollo
             RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
             RenderCommand::Clear();
 
-            Renderer::BeginScene();
+            static float x = 0;
+            static float y = 0;
+            if (Input::IsKeyPressed(APOLLO_KEY_A))
+            {
+                x += 0.01;
+            }
+            if (Input::IsKeyPressed(APOLLO_KEY_D))
+            {
+                x -= 0.01;
+            }
 
-            Renderer::Submit(m_shader2, m_squareVA);
-            Renderer::Submit(m_shader, m_vertexArray);
+            if (Input::IsKeyPressed(APOLLO_KEY_W))
+            {
+                y -= 0.01;
+            }
+            if (Input::IsKeyPressed(APOLLO_KEY_S))
+            {
+                y += 0.01;
+            }
+            m_camera.SetPosition({x, y, 0.0f});
+            m_camera.SetRotation(45.0f);
+
+            Renderer::BeginScene(m_camera);
+
+            Renderer::Submit(m_shader2, m_squareVA, glm::mat4(1.0f));
+            Renderer::Submit(m_shader, m_vertexArray, glm::mat4(1.0f));
 
             Renderer::EndScene();
 
@@ -178,6 +207,7 @@ namespace Apollo
     {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
         //APOLLO_LOGGER_TRACE("{0}", e);
 
@@ -206,5 +236,17 @@ namespace Apollo
     {
         m_isRunning = false;
         return true;
+    }
+
+    bool Application::OnWindowResize(WindowResizeEvent& e)
+    {
+        if (e.GetWidth() == 0 || e.GetHeight() == 0)
+        {
+            return false;
+        }
+
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+        return false;
     }
 } // ApolloEvent& event

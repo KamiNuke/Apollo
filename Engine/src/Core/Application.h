@@ -6,6 +6,7 @@
 #include "Event/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/OrthographicCamera.h"
 #include "Renderer/Shader.h"
 #include "Renderer/VertexArray.h"
 
@@ -37,6 +38,7 @@ namespace Apollo
         static inline Application& Get() { return *s_instance; };
     private:
         bool OnWindowClose(WindowCloseEvent& e);
+        bool OnWindowResize(WindowResizeEvent& e);
 
     private:
         std::unique_ptr<Window> m_window;
@@ -51,5 +53,7 @@ namespace Apollo
 
         std::shared_ptr<VertexArray> m_squareVA;
         std::shared_ptr<Shader> m_shader2;
+
+        OrthographicCamera m_camera;
     };
 } // Apollo

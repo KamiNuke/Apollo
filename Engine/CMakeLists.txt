@@ -51,6 +51,9 @@ set(SOURCES
         src/Renderer/RenderCommand.h
         src/Platform/OpenGL/OpenGLRendererAPI.cpp
         src/Platform/OpenGL/OpenGLRendererAPI.h
+        src/Renderer/Camera.h
+        src/Renderer/OrthographicCamera.cpp
+        src/Renderer/OrthographicCamera.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
