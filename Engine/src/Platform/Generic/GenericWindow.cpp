@@ -55,7 +55,7 @@ namespace Apollo
                 }
                 case SDL_EVENT_KEY_DOWN:
                 {
-                    KeyPressedEvent keyPressed(event.key.key, event.key.repeat);
+                    KeyPressedEvent keyPressed(event.key.scancode, event.key.repeat);
                     m_data.eventCallback(keyPressed);
                     break;
                 }

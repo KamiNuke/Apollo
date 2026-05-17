@@ -6,7 +6,7 @@ namespace Apollo
     class KeyEvent : public Event
     {
     public:
-        inline unsigned int GetKeyCode() const { return m_keyCode; }
+        [[nodiscard]] inline unsigned int GetKeyCode() const { return m_keyCode; }
 
         EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
     protected:

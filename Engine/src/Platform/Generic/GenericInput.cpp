@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 
 #include "Core/Application.h"
+#include "Logger/Log.h"
 
 namespace Apollo
 {
