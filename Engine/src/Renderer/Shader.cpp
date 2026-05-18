@@ -126,21 +126,43 @@ namespace Apollo
 
     void Shader::SetInt(const std::string& name, int value) const
     {
-        glUniform1i(glGetUniformLocation(m_programID, name.c_str()), value);
+    	const GLint location = glGetUniformLocation(m_programID, name.c_str());
+        glUniform1i(location, value);
     }
 
     void Shader::SetBool(const std::string& name, bool value) const
     {
-        glUniform1i(glGetUniformLocation(m_programID, name.c_str()), static_cast<int>(value));
+    	const GLint location = glGetUniformLocation(m_programID, name.c_str());
+        glUniform1i(location, static_cast<int>(value));
     }
 
     void Shader::SetFloat(const std::string& name, float value) const
     {
-        glUniform1f(glGetUniformLocation(m_programID, name.c_str()), value);
+    	const GLint location = glGetUniformLocation(m_programID, name.c_str());
+        glUniform1f(location, value);
+    }
+
+    void Shader::SetFloat2(const std::string& name, glm::vec2 value) const
+    {
+    	const GLint location = glGetUniformLocation(m_programID, name.c_str());
+    	glUniform2f(location, value.x, value.y);
+    }
+
+    void Shader::SetFloat3(const std::string& name, glm::vec3 value) const
+    {
+    	const GLint location = glGetUniformLocation(m_programID, name.c_str());
+    	glUniform3f(location, value.x, value.y, value.z);
+    }
+
+    void Shader::SetFloat4(const std::string& name, glm::vec4 value) const
+    {
+    	const GLint location = glGetUniformLocation(m_programID, name.c_str());
+    	glUniform4f(location, value.x, value.y, value.z, value.w);
     }
 
     void Shader::SetMat4(const std::string& name, const glm::mat4& value) const
     {
-    	glUniformMatrix4fv(glGetUniformLocation(m_programID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+    	const GLint location = glGetUniformLocation(m_programID, name.c_str());
+    	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
     }
 } // Apollo

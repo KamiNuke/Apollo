@@ -57,6 +57,10 @@ set(SOURCES
         src/Core/Timestep.h
         src/Utils/PlatformUtils.h
         src/Platform/Generic/GenericPlatformUtils.cpp
+        src/Renderer/FrameBuffer.cpp
+        src/Renderer/FrameBuffer.h
+        src/Platform/OpenGL/OpenGLFrameBuffer.cpp
+        src/Platform/OpenGL/OpenGLFrameBuffer.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

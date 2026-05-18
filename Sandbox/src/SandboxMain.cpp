@@ -3,6 +3,7 @@
 #include "defines.h"
 #include "imgui.h"
 #include "Event/KeyEvent.h"
+#include "Platform/OpenGL/OpenGLFrameBuffer.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 
@@ -10,7 +11,7 @@ class TestLayer : public Apollo::Layer
 {
 public:
     TestLayer()
-        : Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_cameraPosition(0.0f)
+        : Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_squarePosition(1.0f), m_cameraPosition(0.0f)
     {
 
         float vertices[6*3]
@@ -87,12 +88,13 @@ public:
             layout (location = 1) in vec3 aColor;
 
             uniform mat4 uViewProjection;
+            uniform mat4 uTransform;
 
             out vec3 vColor;
 
             void main()
             {
-                gl_Position = uViewProjection * vec4(aPos.x + 0.5, aPos.y, aPos.z, 1.0);
+                gl_Position = uViewProjection * uTransform * vec4(aPos.x + 0.5, aPos.y, aPos.z, 1.0);
                 vColor = aColor;
             }
         )";
@@ -114,12 +116,13 @@ public:
             layout (location = 0) in vec3 aPos;
 
             uniform mat4 uViewProjection;
+            uniform mat4 uTransform;
 
             out vec3 ourColor;
 
             void main()
             {
-                gl_Position = uViewProjection * vec4(aPos, 1.0f);
+                gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0f);
                 ourColor = aPos;
             }
         )";
@@ -128,19 +131,22 @@ public:
             #version 330 core
             in vec3 ourColor;
             out vec4 FragColor;
+
+            uniform vec4 gColor;
+
             void main()
             {
-                FragColor = vec4(ourColor, 1.0f);
+                FragColor = gColor;
             }
         )";
 
         m_shader2 = std::make_shared<Apollo::Shader>(vertexSrc2, fragSrc2);
+
+        m_fbo = std::make_shared<Apollo::OpenGLFrameBuffer>(1280, 720);
     }
 
     void OnUpdate(Apollo::Timestep timestep) override
     {
-        LOGGER_INFO("Delta time: {0} ({1})", timestep.GetSeconds(), timestep.GetMilliseconds());
-
         if (Apollo::Input::IsKeyPressed(APOLLO_KEY_LEFT))
             m_cameraPosition.x += m_cameraMoveSpeed * timestep;
         else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_RIGHT))
@@ -151,12 +157,29 @@ public:
         else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_DOWN))
             m_cameraPosition.y += m_cameraMoveSpeed * timestep;
 
-        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_A))
+        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_I))
            m_rotation -= m_cameraRotationSpeed * timestep;
-        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_D))
+        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_J))
             m_rotation += m_cameraRotationSpeed * timestep;
 
+        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_A))
+            m_squarePosition.x -= 1.1f * timestep;
+        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_D))
+            m_squarePosition.x += 1.1f * timestep;
 
+        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_W))
+            m_squarePosition.y += 1.1f * timestep;
+        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_S))
+            m_squarePosition.y -= 1.1f * timestep;
+
+        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_R))
+            m_squareScale += 0.5f * timestep;
+        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_T))
+            m_squareScale -= 0.5f * timestep;
+
+        Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
+        Apollo::RenderCommand::Clear();
+        m_fbo->Bind();
         Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
         Apollo::RenderCommand::Clear();
 
@@ -165,14 +188,55 @@ public:
 
         Apollo::Renderer::BeginScene(m_camera);
 
-        Apollo::Renderer::Submit(m_shader2, m_squareVA, glm::mat4(1.0f));
-        Apollo::Renderer::Submit(m_shader, m_vertexArray, glm::mat4(1.0f));
+        glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(m_squareScale));
 
+        for (int i = 0; i < 20; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                glm::vec3 pos(i * 0.11, j * 0.11, 0.0f);
+                pos = pos + m_squarePosition;
+                glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+                if (i % 2 == 0)
+                    m_shader2->SetFloat4("gColor", {0.8f, 0.2f, 0.3f, 1.0f});
+                else
+                    m_shader2->SetFloat4("gColor", {0.1f, 0.3f, 0.98f, 1.0f});
+
+                Apollo::Renderer::Submit(m_shader2, m_squareVA, transform);
+            }
+        }
+
+        Apollo::Renderer::Submit(m_shader, m_vertexArray);
         Apollo::Renderer::EndScene();
+
+        m_fbo->Unbind();
     }
 
     void OnImGuiRender() override
     {
+        ImGui::Begin("My Scene");
+
+        // we access the ImGui window size
+        const float window_width = ImGui::GetContentRegionAvail().x;
+        const float window_height = ImGui::GetContentRegionAvail().y;
+
+        // we rescale the framebuffer to the actual window size here and reset the glViewport
+        m_fbo->Resize(window_width, window_height);
+        Apollo::RenderCommand::SetViewport(0, 0, window_width, window_height);
+
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+
+        // and here we can add our created texture as image to ImGui
+        // unfortunately we need to use the cast to void* or I didn't find another way tbh
+        ImGui::GetWindowDrawList()->AddImage(
+            (void *)m_fbo->GetTexture(),
+            ImVec2(pos.x, pos.y),
+            ImVec2(pos.x + window_width, pos.y + window_height),
+            ImVec2(0, 1),
+            ImVec2(1, 0)
+        );
+
+        ImGui::End();
     }
 
     void OnEvent(Apollo::Event& event) override
@@ -180,6 +244,8 @@ public:
     }
 
 private:
+    std::shared_ptr<Apollo::OpenGLFrameBuffer> m_fbo;
+
     std::shared_ptr<Apollo::Shader> m_shader;
     std::shared_ptr<Apollo::VertexArray> m_vertexArray;
 
@@ -191,7 +257,10 @@ private:
     float m_cameraMoveSpeed = 5.0f;
 
     float m_rotation = 0.0f;
-    float m_cameraRotationSpeed = 180.0f;
+    float m_cameraRotationSpeed = 5.0f;
+
+    glm::vec3 m_squarePosition;
+    float m_squareScale = 0.05f;
 };
 
 SandboxMain::SandboxMain(const Apollo::Window::Properties& props)
