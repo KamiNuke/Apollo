@@ -55,6 +55,8 @@ set(SOURCES
         src/Renderer/OrthographicCamera.cpp
         src/Renderer/OrthographicCamera.h
         src/Core/Timestep.h
+        src/Utils/PlatformUtils.h
+        src/Platform/Generic/GenericPlatformUtils.cpp
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
