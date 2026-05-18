@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "LayerStack.h"
+#include "Timestep.h"
 #include "Window.h"
 #include "Event/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
@@ -44,5 +45,7 @@ namespace Apollo
         LayerStack m_layerStack;
 
         bool m_isRunning = true;
+
+        float m_lastFrameTime = 0.0f;
     };
 } // Apollo

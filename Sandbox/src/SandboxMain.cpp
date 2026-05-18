@@ -137,22 +137,24 @@ public:
         m_shader2 = std::make_shared<Apollo::Shader>(vertexSrc2, fragSrc2);
     }
 
-    void OnUpdate() override
+    void OnUpdate(Apollo::Timestep timestep) override
     {
+        LOGGER_INFO("Delta time: {0} ({1})", timestep.GetSeconds(), timestep.GetMilliseconds());
+
         if (Apollo::Input::IsKeyPressed(APOLLO_KEY_LEFT))
-            m_cameraPosition.x += m_cameraMoveSpeed;
+            m_cameraPosition.x += m_cameraMoveSpeed * timestep;
         else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_RIGHT))
-            m_cameraPosition.x -= m_cameraMoveSpeed;
+            m_cameraPosition.x -= m_cameraMoveSpeed * timestep;
 
         if (Apollo::Input::IsKeyPressed(APOLLO_KEY_UP))
-            m_cameraPosition.y -= m_cameraMoveSpeed;
+            m_cameraPosition.y -= m_cameraMoveSpeed * timestep;
         else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_DOWN))
-            m_cameraPosition.y += m_cameraMoveSpeed;
+            m_cameraPosition.y += m_cameraMoveSpeed * timestep;
 
         if (Apollo::Input::IsKeyPressed(APOLLO_KEY_A))
-           m_rotation -= m_cameraRotationSpeed;
+           m_rotation -= m_cameraRotationSpeed * timestep;
         else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_D))
-            m_rotation += m_cameraRotationSpeed;
+            m_rotation += m_cameraRotationSpeed * timestep;
 
 
         Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
@@ -186,10 +188,10 @@ private:
 
     Apollo::OrthographicCamera m_camera;
     glm::vec3 m_cameraPosition;
-    float m_cameraMoveSpeed = 0.1f;
+    float m_cameraMoveSpeed = 5.0f;
 
     float m_rotation = 0.0f;
-    float m_cameraRotationSpeed = 0.1f;
+    float m_cameraRotationSpeed = 180.0f;
 };
 
 SandboxMain::SandboxMain(const Apollo::Window::Properties& props)

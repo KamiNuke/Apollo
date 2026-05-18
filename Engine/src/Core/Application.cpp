@@ -6,6 +6,7 @@
 #include "defines.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
+#include "SDL3/SDL_timer.h"
 
 namespace Apollo
 {
@@ -18,6 +19,7 @@ namespace Apollo
 
         m_window = std::unique_ptr<Window>(Window::Create());
         m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+        m_window->SetVsync(true);
 
         m_imGuiLayer = new ImGuiLayer();
         PushOverlay(m_imGuiLayer);
@@ -31,8 +33,13 @@ namespace Apollo
     {
         while (m_isRunning)
         {
+            float time = static_cast<float>(SDL_GetTicks()) / 1000;
+            Timestep timestep = time - m_lastFrameTime;
+            m_lastFrameTime = time;
+
+
             for (Layer* layer : m_layerStack)
-                layer->OnUpdate();
+                layer->OnUpdate(timestep);
 
             m_imGuiLayer->Begin();
             for (Layer* layer : m_layerStack)
