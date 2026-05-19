@@ -68,6 +68,8 @@ set(SOURCES
         src/Renderer/Texture.h
         src/Platform/OpenGL/OpenGLTexture.cpp
         src/Platform/OpenGL/OpenGLTexture.h
+        src/Renderer/OrthographicCameraController.cpp
+        src/Renderer/OrthographicCameraController.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

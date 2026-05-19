@@ -1,14 +1,15 @@
 #include "SandboxMain.h"
 
 #include "imgui.h"
+#include "Renderer/OrthographicCameraController.h"
 
 
 class TestLayer : public Apollo::Layer
 {
 public:
     TestLayer()
-        : Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f),
-    m_cameraPosition(0.0f), m_squarePosition(1.0f), m_squareColor(1.0f)
+        : Layer("Test"), m_cameraController(1280.0f / 720.0f, true),
+            m_squarePosition(1.0f), m_squareColor(1.0f)
     {
 
         float vertices[6*3]
@@ -150,35 +151,7 @@ public:
 
     void OnUpdate(Apollo::Timestep timestep) override
     {
-        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_LEFT))
-            m_cameraPosition.x += m_cameraMoveSpeed * timestep;
-        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_RIGHT))
-            m_cameraPosition.x -= m_cameraMoveSpeed * timestep;
-
-        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_UP))
-            m_cameraPosition.y -= m_cameraMoveSpeed * timestep;
-        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_DOWN))
-            m_cameraPosition.y += m_cameraMoveSpeed * timestep;
-
-        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_I))
-           m_rotation -= m_cameraRotationSpeed * timestep;
-        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_J))
-            m_rotation += m_cameraRotationSpeed * timestep;
-
-        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_A))
-            m_squarePosition.x -= 1.1f * timestep;
-        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_D))
-            m_squarePosition.x += 1.1f * timestep;
-
-        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_W))
-            m_squarePosition.y += 1.1f * timestep;
-        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_S))
-            m_squarePosition.y -= 1.1f * timestep;
-
-        if (Apollo::Input::IsKeyPressed(APOLLO_KEY_R))
-            m_squareScale += 0.5f * timestep;
-        else if (Apollo::Input::IsKeyPressed(APOLLO_KEY_T))
-            m_squareScale -= 0.5f * timestep;
+        m_cameraController.OnUpdate(timestep);
 
         Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
         Apollo::RenderCommand::Clear();
@@ -186,10 +159,7 @@ public:
         Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
         Apollo::RenderCommand::Clear();
 
-        m_camera.SetPosition(m_cameraPosition);
-        m_camera.SetRotation(m_rotation);
-
-        Apollo::Renderer::BeginScene(m_camera);
+        Apollo::Renderer::BeginScene(m_cameraController.GetCamera());
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(m_squareScale));
         m_shader2->Bind();
@@ -250,6 +220,7 @@ public:
 
     void OnEvent(Apollo::Event& event) override
     {
+        m_cameraController.OnEvent(event);
     }
 
 private:
@@ -264,12 +235,9 @@ private:
 
     Apollo::Ref<Apollo::Texture> m_texture;
 
-    Apollo::OrthographicCamera m_camera;
+    Apollo::OrthographicCameraController m_cameraController;
     glm::vec3 m_cameraPosition;
-    float m_cameraMoveSpeed = 5.0f;
-
     float m_rotation = 0.0f;
-    float m_cameraRotationSpeed = 5.0f;
 
     glm::vec3 m_squarePosition;
     float m_squareScale = 0.05f;
