@@ -21,7 +21,9 @@ namespace Apollo
 
         m_window = std::unique_ptr<Window>(Window::Create());
         m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
-        m_window->SetVsync(false);
+        //m_window->SetVsync(false);
+
+        Renderer::Init();
 
         m_imGuiLayer = new ImGuiLayer();
         PushOverlay(m_imGuiLayer);

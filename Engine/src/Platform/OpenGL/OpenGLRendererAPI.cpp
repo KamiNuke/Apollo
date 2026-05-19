@@ -2,6 +2,12 @@
 
 namespace Apollo
 {
+    void OpenGLRendererAPI::Init()
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
     void OpenGLRendererAPI::SetViewport(int x, int y, int width, int height)
     {
         glViewport(x, y, width, height);

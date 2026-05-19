@@ -6,6 +6,11 @@ namespace Apollo
     class RenderCommand
     {
     public:
+        inline static void Init()
+        {
+            s_rendererAPI->Init();
+        }
+
         inline static void SetViewport(int x, int y, int width, int height)
         {
             s_rendererAPI->SetViewport(x, y, width, height);

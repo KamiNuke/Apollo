@@ -14,6 +14,7 @@ namespace Apollo
             None = 0, OpenGL = 1, Vulkan = 2
         };
     public:
+        virtual void Init() = 0;
         virtual ~RendererAPI() = default;
 
         virtual void SetViewport(int x, int y, int width, int height) = 0;

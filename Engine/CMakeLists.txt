@@ -4,6 +4,7 @@ set(BUILD_NAME Engine)
 set(SOURCES
         ${IMGUI_SOURCES}
         ${GLAD_SOURCES}
+        ${STB_SOURCES}
         src/Logger/Log.cpp
         src/Logger/Log.h
         src/Logger/Log.cpp
@@ -63,6 +64,10 @@ set(SOURCES
         src/Platform/OpenGL/OpenGLShader.cpp
         src/Platform/OpenGL/OpenGLShader.h
         src/Core/Base.h
+        src/Renderer/Texture.cpp
+        src/Renderer/Texture.h
+        src/Platform/OpenGL/OpenGLTexture.cpp
+        src/Platform/OpenGL/OpenGLTexture.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
@@ -78,5 +83,6 @@ target_include_directories(${BUILD_NAME}
         src
         ${GLAD_INCLUDE_DIRS}
         ${IMGUI_INCLUDE_DIRS}
+        ${STB_INCLUDE_DIRS}
 )
 

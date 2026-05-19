@@ -1,12 +1,7 @@
 #include "SandboxMain.h"
 
-#include "Core/Base.h"
 #include "imgui.h"
-#include "Core/Base.h"
-#include "Event/KeyEvent.h"
-#include "Platform/OpenGL/OpenGLFrameBuffer.h"
-#include "Renderer/RenderCommand.h"
-#include "Renderer/Renderer.h"
+
 
 class TestLayer : public Apollo::Layer
 {
@@ -50,13 +45,13 @@ public:
         m_vertexArray->Unbind();
 
 
-        float vertices2[4*3]
+        float vertices2[5*4]
         {
-            -0.85f, -0.85f, 0.0f,
-             0.85f, -0.85f, 0.0f,
-             0.85f,  0.85f, 0.0f,
-            -0.85,   0.85f, 0.0f
-        };
+            -0.85f, -0.85f, 0.0f, 0.0f, 0.0f,
+             0.85f, -0.85f, 0.0f, 1.0f, 0.0f,
+             0.85f,  0.85f, 0.0f, 1.0f, 1.0f,
+            -0.85f,  0.85f, 0.0f, 0.0f, 1.0f,
+         };
 
         unsigned int indices2[6]
         {
@@ -76,6 +71,7 @@ public:
             Apollo::BufferLayout layout =
             {
                 { Apollo::ShaderDataType::Float3, "aPos"},
+                { Apollo::ShaderDataType::Float2, "aTexCoord"}
             };
             m_squareVB->SetLayout(layout);
         }
@@ -145,6 +141,45 @@ public:
 
         m_shader2 = Apollo::Shader::Create(vertexSrc2, fragSrc2);
         m_fbo = Apollo::CreateRef<Apollo::OpenGLFrameBuffer>(1280, 720);
+
+        std::string vertTextureShader = R"(
+            #version 330 core
+            layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec2 aTexCoord;
+
+            uniform mat4 uViewProjection;
+            uniform mat4 uTransform;
+
+            out vec2 vTexCoord;
+
+            void main()
+            {
+                gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0f);
+                vTexCoord = aTexCoord;
+            }
+        )";
+
+        std::string fragTextureShader = R"(
+            #version 330 core
+            layout(location = 0) out vec4 FragColor;
+
+            in vec2 vTexCoord;
+
+            uniform vec3 uColor;
+
+            uniform sampler2D uTexture;
+
+            void main()
+            {
+                FragColor = texture(uTexture, vTexCoord);
+            }
+        )";
+
+        m_textureShader = Apollo::Shader::Create(vertTextureShader, fragTextureShader);
+        m_texture = Apollo::Texture2D::Create("../../Sandbox/assets/klauncher.png");
+
+        m_textureShader->Bind();
+        m_textureShader->SetInt("uTexture", 0);
     }
 
     void OnUpdate(Apollo::Timestep timestep) override
@@ -206,7 +241,10 @@ public:
             }
         }
 
-        Apollo::Renderer::Submit(m_shader, m_vertexArray);
+        m_texture->Bind();
+        Apollo::Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(0.75f)));
+
+        //Apollo::Renderer::Submit(m_shader, m_vertexArray);
         Apollo::Renderer::EndScene();
 
         m_fbo->Unbind();
@@ -255,6 +293,9 @@ private:
 
     Apollo::Ref<Apollo::VertexArray> m_squareVA;
     Apollo::Ref<Apollo::Shader> m_shader2;
+
+    Apollo::Ref<Apollo::Shader> m_textureShader;
+    Apollo::Ref<Apollo::Texture> m_texture;
 
     Apollo::OrthographicCamera m_camera;
     glm::vec3 m_cameraPosition;
