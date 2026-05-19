@@ -20,6 +20,7 @@ namespace Apollo
 
     private:
         uint32_t m_vertexArrayID;
+        uint32_t m_vertexBufferIndex = 0;
 
         std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
         std::shared_ptr<IndexBuffer> m_indexBuffer;

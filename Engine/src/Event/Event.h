@@ -24,8 +24,8 @@ namespace Apollo
         EventCategoryKeyboard = 0x04,
     };
 
-#define EVENT_CLASS_TYPE(type) static EventType getStaticType() { return EventType::type; }\
-                                virtual EventType GetEventType() const override { return getStaticType(); }\
+#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
+                                virtual EventType GetEventType() const override { return GetStaticType(); }\
                                 virtual const char* GetName() const override { return #type; }
 
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
@@ -51,19 +51,16 @@ namespace Apollo
 
     class EventDispatcher
     {
-        template <typename T>
-        using EventFn = std::function<bool(T&)>;
     public:
         EventDispatcher(Event& event)
             : m_event(event) {}
 
-        template<typename T>
-        requires(std::is_base_of_v<Event, T>)
-        bool Dispatch(EventFn<T> func)
+        template<typename T, typename F>
+        bool Dispatch(const F& func)
         {
-            if (m_event.GetEventType() == T::getStaticType())
+            if (m_event.GetEventType() == T::GetStaticType())
             {
-                m_event.handled = func(*reinterpret_cast<T*>(&m_event));
+                m_event.handled |= func(static_cast<T&>(m_event));
                 return true;
             }
             return false;

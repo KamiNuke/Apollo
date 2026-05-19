@@ -1,6 +1,6 @@
 #include "glad/glad.h"
 #include "OpenGLShader.h"
-
+#include <array>
 #include "Logger/Log.h"
 
 namespace Apollo
@@ -19,9 +19,16 @@ namespace Apollo
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_name = filepath.substr(lastSlash, count);
 	}
 
-    OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
+    OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+	    : m_name(name)
     {
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSource;
@@ -127,11 +134,14 @@ namespace Apollo
 		return shaderSources;
     }
 
-    void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
+    void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
     {
 		m_programID = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		assert(shaderSources.size() <= 2 && "Up to 2 shaders supported for now");
+		std::array<GLenum, 2> glShaderIDs;
 
+
+		int glShaderIDIndex = 0;
 		for (auto& kv : shaderSources)
 		{
 			GLenum type = kv.first;
@@ -161,7 +171,7 @@ namespace Apollo
 			}
 
 			glAttachShader(m_programID, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
 		// Link our program

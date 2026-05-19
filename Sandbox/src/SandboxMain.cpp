@@ -106,7 +106,7 @@ public:
             }
         )";
 
-        m_shader = Apollo::Shader::Create(vertexSrc, fragSrc);
+        m_shader = Apollo::Shader::Create("test", vertexSrc, fragSrc);
 
         std::string vertexSrc2 = R"(
             #version 330 core
@@ -138,14 +138,14 @@ public:
             }
         )";
 
-        m_shader2 = Apollo::Shader::Create(vertexSrc2, fragSrc2);
+        m_shader2 = Apollo::Shader::Create("test", vertexSrc2, fragSrc2);
         m_fbo = Apollo::CreateRef<Apollo::OpenGLFrameBuffer>(1280, 720);
 
-        m_textureShader = Apollo::Shader::Create("../../Sandbox/shaders/Texture.glsl");
+        auto textureShader = m_shaderLibrary.Load("../../Sandbox/shaders/Texture.glsl");
         m_texture = Apollo::Texture2D::Create("../../Sandbox/assets/klauncher.png");
 
-        m_textureShader->Bind();
-        m_textureShader->SetInt("uTexture", 0);
+        textureShader->Bind();
+        textureShader->SetInt("uTexture", 0);
     }
 
     void OnUpdate(Apollo::Timestep timestep) override
@@ -207,8 +207,9 @@ public:
             }
         }
 
+        auto textureShader = m_shaderLibrary.Get("Texture");
         m_texture->Bind();
-        Apollo::Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(0.75f)));
+        Apollo::Renderer::Submit(textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(0.75f)));
 
         //Apollo::Renderer::Submit(m_shader, m_vertexArray);
         Apollo::Renderer::EndScene();
@@ -254,13 +255,13 @@ public:
 private:
     Apollo::Ref<Apollo::OpenGLFrameBuffer> m_fbo;
 
+    Apollo::ShaderLibrary m_shaderLibrary;
     Apollo::Ref<Apollo::Shader> m_shader;
     Apollo::Ref<Apollo::VertexArray> m_vertexArray;
 
     Apollo::Ref<Apollo::VertexArray> m_squareVA;
     Apollo::Ref<Apollo::Shader> m_shader2;
 
-    Apollo::Ref<Apollo::Shader> m_textureShader;
     Apollo::Ref<Apollo::Texture> m_texture;
 
     Apollo::OrthographicCamera m_camera;

@@ -8,7 +8,7 @@ namespace Apollo
     {
     public:
         OpenGLShader(const std::string& filepath);
-        OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
+        OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
         ~OpenGLShader() override;
 
         void Bind() const override;
@@ -22,13 +22,15 @@ namespace Apollo
         void SetFloat4(const std::string& name, glm::vec4 value) const override;
         void SetMat4(const std::string& name, const glm::mat4& value) const override;
 
+        [[nodiscard]] virtual const std::string& GetName() const override { return m_name; };
         [[nodiscard]] uint32_t GetID() const override { return m_programID; }
 
     private:
         std::string ReadFile(const std::string& filepath);
         std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
-        void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
+        void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
     private:
         uint32_t m_programID;
+        std::string m_name;
     };
 } // Apollo

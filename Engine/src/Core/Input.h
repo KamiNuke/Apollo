@@ -7,8 +7,11 @@ namespace Apollo
 {
     class Input
     {
+    protected:
+        Input() = default;
     public:
-        virtual ~Input() = default;
+        Input(const Input&) = delete;
+        Input& operator=(const Input&) = delete;
 
         inline static bool IsKeyPressed(int keycode) { return s_instance->IsKeyPressedImpl(keycode); }
         inline static bool IsMouseButtonPressed(int button) { return s_instance->IsMouseButtonPressedImpl(button); }

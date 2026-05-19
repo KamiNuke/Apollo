@@ -53,19 +53,18 @@ namespace Apollo
         glBindVertexArray(m_vertexArrayID);
         buffer->Bind();
 
-        uint32_t index = 0;
         const auto& layout = buffer->GetLayout();
         for (const auto& element : layout)
         {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index,
+            glEnableVertexAttribArray(m_vertexBufferIndex);
+            glVertexAttribPointer(m_vertexBufferIndex,
             element.GetElementCount(),
                 ShaderDataTypeToOpenGLBaseType(element.type),
                 element.normalized,
                 buffer->GetLayout().GetStride(),
                 reinterpret_cast<void*>(element.offset)
             );
-            index++;
+            m_vertexBufferIndex++;
         }
 
         m_vertexBuffers.push_back(buffer);
