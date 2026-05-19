@@ -8,7 +8,6 @@ set(SOURCES
         src/Logger/Log.h
         src/Logger/Log.cpp
         src/Core/Window.h
-        src/defines.h
         src/Core/Application.cpp
         src/Core/Application.h
         src/main.h
@@ -63,6 +62,7 @@ set(SOURCES
         src/Platform/OpenGL/OpenGLFrameBuffer.h
         src/Platform/OpenGL/OpenGLShader.cpp
         src/Platform/OpenGL/OpenGLShader.h
+        src/Core/Base.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

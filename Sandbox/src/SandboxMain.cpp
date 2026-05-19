@@ -1,7 +1,8 @@
 #include "SandboxMain.h"
 
-#include "defines.h"
+#include "Core/Base.h"
 #include "imgui.h"
+#include "Core/Base.h"
 #include "Event/KeyEvent.h"
 #include "Platform/OpenGL/OpenGLFrameBuffer.h"
 #include "Renderer/RenderCommand.h"
@@ -11,7 +12,8 @@ class TestLayer : public Apollo::Layer
 {
 public:
     TestLayer()
-        : Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_squarePosition(1.0f), m_cameraPosition(0.0f), m_squareColor(1.0f)
+        : Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f),
+    m_cameraPosition(0.0f), m_squarePosition(1.0f), m_squareColor(1.0f)
     {
 
         float vertices[6*3]
@@ -26,13 +28,13 @@ public:
             0, 1, 2,
         };
 
-        m_vertexArray.reset(Apollo::VertexArray::Create());
+        m_vertexArray = Apollo::VertexArray::Create();
         m_vertexArray->Bind();
 
-        std::shared_ptr<Apollo::VertexBuffer> m_vertexBuffer;
-        std::shared_ptr<Apollo::IndexBuffer> m_indexBuffer;
-        m_vertexBuffer.reset(Apollo::VertexBuffer::Create(vertices, sizeof(vertices)));
-        m_indexBuffer.reset(Apollo::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+        Apollo::Ref<Apollo::VertexBuffer> m_vertexBuffer;
+        Apollo::Ref<Apollo::IndexBuffer> m_indexBuffer;
+        m_vertexBuffer = Apollo::VertexBuffer::Create(vertices, sizeof(vertices));
+        m_indexBuffer = Apollo::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
         {
             Apollo::BufferLayout layout =
@@ -62,13 +64,13 @@ public:
             2, 3, 0,
         };
 
-        m_squareVA.reset(Apollo::VertexArray::Create());
+        m_squareVA = Apollo::VertexArray::Create();
         m_squareVA->Bind();
 
-        std::shared_ptr<Apollo::VertexBuffer> m_squareVB;
-        std::shared_ptr<Apollo::IndexBuffer> m_squareVI;
-        m_squareVB.reset(Apollo::VertexBuffer::Create(vertices2, sizeof(vertices2)));
-        m_squareVI.reset(Apollo::IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t)));
+        Apollo::Ref<Apollo::VertexBuffer> m_squareVB;
+        Apollo::Ref<Apollo::IndexBuffer> m_squareVI;
+        m_squareVB = Apollo::VertexBuffer::Create(vertices2, sizeof(vertices2));
+        m_squareVI = Apollo::IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
 
         {
             Apollo::BufferLayout layout =
@@ -109,7 +111,7 @@ public:
             }
         )";
 
-        m_shader.reset(Apollo::Shader::Create(vertexSrc, fragSrc));
+        m_shader = Apollo::Shader::Create(vertexSrc, fragSrc);
 
         std::string vertexSrc2 = R"(
             #version 330 core
@@ -141,8 +143,8 @@ public:
             }
         )";
 
-        m_shader2.reset(Apollo::Shader::Create(vertexSrc2, fragSrc2));
-        m_fbo = std::make_shared<Apollo::OpenGLFrameBuffer>(1280, 720);
+        m_shader2 = Apollo::Shader::Create(vertexSrc2, fragSrc2);
+        m_fbo = Apollo::CreateRef<Apollo::OpenGLFrameBuffer>(1280, 720);
     }
 
     void OnUpdate(Apollo::Timestep timestep) override
@@ -227,7 +229,7 @@ public:
         // and here we can add our created texture as image to ImGui
         // unfortunately we need to use the cast to void* or I didn't find another way tbh
         ImGui::GetWindowDrawList()->AddImage(
-            (void *)m_fbo->GetTexture(),
+            m_fbo->GetTexture(),
             ImVec2(pos.x, pos.y),
             ImVec2(pos.x + window_width, pos.y + window_height),
             ImVec2(0, 1),
@@ -246,13 +248,13 @@ public:
     }
 
 private:
-    std::shared_ptr<Apollo::OpenGLFrameBuffer> m_fbo;
+    Apollo::Ref<Apollo::OpenGLFrameBuffer> m_fbo;
 
-    std::shared_ptr<Apollo::Shader> m_shader;
-    std::shared_ptr<Apollo::VertexArray> m_vertexArray;
+    Apollo::Ref<Apollo::Shader> m_shader;
+    Apollo::Ref<Apollo::VertexArray> m_vertexArray;
 
-    std::shared_ptr<Apollo::VertexArray> m_squareVA;
-    std::shared_ptr<Apollo::Shader> m_shader2;
+    Apollo::Ref<Apollo::VertexArray> m_squareVA;
+    Apollo::Ref<Apollo::Shader> m_shader2;
 
     Apollo::OrthographicCamera m_camera;
     glm::vec3 m_cameraPosition;

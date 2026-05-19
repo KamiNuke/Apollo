@@ -5,6 +5,7 @@
 #include <SDL3/SDL.h>
 #include <memory>
 
+#include "Core/Base.h"
 #include "Renderer/GraphicsContext.h"
 
 namespace Apollo::Platform
@@ -40,7 +41,7 @@ namespace Apollo::Platform
 
     private:
         SDL_Window* m_window = nullptr;
-        std::unique_ptr<GraphicsContext> m_context;
+        Scope<GraphicsContext> m_context;
 
         struct WindowData
         {

@@ -7,7 +7,7 @@
 
 namespace Apollo
 {
-    Input* Input::s_instance = new GenericInput();
+    Scope<Input> Input::s_instance = CreateScope<GenericInput>();
 
     bool GenericInput::IsKeyPressedImpl(int keycode)
     {

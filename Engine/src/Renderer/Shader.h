@@ -7,6 +7,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Core/Base.h"
+
 namespace Apollo
 {
     class Shader
@@ -25,7 +27,7 @@ namespace Apollo
         virtual void SetFloat4(const std::string& name, glm::vec4 value) const = 0;
         virtual void SetMat4(const std::string& name, const glm::mat4& value) const = 0;
 
-        static Shader* Create(const std::string& vertexSource, const std::string& fragmentSource);
+        static Scope<Shader> Create(const std::string& vertexSource, const std::string& fragmentSource);
         [[nodiscard]] virtual uint32_t GetID() const = 0;
     };
 } // Apollo

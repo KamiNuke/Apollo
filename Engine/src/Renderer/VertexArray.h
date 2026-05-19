@@ -13,12 +13,12 @@ namespace Apollo
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& buffer) = 0;
-        virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& buffer) = 0;
+        virtual void AddVertexBuffer(const Ref<VertexBuffer>& buffer) = 0;
+        virtual void SetIndexBuffer(const Ref<IndexBuffer>& buffer) = 0;
 
         virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() = 0;
-        virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() = 0;
+        virtual const Ref<IndexBuffer>& GetIndexBuffer() = 0;
 
-        static VertexArray* Create();
+        static Scope<VertexArray> Create();
     };
 } // Apollo

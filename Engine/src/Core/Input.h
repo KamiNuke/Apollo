@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 
+#include "Base.h"
+
 namespace Apollo
 {
     class Input
@@ -17,6 +19,6 @@ namespace Apollo
         virtual bool IsMouseButtonPressedImpl(int button) = 0;
         virtual glm::vec2 GetMousePosImpl() = 0;
     private:
-        static Input* s_instance;
+        static Scope<Input> s_instance;
     };
 }

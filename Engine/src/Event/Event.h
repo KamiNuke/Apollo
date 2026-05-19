@@ -63,7 +63,7 @@ namespace Apollo
         {
             if (m_event.GetEventType() == T::getStaticType())
             {
-                m_event.handled = func(*(T*)&m_event);
+                m_event.handled = func(*reinterpret_cast<T*>(&m_event));
                 return true;
             }
             return false;

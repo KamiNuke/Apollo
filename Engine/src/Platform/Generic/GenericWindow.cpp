@@ -186,7 +186,7 @@ namespace Apollo
             assert("SDL_CreateWindow() Failed");
         }
 
-        m_context = std::make_unique<OpenGLContext>(m_window);
+        m_context = CreateScope<OpenGLContext>(m_window);
         m_context->Init();
 
         SDL_ShowWindow(m_window);

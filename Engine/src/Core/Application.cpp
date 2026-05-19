@@ -4,7 +4,7 @@
 #include <X11/Xproto.h>
 
 #include "Logger/Log.h"
-#include "defines.h"
+#include "Base.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 #include "SDL3/SDL_timer.h"

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "Base.h"
 #include "LayerStack.h"
 #include "Timestep.h"
 #include "Window.h"
@@ -38,7 +39,7 @@ namespace Apollo
         bool OnWindowResize(WindowResizeEvent& e);
 
     private:
-        std::unique_ptr<Window> m_window;
+        Scope<Window> m_window;
         static Application* s_instance;
 
         ImGuiLayer* m_imGuiLayer;

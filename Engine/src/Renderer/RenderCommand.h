@@ -25,6 +25,6 @@ namespace Apollo
         }
 
     private:
-        static RendererAPI* s_rendererAPI;
+        static Scope<RendererAPI> s_rendererAPI;
     };
 } // Apollo

@@ -4,21 +4,21 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 
+#include "Core/Base.h"
+
 namespace Apollo
 {
     class Log
     {
     public:
-        using LogRef = std::shared_ptr<spdlog::logger>;
-
         static void Init();
 
-        static LogRef& GetCore();
-        static LogRef& GetUser();
+        static Ref<spdlog::logger>& GetCore();
+        static Ref<spdlog::logger>& GetUser();
 
     private:
-        static LogRef s_coreSink;
-        static LogRef s_userSink;
+        static Ref<spdlog::logger> s_coreSink;
+        static Ref<spdlog::logger> s_userSink;
     };
 } // Apollo
 
