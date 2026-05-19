@@ -26,10 +26,9 @@ public:
         m_vertexArray = Apollo::VertexArray::Create();
         m_vertexArray->Bind();
 
-        Apollo::Ref<Apollo::VertexBuffer> m_vertexBuffer;
-        Apollo::Ref<Apollo::IndexBuffer> m_indexBuffer;
-        m_vertexBuffer = Apollo::VertexBuffer::Create(vertices, sizeof(vertices));
-        m_indexBuffer = Apollo::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+        Apollo::Ref<Apollo::VertexBuffer> m_vertexBuffer = Apollo::VertexBuffer::Create(vertices, sizeof(vertices));
+        Apollo::Ref<Apollo::IndexBuffer> m_indexBuffer = Apollo::IndexBuffer::Create(
+            indices, sizeof(indices) / sizeof(uint32_t));
 
         {
             Apollo::BufferLayout layout =
@@ -142,40 +141,7 @@ public:
         m_shader2 = Apollo::Shader::Create(vertexSrc2, fragSrc2);
         m_fbo = Apollo::CreateRef<Apollo::OpenGLFrameBuffer>(1280, 720);
 
-        std::string vertTextureShader = R"(
-            #version 330 core
-            layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec2 aTexCoord;
-
-            uniform mat4 uViewProjection;
-            uniform mat4 uTransform;
-
-            out vec2 vTexCoord;
-
-            void main()
-            {
-                gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0f);
-                vTexCoord = aTexCoord;
-            }
-        )";
-
-        std::string fragTextureShader = R"(
-            #version 330 core
-            layout(location = 0) out vec4 FragColor;
-
-            in vec2 vTexCoord;
-
-            uniform vec3 uColor;
-
-            uniform sampler2D uTexture;
-
-            void main()
-            {
-                FragColor = texture(uTexture, vTexCoord);
-            }
-        )";
-
-        m_textureShader = Apollo::Shader::Create(vertTextureShader, fragTextureShader);
+        m_textureShader = Apollo::Shader::Create("../../Sandbox/shaders/Texture.glsl");
         m_texture = Apollo::Texture2D::Create("../../Sandbox/assets/klauncher.png");
 
         m_textureShader->Bind();

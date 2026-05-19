@@ -1,4 +1,5 @@
 #pragma once
+#include "glad/glad.h"
 #include "Renderer/Shader.h"
 
 namespace Apollo
@@ -6,6 +7,7 @@ namespace Apollo
     class OpenGLShader : public Shader
     {
     public:
+        OpenGLShader(const std::string& filepath);
         OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
         ~OpenGLShader() override;
 
@@ -22,6 +24,10 @@ namespace Apollo
 
         [[nodiscard]] uint32_t GetID() const override { return m_programID; }
 
+    private:
+        std::string ReadFile(const std::string& filepath);
+        std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+        void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
     private:
         uint32_t m_programID;
     };

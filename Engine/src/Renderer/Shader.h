@@ -27,6 +27,7 @@ namespace Apollo
         virtual void SetFloat4(const std::string& name, glm::vec4 value) const = 0;
         virtual void SetMat4(const std::string& name, const glm::mat4& value) const = 0;
 
+        static Scope<Shader> Create(const std::string& filepath);
         static Scope<Shader> Create(const std::string& vertexSource, const std::string& fragmentSource);
         [[nodiscard]] virtual uint32_t GetID() const = 0;
     };
