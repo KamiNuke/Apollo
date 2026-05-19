@@ -11,7 +11,7 @@ class TestLayer : public Apollo::Layer
 {
 public:
     TestLayer()
-        : Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_squarePosition(1.0f), m_cameraPosition(0.0f)
+        : Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_squarePosition(1.0f), m_cameraPosition(0.0f), m_squareColor(1.0f)
     {
 
         float vertices[6*3]
@@ -109,7 +109,7 @@ public:
             }
         )";
 
-        m_shader = std::make_shared<Apollo::Shader>(vertexSrc, fragSrc);
+        m_shader.reset(Apollo::Shader::Create(vertexSrc, fragSrc));
 
         std::string vertexSrc2 = R"(
             #version 330 core
@@ -130,18 +130,18 @@ public:
         std::string fragSrc2 = R"(
             #version 330 core
             in vec3 ourColor;
+
             out vec4 FragColor;
 
-            uniform vec4 gColor;
+            uniform vec3 uColor;
 
             void main()
             {
-                FragColor = gColor;
+                FragColor = vec4(uColor, 1.0f);
             }
         )";
 
-        m_shader2 = std::make_shared<Apollo::Shader>(vertexSrc2, fragSrc2);
-
+        m_shader2.reset(Apollo::Shader::Create(vertexSrc2, fragSrc2));
         m_fbo = std::make_shared<Apollo::OpenGLFrameBuffer>(1280, 720);
     }
 
@@ -189,6 +189,8 @@ public:
         Apollo::Renderer::BeginScene(m_camera);
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(m_squareScale));
+        m_shader2->Bind();
+        m_shader2->SetFloat3("uColor", m_squareColor);
 
         for (int i = 0; i < 20; i++)
         {
@@ -197,10 +199,6 @@ public:
                 glm::vec3 pos(i * 0.11, j * 0.11, 0.0f);
                 pos = pos + m_squarePosition;
                 glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-                if (i % 2 == 0)
-                    m_shader2->SetFloat4("gColor", {0.8f, 0.2f, 0.3f, 1.0f});
-                else
-                    m_shader2->SetFloat4("gColor", {0.1f, 0.3f, 0.98f, 1.0f});
 
                 Apollo::Renderer::Submit(m_shader2, m_squareVA, transform);
             }
@@ -237,6 +235,10 @@ public:
         );
 
         ImGui::End();
+
+        ImGui::Begin("Settings");
+        ImGui::ColorEdit3("Square Color", glm::value_ptr(m_squareColor));
+        ImGui::End();
     }
 
     void OnEvent(Apollo::Event& event) override
@@ -261,6 +263,7 @@ private:
 
     glm::vec3 m_squarePosition;
     float m_squareScale = 0.05f;
+    glm::vec3 m_squareColor;
 };
 
 SandboxMain::SandboxMain(const Apollo::Window::Properties& props)

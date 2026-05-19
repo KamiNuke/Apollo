@@ -12,22 +12,20 @@ namespace Apollo
     class Shader
     {
     public:
-        Shader(const std::string& vertexSource, const std::string& fragmentSource);
-        ~Shader();
+        virtual ~Shader() = default;
 
-        void Bind();
-        void Unbind();
+        virtual void Bind() const = 0;
+        virtual void Unbind() const = 0;
 
-        void SetInt(const std::string& name, int value) const;
-        void SetBool(const std::string& name, bool value) const;
-        void SetFloat(const std::string& name, float value) const;
-        void SetFloat2(const std::string& name, glm::vec2 value) const;
-        void SetFloat3(const std::string& name, glm::vec3 value) const;
-        void SetFloat4(const std::string& name, glm::vec4 value) const;
-        void SetMat4(const std::string& name, const glm::mat4& value) const;
+        virtual void SetInt(const std::string& name, int value) const = 0;
+        virtual void SetBool(const std::string& name, bool value) const = 0;
+        virtual void SetFloat(const std::string& name, float value) const = 0;
+        virtual void SetFloat2(const std::string& name, glm::vec2 value) const = 0;
+        virtual void SetFloat3(const std::string& name, glm::vec3 value) const = 0;
+        virtual void SetFloat4(const std::string& name, glm::vec4 value) const = 0;
+        virtual void SetMat4(const std::string& name, const glm::mat4& value) const = 0;
 
-        [[nodiscard]] uint32_t GetID() const { return m_programID; }
-    private:
-        uint32_t m_programID;
+        static Shader* Create(const std::string& vertexSource, const std::string& fragmentSource);
+        [[nodiscard]] virtual uint32_t GetID() const = 0;
     };
 } // Apollo

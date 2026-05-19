@@ -61,6 +61,8 @@ set(SOURCES
         src/Renderer/FrameBuffer.h
         src/Platform/OpenGL/OpenGLFrameBuffer.cpp
         src/Platform/OpenGL/OpenGLFrameBuffer.h
+        src/Platform/OpenGL/OpenGLShader.cpp
+        src/Platform/OpenGL/OpenGLShader.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
