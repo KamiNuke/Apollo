@@ -18,6 +18,8 @@ namespace Apollo
         [[nodiscard]] virtual uint32_t GetHeight() const = 0;
         [[nodiscard]] virtual const std::string& GetPath() const = 0;
         [[nodiscard]] virtual uint32_t GetID() const = 0;
+
+        virtual bool operator==(const Texture& other) const = 0;
     };
 
     class Texture2D : public Texture

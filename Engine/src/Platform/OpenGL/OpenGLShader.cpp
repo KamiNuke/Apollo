@@ -57,6 +57,12 @@ namespace Apollo
         glUniform1i(location, value);
     }
 
+    void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count) const
+    {
+		const GLint location = glGetUniformLocation(m_programID, name.c_str());
+		glUniform1iv(location, count, values);
+    }
+
     void OpenGLShader::SetBool(const std::string& name, bool value) const
     {
         const GLint location = glGetUniformLocation(m_programID, name.c_str());

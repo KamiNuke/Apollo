@@ -15,6 +15,7 @@ namespace Apollo
         void Unbind() const override;
 
         void SetInt(const std::string& name, int value) const override;
+        void SetIntArray(const std::string& name, int* values, uint32_t count) const override;
         void SetBool(const std::string& name, bool value) const override;
         void SetFloat(const std::string& name, float value) const override;
         void SetFloat2(const std::string& name, const glm::vec2& value) const override;

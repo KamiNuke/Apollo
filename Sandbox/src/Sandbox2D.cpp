@@ -24,16 +24,16 @@ void Sandbox2D::OnUpdate(Apollo::Timestep ts)
     Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
     Apollo::RenderCommand::Clear();
 
+    static float rotation = 0.0f;
+    rotation += ts * 20.0f;
+
     Apollo::Renderer2D::BeginScene(m_cameraController.GetCamera());
 
-    //Apollo::Renderer2D::DrawQuad({0.0f, 1.0f}, {1.0f, 0.30f}, m_squareColor);
-    //Apollo::Renderer2D::DrawRotatedQuad({-1.0f, 0.0f}, {0.50f, 1.0f},glm::radians(-60.0f),  m_squareColor);
-    //Apollo::Renderer2D::DrawRotatedQuad({m_texturePosition.x - 0.5f, m_texturePosition.y, -0.1}, {1.0f, 1.0f}, glm::radians(45.0f), m_texture);
-
-    Apollo::Renderer2D::DrawQuad(m_texturePosition, {1.0f, 1.0f}, m_texture, 0.5f, m_squareColor);
-    Apollo::Renderer2D::DrawQuad({-1.0f, 0.0f}, {0.50f, 1.0f}, m_squareColor);
+    Apollo::Renderer2D::DrawRotatedQuad({m_texturePosition.x, m_texturePosition.y + 0.5f, -0.1}, {1.0f, 1.0f}, rotation, m_texture);
+    Apollo::Renderer2D::DrawQuad({m_texturePosition.x - 0.5f, m_texturePosition.y, -0.1}, {1.0f, 1.0f}, m_texture, 1.0f, m_squareColor);
     Apollo::Renderer2D::DrawQuad({0.0f, 1.0f}, {1.0f, 0.30f}, m_squareColor);
-
+    Apollo::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+    Apollo::Renderer2D::DrawRotatedQuad({-1.0f, 0.0f}, {0.50f, 1.0f},rotation,  m_squareColor);
 
     Apollo::Renderer2D::EndScene();
 }

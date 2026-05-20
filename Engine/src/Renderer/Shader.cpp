@@ -4,7 +4,6 @@
 
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
-#include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace Apollo
 {

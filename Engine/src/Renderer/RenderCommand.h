@@ -24,9 +24,9 @@ namespace Apollo
             s_rendererAPI->Clear();
         }
 
-        inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+        inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = 0)
         {
-            s_rendererAPI->DrawIndexed(vertexArray);
+            s_rendererAPI->DrawIndexed(vertexArray, indexCount);
         }
 
     private:

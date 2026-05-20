@@ -20,6 +20,8 @@ namespace Apollo
         [[nodiscard]] const std::string& GetPath() const override { return m_path; }
         [[nodiscard]] uint32_t GetID() const override { return m_textureID; }
 
+        bool operator==(const Texture& other) const override { return m_textureID == other.GetID(); }
+
     private:
         std::string m_path;
         uint32_t m_width, m_height;

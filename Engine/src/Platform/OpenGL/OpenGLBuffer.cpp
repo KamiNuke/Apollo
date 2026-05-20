@@ -6,6 +6,14 @@ namespace Apollo
     // VBO
     //
 
+    OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+    {
+        glGenBuffers(1, &m_bufferID);
+
+        glBindBuffer(GL_ARRAY_BUFFER, m_bufferID);
+        glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+    }
+
     OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
     {
         glGenBuffers(1, &m_bufferID);
