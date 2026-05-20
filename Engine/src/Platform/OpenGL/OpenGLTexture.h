@@ -11,7 +11,7 @@ namespace Apollo
         OpenGLTexture2D(const std::string& path);
         ~OpenGLTexture2D() override;
 
-        void Bind(uint32_t slot = GL_TEXTURE0) const override;
+        void Bind(uint32_t slot = 0) const override;
 
         void SetData(void* data, uint32_t size) override;
 

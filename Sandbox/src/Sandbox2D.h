@@ -20,7 +20,7 @@ private:
     Apollo::Ref<Apollo::Shader> m_flatColorShader;
     Apollo::Ref<Apollo::VertexArray> m_squareVA;
     Apollo::Ref<Apollo::Texture2D> m_texture;
-    glm::vec3 m_texturePosition {0.0f, 0.0f, 0.0f};
+    glm::vec3 m_texturePosition {0.0f, 0.5f, 0.0f};
 
     glm::vec4 m_squareColor {0.9f, 0.2f, 0.4f, 1.0f};
 };
