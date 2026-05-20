@@ -8,6 +8,22 @@
 
 namespace Apollo
 {
+    OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height, void* data, uint32_t size)
+        : m_width(width), m_height(height)
+    {
+        m_internalFormat = GL_RGBA8;
+        m_format = GL_RGBA;
+
+        glGenTextures(1, &m_textureID);
+        glBindTexture(GL_TEXTURE_2D, m_textureID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        OpenGLTexture2D::SetData(data, size);
+    }
+
     OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
         : m_path(path)
     {
@@ -29,6 +45,9 @@ namespace Apollo
             internalFormat = GL_RGB8;
             format = GL_RGB;
         }
+
+        m_internalFormat = internalFormat;
+        m_format = format;
 
         glGenTextures(1, &m_textureID);
         glBindTexture(GL_TEXTURE_2D, m_textureID);
@@ -52,5 +71,14 @@ namespace Apollo
     {
         glActiveTexture(slot);
         glBindTexture(GL_TEXTURE_2D, m_textureID);
+    }
+
+    void OpenGLTexture2D::SetData(void* data, uint32_t size)
+    {
+        const uint32_t bpp = m_format == GL_RGBA ? 4 : 3;
+        assert(size == m_width * m_height * bpp && "Data must be entire texture!");
+
+        glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
 } // Apollo

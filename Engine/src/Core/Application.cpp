@@ -31,6 +31,7 @@ namespace Apollo
 
     Application::~Application()
     {
+        Renderer::Shutdown();
     }
 
     void Application::Run()
@@ -38,11 +39,14 @@ namespace Apollo
         while (m_isRunning)
         {
             float time = Time::GetTime();
-            Timestep timestep = time - m_lastFrameTime;
+            Timestep ts = time - m_lastFrameTime;
             m_lastFrameTime = time;
 
-            for (Layer* layer : m_layerStack)
-                layer->OnUpdate(timestep);
+            if (!m_isMinimized)
+            {
+                for (Layer* layer : m_layerStack)
+                    layer->OnUpdate(ts);
+            }
 
             m_imGuiLayer->Begin();
             for (Layer* layer : m_layerStack)
@@ -92,8 +96,10 @@ namespace Apollo
     {
         if (e.GetWidth() == 0 || e.GetHeight() == 0)
         {
+            m_isMinimized = true;
             return false;
         }
+        m_isMinimized = false;
 
         Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 

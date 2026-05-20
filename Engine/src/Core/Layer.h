@@ -14,7 +14,7 @@ namespace Apollo
 
         virtual void OnAttach() {}
         virtual void OnDetach() {}
-        virtual void OnUpdate(Timestep timestep) {}
+        virtual void OnUpdate(Timestep ts) {}
         virtual void OnImGuiRender() {}
         virtual void OnEvent(Event& event) {}
         [[nodiscard]] const inline std::string& GetName() const { return m_name; }

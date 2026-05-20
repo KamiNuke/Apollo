@@ -1,6 +1,8 @@
 #include "SandboxMain.h"
+#include "main.h"
 
 #include "imgui.h"
+#include "Sandbox2D.h"
 #include "Renderer/OrthographicCameraController.h"
 
 
@@ -62,10 +64,9 @@ public:
         m_squareVA = Apollo::VertexArray::Create();
         m_squareVA->Bind();
 
-        Apollo::Ref<Apollo::VertexBuffer> m_squareVB;
-        Apollo::Ref<Apollo::IndexBuffer> m_squareVI;
-        m_squareVB = Apollo::VertexBuffer::Create(vertices2, sizeof(vertices2));
-        m_squareVI = Apollo::IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
+        Apollo::Ref<Apollo::VertexBuffer> m_squareVB = Apollo::VertexBuffer::Create(vertices2, sizeof(vertices2));
+        Apollo::Ref<Apollo::IndexBuffer> m_squareVI = Apollo::IndexBuffer::Create(
+            indices2, sizeof(indices2) / sizeof(uint32_t));
 
         {
             Apollo::BufferLayout layout =
@@ -142,8 +143,8 @@ public:
         m_shader2 = Apollo::Shader::Create("test", vertexSrc2, fragSrc2);
         m_fbo = Apollo::CreateRef<Apollo::OpenGLFrameBuffer>(1280, 720);
 
-        auto textureShader = m_shaderLibrary.Load("../../Sandbox/shaders/Texture.glsl");
-        m_texture = Apollo::Texture2D::Create("../../Sandbox/assets/klauncher.png");
+        auto textureShader = m_shaderLibrary.Load("../../../Sandbox/shaders/Texture.glsl");
+        m_texture = Apollo::Texture2D::Create("../../../Sandbox/assets/klauncher.png");
 
         textureShader->Bind();
         textureShader->SetInt("uTexture", 0);
@@ -189,7 +190,7 @@ public:
 
     void OnImGuiRender() override
     {
-        ImGui::Begin("My Scene");
+        ImGui::Begin("Viewport");
 
         // we access the ImGui window size
         const float window_width = ImGui::GetContentRegionAvail().x;
@@ -236,8 +237,6 @@ private:
     Apollo::Ref<Apollo::Texture> m_texture;
 
     Apollo::OrthographicCameraController m_cameraController;
-    glm::vec3 m_cameraPosition;
-    float m_rotation = 0.0f;
 
     glm::vec3 m_squarePosition;
     float m_squareScale = 0.05f;
@@ -247,7 +246,8 @@ private:
 SandboxMain::SandboxMain(const Apollo::Window::Properties& props)
     : Application(props)
 {
-    PushLayer(new TestLayer());
+    //PushLayer(new TestLayer());
+    PushLayer(new Sandbox2D());
 }
 
 SandboxMain::~SandboxMain()

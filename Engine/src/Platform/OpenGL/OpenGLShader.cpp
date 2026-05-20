@@ -69,19 +69,19 @@ namespace Apollo
         glUniform1f(location, value);
     }
 
-    void OpenGLShader::SetFloat2(const std::string& name, glm::vec2 value) const
+    void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value) const
     {
         const GLint location = glGetUniformLocation(m_programID, name.c_str());
         glUniform2f(location, value.x, value.y);
     }
 
-    void OpenGLShader::SetFloat3(const std::string& name, glm::vec3 value) const
+    void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value) const
     {
         const GLint location = glGetUniformLocation(m_programID, name.c_str());
         glUniform3f(location, value.x, value.y, value.z);
     }
 
-    void OpenGLShader::SetFloat4(const std::string& name, glm::vec4 value) const
+    void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value) const
     {
         const GLint location = glGetUniformLocation(m_programID, name.c_str());
         glUniform4f(location, value.x, value.y, value.z, value.w);
@@ -100,10 +100,17 @@ namespace Apollo
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
-			result.resize(in.tellg());
-			in.seekg(0, std::ios::beg);
-			in.read(&result[0], result.size());
-			in.close();
+			size_t size = in.tellg();
+			if (size != -1)
+			{
+				result.resize(size);
+				in.seekg(0, std::ios::beg);
+				in.read(&result[0], result.size());
+			}
+			else
+			{
+				APOLLO_LOGGER_ERROR("Couldn't open file {0}", filepath);
+			}
 		}
 		else
 		{
@@ -123,13 +130,15 @@ namespace Apollo
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\r\n", pos);
+			assert(eol != std::string::npos && "Invalid shader type specified");
 			size_t begin = pos + typeTokenLength + 1;
 			std::string type = source.substr(begin, eol - begin);
 			assert(ShaderTypeFromString(type) && "Invalid shader type specified");
 
 			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
 			pos = source.find(typeToken, nextLinePos);
-			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));		}
+			shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
+		}
 
 		return shaderSources;
     }
@@ -201,7 +210,11 @@ namespace Apollo
 			return;
 		}
 
-			for (auto id : glShaderIDs)
-				glDetachShader(m_programID, id);
+		for (auto id : glShaderIDs)
+		{
+			glDetachShader(m_programID, id);
+			glDeleteShader(id);
+		}
+
     }
 } // Apollo

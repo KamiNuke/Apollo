@@ -185,23 +185,23 @@ typedef enum APOLLO_KEY
     APOLLO_KEY_F23 = 114,
     APOLLO_KEY_F24 = 115,
     APOLLO_KEY_EXECUTE = 116,
-    APOLLO_KEY_HELP = 117,    /**< AL Integrated Help Center */
-    APOLLO_KEY_MENU = 118,    /**< Menu (show menu) */
+    APOLLO_KEY_HELP = 117, /**< AL Integrated Help Center */
+    APOLLO_KEY_MENU = 118, /**< Menu (show menu) */
     APOLLO_KEY_SELECT = 119,
-    APOLLO_KEY_STOP = 120,    /**< AC Stop */
-    APOLLO_KEY_AGAIN = 121,   /**< AC Redo/Repeat */
-    APOLLO_KEY_UNDO = 122,    /**< AC Undo */
-    APOLLO_KEY_CUT = 123,     /**< AC Cut */
-    APOLLO_KEY_COPY = 124,    /**< AC Copy */
-    APOLLO_KEY_PASTE = 125,   /**< AC Paste */
-    APOLLO_KEY_FIND = 126,    /**< AC Find */
+    APOLLO_KEY_STOP = 120, /**< AC Stop */
+    APOLLO_KEY_AGAIN = 121, /**< AC Redo/Repeat */
+    APOLLO_KEY_UNDO = 122, /**< AC Undo */
+    APOLLO_KEY_CUT = 123, /**< AC Cut */
+    APOLLO_KEY_COPY = 124, /**< AC Copy */
+    APOLLO_KEY_PASTE = 125, /**< AC Paste */
+    APOLLO_KEY_FIND = 126, /**< AC Find */
     APOLLO_KEY_MUTE = 127,
     APOLLO_KEY_VOLUMEUP = 128,
     APOLLO_KEY_VOLUMEDOWN = 129,
-/* not sure whether there's a reason to enable these */
-/*     APOLLO_KEY_LOCKINGCAPSLOCK = 130,  */
-/*     APOLLO_KEY_LOCKINGNUMLOCK = 131, */
-/*     APOLLO_KEY_LOCKINGSCROLLLOCK = 132, */
+    /* not sure whether there's a reason to enable these */
+    /*     APOLLO_KEY_LOCKINGCAPSLOCK = 130,  */
+    /*     APOLLO_KEY_LOCKINGNUMLOCK = 131, */
+    /*     APOLLO_KEY_LOCKINGSCROLLLOCK = 132, */
     APOLLO_KEY_KP_COMMA = 133,
     APOLLO_KEY_KP_EQUALSAS400 = 134,
 
@@ -225,9 +225,9 @@ typedef enum APOLLO_KEY
     APOLLO_KEY_LANG8 = 151, /**< reserved */
     APOLLO_KEY_LANG9 = 152, /**< reserved */
 
-    APOLLO_KEY_ALTERASE = 153,    /**< Erase-Eaze */
+    APOLLO_KEY_ALTERASE = 153, /**< Erase-Eaze */
     APOLLO_KEY_SYSREQ = 154,
-    APOLLO_KEY_CANCEL = 155,      /**< AC Cancel */
+    APOLLO_KEY_CANCEL = 155, /**< AC Cancel */
     APOLLO_KEY_CLEAR = 156,
     APOLLO_KEY_PRIOR = 157,
     APOLLO_KEY_RETURN2 = 158,
@@ -294,12 +294,12 @@ typedef enum APOLLO_KEY
     APOLLO_KEY_RALT = 230, /**< alt gr, option */
     APOLLO_KEY_RGUI = 231, /**< windows, command (apple), meta */
 
-    APOLLO_KEY_MODE = 257,    /**< I'm not sure if this is really not covered
+    APOLLO_KEY_MODE = 257, /**< I'm not sure if this is really not covered
                                  *   by any of the above, but since there's a
                                  *   special SDL_KMOD_MODE for it I'm adding it here
                                  */
 
-    /* @} *//* Usage page 0x07 */
+    /* @} */ /* Usage page 0x07 */
 
     /**
      *  \name Usage page 0x0C
@@ -312,41 +312,41 @@ typedef enum APOLLO_KEY
      */
     /* @{ */
 
-    APOLLO_KEY_SLEEP = 258,                   /**< Sleep */
-    APOLLO_KEY_WAKE = 259,                    /**< Wake */
+    APOLLO_KEY_SLEEP = 258, /**< Sleep */
+    APOLLO_KEY_WAKE = 259, /**< Wake */
 
-    APOLLO_KEY_CHANNEL_INCREMENT = 260,       /**< Channel Increment */
-    APOLLO_KEY_CHANNEL_DECREMENT = 261,       /**< Channel Decrement */
+    APOLLO_KEY_CHANNEL_INCREMENT = 260, /**< Channel Increment */
+    APOLLO_KEY_CHANNEL_DECREMENT = 261, /**< Channel Decrement */
 
-    APOLLO_KEY_MEDIA_PLAY = 262,          /**< Play */
-    APOLLO_KEY_MEDIA_PAUSE = 263,         /**< Pause */
-    APOLLO_KEY_MEDIA_RECORD = 264,        /**< Record */
-    APOLLO_KEY_MEDIA_FAST_FORWARD = 265,  /**< Fast Forward */
-    APOLLO_KEY_MEDIA_REWIND = 266,        /**< Rewind */
-    APOLLO_KEY_MEDIA_NEXT_TRACK = 267,    /**< Next Track */
+    APOLLO_KEY_MEDIA_PLAY = 262, /**< Play */
+    APOLLO_KEY_MEDIA_PAUSE = 263, /**< Pause */
+    APOLLO_KEY_MEDIA_RECORD = 264, /**< Record */
+    APOLLO_KEY_MEDIA_FAST_FORWARD = 265, /**< Fast Forward */
+    APOLLO_KEY_MEDIA_REWIND = 266, /**< Rewind */
+    APOLLO_KEY_MEDIA_NEXT_TRACK = 267, /**< Next Track */
     APOLLO_KEY_MEDIA_PREVIOUS_TRACK = 268, /**< Previous Track */
-    APOLLO_KEY_MEDIA_STOP = 269,          /**< Stop */
-    APOLLO_KEY_MEDIA_EJECT = 270,         /**< Eject */
-    APOLLO_KEY_MEDIA_PLAY_PAUSE = 271,    /**< Play / Pause */
-    APOLLO_KEY_MEDIA_SELECT = 272,        /* Media Select */
+    APOLLO_KEY_MEDIA_STOP = 269, /**< Stop */
+    APOLLO_KEY_MEDIA_EJECT = 270, /**< Eject */
+    APOLLO_KEY_MEDIA_PLAY_PAUSE = 271, /**< Play / Pause */
+    APOLLO_KEY_MEDIA_SELECT = 272, /* Media Select */
 
-    APOLLO_KEY_AC_NEW = 273,              /**< AC New */
-    APOLLO_KEY_AC_OPEN = 274,             /**< AC Open */
-    APOLLO_KEY_AC_CLOSE = 275,            /**< AC Close */
-    APOLLO_KEY_AC_EXIT = 276,             /**< AC Exit */
-    APOLLO_KEY_AC_SAVE = 277,             /**< AC Save */
-    APOLLO_KEY_AC_PRINT = 278,            /**< AC Print */
-    APOLLO_KEY_AC_PROPERTIES = 279,       /**< AC Properties */
+    APOLLO_KEY_AC_NEW = 273, /**< AC New */
+    APOLLO_KEY_AC_OPEN = 274, /**< AC Open */
+    APOLLO_KEY_AC_CLOSE = 275, /**< AC Close */
+    APOLLO_KEY_AC_EXIT = 276, /**< AC Exit */
+    APOLLO_KEY_AC_SAVE = 277, /**< AC Save */
+    APOLLO_KEY_AC_PRINT = 278, /**< AC Print */
+    APOLLO_KEY_AC_PROPERTIES = 279, /**< AC Properties */
 
-    APOLLO_KEY_AC_SEARCH = 280,           /**< AC Search */
-    APOLLO_KEY_AC_HOME = 281,             /**< AC Home */
-    APOLLO_KEY_AC_BACK = 282,             /**< AC Back */
-    APOLLO_KEY_AC_FORWARD = 283,          /**< AC Forward */
-    APOLLO_KEY_AC_STOP = 284,             /**< AC Stop */
-    APOLLO_KEY_AC_REFRESH = 285,          /**< AC Refresh */
-    APOLLO_KEY_AC_BOOKMARKS = 286,        /**< AC Bookmarks */
+    APOLLO_KEY_AC_SEARCH = 280, /**< AC Search */
+    APOLLO_KEY_AC_HOME = 281, /**< AC Home */
+    APOLLO_KEY_AC_BACK = 282, /**< AC Back */
+    APOLLO_KEY_AC_FORWARD = 283, /**< AC Forward */
+    APOLLO_KEY_AC_STOP = 284, /**< AC Stop */
+    APOLLO_KEY_AC_REFRESH = 285, /**< AC Refresh */
+    APOLLO_KEY_AC_BOOKMARKS = 286, /**< AC Bookmarks */
 
-    /* @} *//* Usage page 0x0C */
+    /* @} */ /* Usage page 0x0C */
 
 
     /**
@@ -367,12 +367,11 @@ typedef enum APOLLO_KEY
     APOLLO_KEY_CALL = 289, /**< Used for accepting phone calls. */
     APOLLO_KEY_ENDCALL = 290, /**< Used for rejecting phone calls. */
 
-    /* @} *//* Mobile keys */
+    /* @} */ /* Mobile keys */
 
     /* Add any other keys here. */
 
-    APOLLO_KEY_RESERVED = 400,    /**< 400-500 reserved for dynamic keycodes */
+    APOLLO_KEY_RESERVED = 400, /**< 400-500 reserved for dynamic keycodes */
 
     APOLLO_KEY_COUNT = 512 /**< not a key, just marks the number of scancodes for array bounds */
-
 } APOLLO_KEY;

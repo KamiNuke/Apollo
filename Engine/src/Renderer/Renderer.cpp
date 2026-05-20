@@ -2,6 +2,7 @@
 #include "Renderer.h"
 
 #include "RenderCommand.h"
+#include "Renderer2D.h"
 
 namespace Apollo
 {
@@ -10,6 +11,12 @@ namespace Apollo
     void Renderer::Init()
     {
         RenderCommand::Init();
+        Renderer2D::Init();
+    }
+
+    void Renderer::Shutdown()
+    {
+        Renderer2D::Shutdown();
     }
 
     void Renderer::BeginScene(OrthographicCamera& camera)

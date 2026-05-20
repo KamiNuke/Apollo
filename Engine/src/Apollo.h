@@ -8,13 +8,12 @@
 
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/Renderer2D.h"
 #include "Renderer/Texture.h"
 #include "Renderer/OrthographicCameraController.h"
 
 #include "Core/Timestep.h"
 
 #include "Core/Input.h"
-#include "keycodes.h"
-#include "mousecodes.h"
-
-#include "main.h"
+#include "Core/KeyCodes.h"
+#include "Core/MouseCodes.h"

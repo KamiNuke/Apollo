@@ -11,7 +11,7 @@
 
 namespace Apollo
 {
-    static bool s_SDLInitialized = false;
+    static uint8_t s_SDLWindowCount = 0;
 
     Window* Window::Create(const Properties& props)
     {
@@ -167,15 +167,14 @@ namespace Apollo
 
         APOLLO_LOGGER_INFO("Initializing window {0} ({1}, {2})", props.title, props.width, props.height);
 
-        if (!s_SDLInitialized)
+        if (s_SDLWindowCount == 0)
         {
+            APOLLO_LOGGER_INFO("Initializing SDL");
             if (!SDL_Init(SDL_INIT_VIDEO))
             {
                 APOLLO_LOGGER_CRITICAL("Failed to initialize SDL: {0}", SDL_GetError());
                 assert("SDL_Init() Failed");
             }
-
-            s_SDLInitialized = true;
         }
 
         constexpr SDL_WindowFlags flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
@@ -189,6 +188,8 @@ namespace Apollo
         m_context = CreateScope<OpenGLContext>(m_window);
         m_context->Init();
 
+        ++s_SDLWindowCount;
+
         SDL_ShowWindow(m_window);
         SetVsync(true);
     }
@@ -197,6 +198,12 @@ namespace Apollo
     {
         m_context->Shutdown();
         SDL_DestroyWindow(m_window);
-        SDL_Quit();
+        --s_SDLWindowCount;
+
+        if (s_SDLWindowCount == 0)
+        {
+            APOLLO_LOGGER_INFO("Terminating SDL");
+            SDL_Quit();
+        }
     }
 } // Apollo

@@ -46,6 +46,7 @@ namespace Apollo
         LayerStack m_layerStack;
 
         bool m_isRunning = true;
+        bool m_isMinimized = false;
 
         float m_lastFrameTime = 0.0f;
     };

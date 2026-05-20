@@ -40,7 +40,7 @@ namespace Apollo
     {
         std::string name;
         ShaderDataType type;
-        uint32_t offset;
+        size_t offset;
         uint32_t size;
         bool normalized;
 
@@ -76,7 +76,7 @@ namespace Apollo
     class BufferLayout
     {
     public:
-        BufferLayout() {}
+        BufferLayout() = default;
 
         BufferLayout(std::initializer_list<BufferElement> elements)
             : m_elements(elements)
@@ -99,7 +99,7 @@ namespace Apollo
     private:
         void CalculateOffsetAndStride()
         {
-            uint32_t offset = 0;
+            size_t offset = 0;
             m_stride = 0;
             for (auto& element : m_elements)
             {

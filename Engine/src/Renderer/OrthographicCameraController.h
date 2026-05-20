@@ -19,7 +19,7 @@ namespace Apollo
         [[nodiscard]] const OrthographicCamera& GetCamera() const { return m_camera; }
 
         float GetZoomLevel() const { return m_zoomLevel; }
-        void SetZoomLevel(float zoomLevel) { m_zoomLevel = zoomLevel; }
+        void SetZoomLevel(const float zoomLevel) { m_zoomLevel = zoomLevel; }
     private:
         bool OnMouseScrolled(MouseScrolledEvent& e);
         bool OnWindowResized(WindowResizeEvent& e);
