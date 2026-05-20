@@ -7,7 +7,6 @@
 #include "Base.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
-#include "SDL3/SDL_timer.h"
 #include "Utils/PlatformUtils.h"
 
 namespace Apollo
@@ -16,6 +15,7 @@ namespace Apollo
 
     Application::Application(const Window::Properties& props)
     {
+
         assert(!s_instance && "Application already exists");
         s_instance = this;
 

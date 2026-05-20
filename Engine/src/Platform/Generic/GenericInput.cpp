@@ -1,14 +1,10 @@
 #include "GenericInput.h"
 
 #include <SDL3/SDL.h>
-
-#include "Core/Application.h"
 #include "Logger/Log.h"
 
 namespace Apollo
 {
-    Scope<Input> Input::s_instance = CreateScope<GenericInput>();
-
     bool GenericInput::IsKeyPressedImpl(int keycode)
     {
         const auto state = SDL_GetKeyboardState(nullptr);

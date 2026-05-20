@@ -23,9 +23,9 @@ set(SOURCES
         src/Core/LayerStack.h
         src/ImGui/ImGuiLayer.cpp
         src/ImGui/ImGuiLayer.h
-        src/Core/Input.h
-        src/Core/KeyCodes.h
-        src/Core/MouseCodes.h
+        src/Input/Input.h
+        src/Input/KeyCodes.h
+        src/Input/MouseCodes.h
         src/Platform/Generic/GenericWindow.cpp
         src/Platform/Generic/GenericWindow.h
         src/Platform/Generic/GenericInput.cpp
@@ -72,6 +72,9 @@ set(SOURCES
         src/Renderer/OrthographicCameraController.h
         src/Renderer/Renderer2D.cpp
         src/Renderer/Renderer2D.h
+        src/Core/Timer.h
+        src/Input/Input.cpp
+        src/Core/Window.cpp
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

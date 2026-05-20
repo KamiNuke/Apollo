@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 
-#include "Base.h"
+#include "../Core/Base.h"
 
 namespace Apollo
 {
@@ -10,6 +10,8 @@ namespace Apollo
     protected:
         Input() = default;
     public:
+        virtual ~Input() = default;
+
         Input(const Input&) = delete;
         Input& operator=(const Input&) = delete;
 
@@ -17,6 +19,7 @@ namespace Apollo
         inline static bool IsMouseButtonPressed(int button) { return s_instance->IsMouseButtonPressedImpl(button); }
         inline static glm::vec2 GetMousePos() { return s_instance->GetMousePosImpl(); }
 
+        static Scope<Input> Create();
     protected:
         virtual bool IsKeyPressedImpl(int keycode) = 0;
         virtual bool IsMouseButtonPressedImpl(int button) = 0;

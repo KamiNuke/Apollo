@@ -13,11 +13,6 @@ namespace Apollo
 {
     static uint8_t s_SDLWindowCount = 0;
 
-    Window* Window::Create(const Properties& props)
-    {
-        return new Platform::GenericWindow(props);
-    }
-
     Platform::GenericWindow::GenericWindow(const Properties& props)
     {
         Init(props);

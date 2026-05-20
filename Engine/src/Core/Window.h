@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+#include "Base.h"
 #include "Event/Event.h"
 
 namespace Apollo
@@ -43,7 +44,7 @@ namespace Apollo
         virtual void ImGuiBegin() = 0;
         virtual void ImGuiEnd() = 0;
 
-        static Window* Create(const Properties& props = Properties());
+        static Scope<Window> Create(const Properties& props = Properties());
     private:
 
     };

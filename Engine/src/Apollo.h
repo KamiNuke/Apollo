@@ -14,6 +14,6 @@
 
 #include "Core/Timestep.h"
 
-#include "Core/Input.h"
-#include "Core/KeyCodes.h"
-#include "Core/MouseCodes.h"
+#include "Input/Input.h"
+#include "Input/KeyCodes.h"
+#include "Input/MouseCodes.h"

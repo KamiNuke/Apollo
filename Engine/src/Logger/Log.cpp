@@ -28,12 +28,12 @@ namespace Apollo
         s_userSink->flush_on(spdlog::level::trace);
     }
 
-    Ref<spdlog::logger>& Log::GetCore()
+    Ref<spdlog::logger>& Log::GetCoreLogger()
     {
         return s_coreSink;
     }
 
-    Ref<spdlog::logger>& Log::GetUser()
+    Ref<spdlog::logger>& Log::GetUserLogger()
     {
         return s_userSink;
     }

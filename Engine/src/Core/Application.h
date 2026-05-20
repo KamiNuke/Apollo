@@ -8,6 +8,8 @@
 #include "Event/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
 
+int main(int argc, char* argv[]);
+
 namespace Apollo
 {
     class Application
@@ -40,7 +42,6 @@ namespace Apollo
 
     private:
         Scope<Window> m_window;
-        static Application* s_instance;
 
         ImGuiLayer* m_imGuiLayer;
         LayerStack m_layerStack;
@@ -49,5 +50,8 @@ namespace Apollo
         bool m_isMinimized = false;
 
         float m_lastFrameTime = 0.0f;
+    private:
+        static Application* s_instance;
+        friend int ::main(int argc, char** argv);
     };
 } // Apollo

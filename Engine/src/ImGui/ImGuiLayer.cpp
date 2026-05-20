@@ -50,12 +50,6 @@ namespace Apollo
         app.GetWindow().ImGuiShutdown();
     }
 
-    void ImGuiLayer::OnImGuiRender()
-    {
-        static bool showDemo = true;
-        ImGui::ShowDemoWindow(&showDemo);
-    }
-
     void ImGuiLayer::Begin()
     {
         Application& app = Application::Get();
