@@ -20,10 +20,11 @@ namespace Apollo
         virtual ~Application();
 
         void Run();
+        void Close();
 
         void OnEvent(Event& e);
-        virtual void OnUpdate() = 0;
-        virtual void OnRender() = 0;
+        virtual void OnUpdate() {}
+        virtual void OnRender() {}
 
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* overlay);

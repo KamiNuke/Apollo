@@ -1,5 +1,7 @@
 set(SOURCES
-
+        src/EditorApp.cpp
+        src/EditorLayer.h
+        src/EditorLayer.cpp
 )
 
 set(BUILD_NAME Apollo)

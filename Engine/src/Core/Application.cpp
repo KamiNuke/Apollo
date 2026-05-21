@@ -57,6 +57,11 @@ namespace Apollo
         }
     }
 
+    void Application::Close()
+    {
+        m_isRunning = false;
+    }
+
     void Application::OnEvent(Event& e)
     {
         EventDispatcher dispatcher(e);
