@@ -17,9 +17,9 @@ namespace Apollo
 
     struct Renderer2DData
     {
-        const uint32_t maxQuads = 20000;
-        const uint32_t maxVertices = maxQuads * 4;
-        const uint32_t maxIndices = maxQuads * 6;
+        static constexpr uint32_t maxQuads = 20000;
+        static constexpr uint32_t maxVertices = maxQuads * 4;
+        static constexpr uint32_t maxIndices = maxQuads * 6;
         static constexpr uint32_t maxTextureSlots = 32;
 
         Ref<VertexArray> quadVertexArray;
@@ -35,6 +35,8 @@ namespace Apollo
         uint32_t textureSlotIndex = 1; // 0 - white texture
 
         glm::vec4 quadVertexPositions[4];
+
+        Renderer2D::Statistics stats;
     };
 
     static Renderer2DData* s_data = nullptr;
@@ -52,7 +54,7 @@ namespace Apollo
             { ShaderDataType::Float4, "aColor"},
             { ShaderDataType::Float2, "aTexCoord"},
             { ShaderDataType::Float, "aTexIndex"},
-{ ShaderDataType::Float, "aTilingFactor"},
+            { ShaderDataType::Float, "aTilingFactor"},
         });
         s_data->quadVertexArray->AddVertexBuffer(s_data->quadVertexBuffer);
 
@@ -87,7 +89,7 @@ namespace Apollo
 
         s_data->quadShader = Shader::Create("../../../Sandbox/shaders/Texture.glsl");
         s_data->quadShader->Bind();
-        s_data->quadShader->SetIntArray("uTexture", samplers, s_data->maxTextureSlots);
+        s_data->quadShader->SetIntArray("uTextures", samplers, s_data->maxTextureSlots);
 
         s_data->textureSlots[0] = s_data->whiteTexture;
 
@@ -95,7 +97,6 @@ namespace Apollo
         s_data->quadVertexPositions[1] = {0.5f, -0.5f, 0.0f, 1.0f };
         s_data->quadVertexPositions[2] = {0.5f, 0.5f, 0.0f, 1.0f };
         s_data->quadVertexPositions[3] = {-0.5f, 0.5f, 0.0f, 1.0f };
-
     }
 
     void Renderer2D::Shutdown()
@@ -119,7 +120,7 @@ namespace Apollo
 
     void Renderer2D::EndScene()
     {
-        const uint32_t dataSize = reinterpret_cast<uint8_t*>(s_data->quadVertexBufferPtr) - reinterpret_cast<uint8_t*>(s_data->quadVertexBufferBase);
+        const uint32_t dataSize = static_cast<uint32_t>(reinterpret_cast<uint8_t*>(s_data->quadVertexBufferPtr) - reinterpret_cast<uint8_t*>(s_data->quadVertexBufferBase));
         s_data->quadVertexBuffer->SetData(s_data->quadVertexBufferBase, dataSize);
         Flush();
     }
@@ -128,11 +129,26 @@ namespace Apollo
     {
         if (s_data->quadIndexCount)
         {
+            uint32_t dataSize = static_cast<uint32_t>(reinterpret_cast<uint8_t*>(s_data->quadVertexBufferPtr) - reinterpret_cast<uint8_t*>(s_data->quadVertexBufferBase));
+            s_data->quadVertexBuffer->SetData(s_data->quadVertexBufferBase, dataSize);
+
             for (uint32_t i = 0; i < s_data->textureSlotIndex; i++)
                 s_data->textureSlots[i]->Bind(i);
 
+            s_data->quadShader->Bind();
             RenderCommand::DrawIndexed(s_data->quadVertexArray, s_data->quadIndexCount);
+            s_data->stats.drawCalls++;
         }
+    }
+
+    void Renderer2D::FlushAndReset()
+    {
+        EndScene();
+
+        s_data->quadIndexCount = 0;
+        s_data->quadVertexBufferPtr = s_data->quadVertexBufferBase;
+
+        s_data->textureSlotIndex = 1;
     }
 
     void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -142,42 +158,30 @@ namespace Apollo
 
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
     {
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
         constexpr float textureIndex = 0.0f;
         constexpr float tilingFactor = 1.0f;
+
+        if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
+            FlushAndReset();
 
         const glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
             * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[0];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[1];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[2];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[3];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[i];
+            s_data->quadVertexBufferPtr->color = color;
+            s_data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_data->quadVertexBufferPtr++;
+        }
 
         s_data->quadIndexCount += 6;
 
+        s_data->stats.quadCount++;
     }
 
     void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintcolor)
@@ -187,9 +191,13 @@ namespace Apollo
 
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintcolor)
     {
-        constexpr glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
         float textureIndex = 0.0f;
+
+        if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
+            FlushAndReset();
+
 
         for (uint32_t i = 1; i < s_data->textureSlotIndex; i++)
         {
@@ -202,6 +210,9 @@ namespace Apollo
 
         if (textureIndex == 0.0f)
         {
+            if (s_data->textureSlotIndex >= Renderer2DData::maxTextureSlots)
+                FlushAndReset();
+
             textureIndex = static_cast<float>(s_data->textureSlotIndex);
             s_data->textureSlots[s_data->textureSlotIndex] = texture;
             s_data->textureSlotIndex++;
@@ -210,36 +221,19 @@ namespace Apollo
         const glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
             * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[0];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[1];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[2];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[3];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[i];
+            s_data->quadVertexBufferPtr->color = tintcolor;
+            s_data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_data->quadVertexBufferPtr++;
+        }
 
         s_data->quadIndexCount += 6;
 
+        s_data->stats.quadCount++;
     }
 
     void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -251,43 +245,31 @@ namespace Apollo
     void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
         const glm::vec4& color)
     {
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
         constexpr float textureIndex = 0.0f;
         constexpr float tilingFactor = 1.0f;
+
+        if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
+            FlushAndReset();
 
         const glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
             * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
             * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[0];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[1];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[2];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[3];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[i];
+            s_data->quadVertexBufferPtr->color = color;
+            s_data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_data->quadVertexBufferPtr++;
+        }
 
         s_data->quadIndexCount += 6;
 
+        s_data->stats.quadCount++;
     }
 
     void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -299,9 +281,12 @@ namespace Apollo
     void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
         const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintcolor)
     {
-        constexpr glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
         float textureIndex = 0.0f;
+
+        if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
+            FlushAndReset();
 
         for (uint32_t i = 1; i < s_data->textureSlotIndex; i++)
         {
@@ -314,6 +299,9 @@ namespace Apollo
 
         if (textureIndex == 0.0f)
         {
+            if (s_data->textureSlotIndex >= Renderer2DData::maxTextureSlots)
+                FlushAndReset();
+
             textureIndex = static_cast<float>(s_data->textureSlotIndex);
             s_data->textureSlots[s_data->textureSlotIndex] = texture;
             s_data->textureSlotIndex++;
@@ -323,34 +311,29 @@ namespace Apollo
             * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
             * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[0];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
 
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[1];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[2];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
-
-        s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[3];
-        s_data->quadVertexBufferPtr->color = color;
-        s_data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_data->quadVertexBufferPtr++;
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_data->quadVertexBufferPtr->position = transform * s_data->quadVertexPositions[i];
+            s_data->quadVertexBufferPtr->color = tintcolor;
+            s_data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_data->quadVertexBufferPtr++;
+        }
 
         s_data->quadIndexCount += 6;
+
+        s_data->stats.quadCount++;
+    }
+
+    Renderer2D::Statistics Renderer2D::GetStats()
+    {
+        return s_data->stats;
+    }
+
+    void Renderer2D::ResetStats()
+    {
+        memset(&s_data->stats, 0, sizeof(Statistics));
     }
 } // Apollo

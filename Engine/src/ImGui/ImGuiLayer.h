@@ -13,8 +13,11 @@ namespace Apollo
         void OnAttach() override;
         void OnDetach() override;
 
+        void OnEvent(Event& event) override;
+
         void Begin();
         void End();
+
     private:
         float m_time = 0.0f;
     };

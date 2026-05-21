@@ -24,7 +24,18 @@ namespace Apollo
         static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
         static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
 
-    private:
+        struct Statistics
+        {
+            uint32_t drawCalls = 0;
+            uint32_t quadCount = 0;
 
+            [[nodiscard]] uint32_t GetTotalVertexCount() const { return quadCount * 4; }
+            [[nodiscard]] uint32_t GetTotalIndexCount() const { return quadCount * 6; }
+        };
+        static Statistics GetStats();
+        static void ResetStats();
+
+    private:
+        static void FlushAndReset();
     };
 } // Apollo
