@@ -27,9 +27,8 @@ set(SOURCES
         src/Input/KeyCodes.h
         src/Input/MouseCodes.h
         src/Platform/Generic/GenericWindow.cpp
-        src/Platform/Generic/GenericWindow.h
         src/Platform/Generic/GenericInput.cpp
-        src/Platform/Generic/GenericInput.h
+        src/Platform/Generic/GenericWindow.h
         src/Renderer/GraphicsContext.h
         src/Platform/OpenGL/OpenGLContext.cpp
         src/Platform/OpenGL/OpenGLContext.h

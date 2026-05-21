@@ -63,3 +63,4 @@ set(STB_INCLUDE_DIRS ${STB_INCLUDE_DIRS} PARENT_SCOPE)
 
 add_subdirectory(spdlog)
 add_subdirectory(glm)
+add_subdirectory(entt)
