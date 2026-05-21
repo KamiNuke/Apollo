@@ -18,7 +18,8 @@ namespace Apollo
         void Begin();
         void End();
 
+        void BlockEvents(bool block) { m_blockEvents = block; }
     private:
-        float m_time = 0.0f;
+        bool m_blockEvents = true;
     };
 } // Apollo

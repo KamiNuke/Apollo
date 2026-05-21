@@ -52,9 +52,12 @@ namespace Apollo
 
     void ImGuiLayer::OnEvent(Event& event)
     {
-        //ImGuiIO& io = ImGui::GetIO();
-        //event.handled |= event.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
-        //event.handled |= event.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+        if (m_blockEvents)
+        {
+            ImGuiIO& io = ImGui::GetIO();
+            event.handled |= event.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+            event.handled |= event.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+        }
     }
 
     void ImGuiLayer::Begin()

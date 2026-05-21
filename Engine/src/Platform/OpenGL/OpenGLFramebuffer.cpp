@@ -5,6 +5,8 @@
 
 namespace Apollo
 {
+    static constexpr uint32_t s_maxFramebufferSize = 8192;
+
     OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
         : m_specification(spec)
     {
@@ -65,8 +67,14 @@ namespace Apollo
 
     void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
     {
-        if (m_specification.width == width && m_specification.height == height || width == 0 || height == 0)
+        if (m_specification.width == width && m_specification.height == height ||
+            width == 0 || height == 0 ||
+            width > s_maxFramebufferSize || height > s_maxFramebufferSize)
+        {
+            APOLLO_LOGGER_WARN("Attempted to resize framebuffer to {0}, {1}", width, height);
             return;
+        }
+
 
         m_specification.width = width;
         m_specification.height = height;

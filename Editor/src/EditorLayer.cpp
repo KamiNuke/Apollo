@@ -31,7 +31,8 @@ namespace Apollo
 
     void EditorLayer::OnUpdate(Timestep ts)
     {
-        m_cameraController.OnUpdate(ts);
+        if (m_viewportFocused)
+            m_cameraController.OnUpdate(ts);
 
         if (FramebufferSpecification spec = m_framebuffer->GetSpecification();
             m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f &&
@@ -40,6 +41,9 @@ namespace Apollo
             // we rescale the framebuffer to the actual window size here and reset the glViewport
             m_framebuffer->Resize(m_viewportSize.x, m_viewportSize.y);
             m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+
+            m_viewportSize.x = spec.width;
+            m_viewportSize.y = spec.height;
             //RenderCommand::SetViewport(0, 0, m_viewportSize.x, m_viewportSize.y);
         }
 
@@ -130,6 +134,10 @@ namespace Apollo
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0.0f, 0.0f});
         if (ImGui::Begin("Viewport"))
         {
+            m_viewportFocused = ImGui::IsWindowFocused();
+            m_viewportHovered = ImGui::IsWindowHovered();
+            Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered);
+
             // we access the ImGui window size
             ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
             m_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
@@ -144,8 +152,8 @@ namespace Apollo
                 ImVec2(1, 0)
             );
         }
-        ImGui::End(); // Viewport
-        ImGui::PopStyleVar();
+        ImGui::End();
+        ImGui::PopStyleVar(); // Viewport
 
         if (ImGui::Begin("Properties"))
         {

@@ -20,6 +20,8 @@ namespace Apollo
 
         Ref<Framebuffer> m_framebuffer;
         glm::vec2 m_viewportSize = {0.0f, 0.0f};
+        bool m_viewportFocused = false;
+        bool m_viewportHovered = false;
 
         //temp
         Apollo::Ref<Apollo::Shader> m_flatColorShader;

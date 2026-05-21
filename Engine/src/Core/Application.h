@@ -30,6 +30,7 @@ namespace Apollo
         void PushOverlay(Layer* overlay);
 
         [[nodiscard]] inline Window& GetWindow() const { return *m_window; }
+        [[nodiscard]] ImGuiLayer* GetImGuiLayer() { return m_imGuiLayer; }
 
         /*
          * Basically entry function for user apps. Define in order to use

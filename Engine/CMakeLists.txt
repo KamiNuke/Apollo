@@ -73,7 +73,6 @@ set(SOURCES
         src/Renderer/Renderer2D.cpp
         src/Renderer/Renderer2D.h
         src/Core/Timer.h
-        src/Input/Input.cpp
         src/Core/Window.cpp
 )
 
