@@ -73,14 +73,19 @@ set(SOURCES
         src/Renderer/Renderer2D.h
         src/Core/Timer.h
         src/Core/Window.cpp
+        src/Scene/Scene.h
+        src/Scene/Scene.cpp
+        src/Scene/Components.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
 
 target_link_libraries(${BUILD_NAME}
-        PRIVATE
+        PUBLIC
         SDL3::SDL3
         spdlog::spdlog
+        EnTT::EnTT
+        glm::glm
 )
 
 target_include_directories(${BUILD_NAME}
