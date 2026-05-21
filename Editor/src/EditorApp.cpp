@@ -18,7 +18,7 @@ namespace Apollo
     Application* CreateApplication()
     {
         Window::Properties props;
-        props.title = "Apollo";
+        props.title = "Apollo Editor";
 
         return new Editor(props);
     }

@@ -57,10 +57,10 @@ set(SOURCES
         src/Core/Timestep.h
         src/Utils/PlatformUtils.h
         src/Platform/Generic/GenericPlatformUtils.cpp
-        src/Renderer/FrameBuffer.cpp
-        src/Renderer/FrameBuffer.h
-        src/Platform/OpenGL/OpenGLFrameBuffer.cpp
-        src/Platform/OpenGL/OpenGLFrameBuffer.h
+        src/Renderer/Framebuffer.cpp
+        src/Renderer/Framebuffer.h
+        src/Platform/OpenGL/OpenGLFramebuffer.cpp
+        src/Platform/OpenGL/OpenGLFramebuffer.h
         src/Platform/OpenGL/OpenGLShader.cpp
         src/Platform/OpenGL/OpenGLShader.h
         src/Core/Base.h

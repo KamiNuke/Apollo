@@ -20,10 +20,11 @@ namespace Apollo
 
         float GetZoomLevel() const { return m_zoomLevel; }
         void SetZoomLevel(const float zoomLevel) { m_zoomLevel = zoomLevel; }
+
+        void OnResize(float width, float height);
     private:
         bool OnMouseScrolled(MouseScrolledEvent& e);
         bool OnWindowResized(WindowResizeEvent& e);
-        void OnResize(float width, float height);
     private:
         float m_aspectRatio;
         float m_zoomLevel = 1.0f;

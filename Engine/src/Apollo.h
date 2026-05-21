@@ -4,7 +4,7 @@
 #include "Logger/Log.h"
 #include "ImGui/ImGuiLayer.h"
 #include "Event/KeyEvent.h"
-#include "Platform/OpenGL/OpenGLFrameBuffer.h"
+#include "Platform/OpenGL/OpenGLFramebuffer.h"
 
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"

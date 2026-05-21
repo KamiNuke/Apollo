@@ -10,6 +10,11 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+    Apollo::FramebufferSpecification fbSpec;
+    fbSpec.width = 1280;
+    fbSpec.height = 720;
+    m_framebuffer = Apollo::Framebuffer::Create(fbSpec);
+
     m_texture = Apollo::Texture2D::Create("../../../Sandbox/assets/klauncher.png");
 }
 
@@ -21,6 +26,7 @@ void Sandbox2D::OnUpdate(Apollo::Timestep ts)
 {
     m_cameraController.OnUpdate(ts);
 
+    m_framebuffer->Bind();
     Apollo::Renderer2D::ResetStats();
 
     Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
@@ -46,6 +52,9 @@ void Sandbox2D::OnUpdate(Apollo::Timestep ts)
         }
     }
     Apollo::Renderer2D::EndScene();
+    m_framebuffer->Unbind();
+    Apollo::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
+    Apollo::RenderCommand::Clear();
 }
 
 void Sandbox2D::OnImGuiRender()
@@ -58,8 +67,35 @@ void Sandbox2D::OnImGuiRender()
     ImGui::Text("Quads: %d", stats.quadCount);
     ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
     ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+
+    uint32_t textureID = m_framebuffer->GetColorAttachmentRendererID();
+    ImGui::Image(textureID, ImVec2{320, 120});
+
     ImGui::End();
 
+    if (ImGui::Begin("Viewport"))
+    {
+        // we access the ImGui window size
+        const float window_width = ImGui::GetContentRegionAvail().x;
+        const float window_height = ImGui::GetContentRegionAvail().y;
+
+        // we rescale the framebuffer to the actual window size here and reset the glViewport
+        m_framebuffer->Resize(window_width, window_height);
+        Apollo::RenderCommand::SetViewport(0, 0, window_width, window_height);
+
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+
+        // and here we can add our created texture as image to ImGui
+        // unfortunately we need to use the cast to void* or I didn't find another way tbh
+        ImGui::GetWindowDrawList()->AddImage(
+            m_framebuffer->GetColorAttachmentRendererID(),
+            ImVec2(pos.x, pos.y),
+            ImVec2(pos.x + window_width, pos.y + window_height),
+            ImVec2(0, 1),
+            ImVec2(1, 0)
+        );
+        ImGui::End();
+    }
 }
 
 void Sandbox2D::OnEvent(Apollo::Event& event)
