@@ -14,12 +14,12 @@ namespace Apollo
         struct Properties
         {
             std::string title;
-            int width;
-            int height;
+            uint32_t width;
+            uint32_t height;
 
             Properties(const std::string& _title = "Apollo",
-                        const int _width = 1280,
-                        const int _height = 720)
+                        const uint32_t _width = 1280,
+                        const uint32_t _height = 720)
                 : title(_title), width(_width), height(_height)
             {
             }

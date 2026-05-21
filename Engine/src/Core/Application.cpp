@@ -19,7 +19,7 @@ namespace Apollo
         assert(!s_instance && "Application already exists");
         s_instance = this;
 
-        m_window = std::unique_ptr<Window>(Window::Create());
+        m_window = Window::Create(Window::Properties(props.title));
         m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
         //m_window->SetVsync(false);
 

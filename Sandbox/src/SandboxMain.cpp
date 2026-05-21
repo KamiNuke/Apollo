@@ -141,7 +141,7 @@ public:
         )";
 
         m_shader2 = Apollo::Shader::Create("test", vertexSrc2, fragSrc2);
-        m_fbo = Apollo::CreateRef<Apollo::OpenGLFrameBuffer>(1280, 720);
+        //m_fbo = Apollo::CreateRef<Apollo::OpenGLFramebuffer>(1280, 720);
 
         auto textureShader = m_shaderLibrary.Load("../../../Sandbox/shaders/Texture.glsl");
         m_texture = Apollo::Texture2D::Create("../../../Sandbox/assets/klauncher.png");
@@ -204,6 +204,7 @@ public:
 
         // and here we can add our created texture as image to ImGui
         // unfortunately we need to use the cast to void* or I didn't find another way tbh
+        /*
         ImGui::GetWindowDrawList()->AddImage(
             m_fbo->GetTexture(),
             ImVec2(pos.x, pos.y),
@@ -211,7 +212,7 @@ public:
             ImVec2(0, 1),
             ImVec2(1, 0)
         );
-
+*/
         ImGui::End();
 
         ImGui::Begin("Settings");
@@ -225,7 +226,7 @@ public:
     }
 
 private:
-    Apollo::Ref<Apollo::OpenGLFrameBuffer> m_fbo;
+    Apollo::Ref<Apollo::OpenGLFramebuffer> m_fbo;
 
     Apollo::ShaderLibrary m_shaderLibrary;
     Apollo::Ref<Apollo::Shader> m_shader;
