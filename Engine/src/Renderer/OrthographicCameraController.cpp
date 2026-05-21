@@ -65,7 +65,8 @@ namespace Apollo
 
     bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
     {
-        m_zoomLevel -= e.GetOffsetY();
+        m_zoomLevel -= e.GetOffsetY() * 0.25f;
+        m_zoomLevel = std::max(m_zoomLevel, 0.25f);
         m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
         return false;
     }
