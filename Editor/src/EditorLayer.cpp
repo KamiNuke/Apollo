@@ -28,10 +28,10 @@ namespace Apollo
         m_square = m_activeScene->CreateEntity("sQUARE");
         m_square.AddComponent<SpriteRendererComponent>(glm::vec4{0.1f, 1.0f, 0.2f, 1.0f});
 
-        m_cameraEntity = m_activeScene->CreateEntity("CamEnt");
+        m_cameraEntity = m_activeScene->CreateEntity("Camera A");
         m_cameraEntity.AddComponent<CameraComponent>();
 
-        m_secondCamera = m_activeScene->CreateEntity("Clip-Space Camera");
+        m_secondCamera = m_activeScene->CreateEntity("Camera B");
         auto& cc = m_secondCamera.AddComponent<CameraComponent>();
         cc.primary = false;
 
@@ -108,7 +108,6 @@ namespace Apollo
     {
         const ImGuiID dockspace_id = ImGui::GetID("Editor Dockspace");
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
-
         // Create settings
         if (ImGui::DockBuilderGetNode(dockspace_id) == nullptr)
         {
@@ -125,10 +124,8 @@ namespace Apollo
             ImGui::DockBuilderDockWindow("Scene", dock_id_left_bottom);
             ImGui::DockBuilderFinish(dockspace_id);
         }
-
         // Submit dockspace
         ImGui::DockSpaceOverViewport(dockspace_id, viewport, ImGuiDockNodeFlags_PassthruCentralNode);
-
         if (ImGui::BeginMainMenuBar())
         {
             if (ImGui::BeginMenu("File"))
@@ -186,40 +183,7 @@ namespace Apollo
         ImGui::End();
         ImGui::PopStyleVar(); // Viewport
 
-        /*
-        if (ImGui::Begin("Properties"))
-        {
-            if (m_square)
-            {
-                auto& tag = m_square.GetComponent<TagComponent>().tag;
-                ImGui::Text("%s", tag.c_str());
-                auto& color = m_square.GetComponent<SpriteRendererComponent>().color;
-                ImGui::ColorEdit4("Color", glm::value_ptr(color));
-            }
-
-            ImGui::DragFloat3("Camera Transform",
-                glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().transform[3]));
-
-            if (ImGui::Checkbox("Camera A", &m_primaryCamera))
-            {
-                m_cameraEntity.GetComponent<CameraComponent>().primary = m_primaryCamera;
-                m_secondCamera.GetComponent<CameraComponent>().primary = !m_primaryCamera;
-            }
-            {
-                auto& camera = m_cameraEntity.GetComponent<CameraComponent>().camera;
-                float orthoSize = camera.GetOrthographicSize();
-                if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-                    camera.SetOrthographicSize(orthoSize);
-            }
-
-        }
-        ImGui::End(); // Properties
-*/
-
         m_sceneHierarchyPanel.OnImGuiRender();
-
-        //static bool showDemo = true;
-        //ImGui::ShowDemoWindow(&showDemo);
     }
 
     void EditorLayer::OnEvent(Event& event)
