@@ -50,17 +50,17 @@ namespace Apollo
 
             void OnUpdate(Timestep ts)
             {
-                auto& transform = GetComponent<TransformComponent>().transform;
+                auto& position = GetComponent<TransformComponent>().position;
                 float speed = 5.0f;
 
                 if (Input::IsKeyPressed(APOLLO_KEY_A))
-                    transform[3][0] -= speed * ts;
+                    position.x -= speed * ts;
                 if (Input::IsKeyPressed(APOLLO_KEY_D))
-                    transform[3][0] += speed * ts;
+                    position.x += speed * ts;
                 if (Input::IsKeyPressed(APOLLO_KEY_W))
-                    transform[3][1] += speed * ts;
+                    position.y += speed * ts;
                 if (Input::IsKeyPressed(APOLLO_KEY_S))
-                    transform[3][1] -= speed * ts;
+                    position.y -= speed * ts;
             }
         };
 
