@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "Scene/Components.h"
 
 namespace Apollo
 {
@@ -21,7 +22,11 @@ namespace Apollo
         fbSpec.height = 720;
         m_framebuffer = Framebuffer::Create(fbSpec);
 
-        m_texture = Apollo::Texture2D::Create("../../../Editor/assets/klauncher.png");
+        m_texture = Texture2D::Create("../../../Editor/assets/klauncher.png");
+
+        m_activeScene = CreateRef<Scene>();
+        m_square = m_activeScene->CreateEntity("sQUARE");
+        m_square.AddComponent<SpriteRendererComponent>(glm::vec4{0.1f, 1.0f, 0.2f, 1.0f});
     }
 
     void EditorLayer::OnDetach()
@@ -41,39 +46,18 @@ namespace Apollo
             // we rescale the framebuffer to the actual window size here and reset the glViewport
             m_framebuffer->Resize(m_viewportSize.x, m_viewportSize.y);
             m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
-
-            m_viewportSize.x = spec.width;
-            m_viewportSize.y = spec.height;
-            //RenderCommand::SetViewport(0, 0, m_viewportSize.x, m_viewportSize.y);
         }
 
-        m_framebuffer->Bind();
 
         Renderer2D::ResetStats();
-
+        m_framebuffer->Bind();
         // Clean viewport's framebuffer
         RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
         RenderCommand::Clear();
 
         Renderer2D::BeginScene(m_cameraController.GetCamera());
+        m_activeScene->OnUpdate(ts);
 
-        static float rotation = 0.0f;
-        rotation += ts * 20.0f;
-
-        Apollo::Renderer2D::DrawRotatedQuad({m_texturePosition.x, m_texturePosition.y + 0.5f, -0.1}, {1.0f, 1.0f}, rotation, m_texture);
-        Apollo::Renderer2D::DrawQuad({m_texturePosition.x - 0.5f, m_texturePosition.y, -0.1}, {1.0f, 1.0f}, m_texture, 1.0f, m_squareColor);
-        Apollo::Renderer2D::DrawQuad({0.0f, 1.0f}, {1.0f, 0.30f}, m_squareColor);
-        Apollo::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-        Apollo::Renderer2D::DrawRotatedQuad({-1.0f, 0.0f}, {0.50f, 1.0f},rotation,  m_squareColor);
-
-        for (float y = -5.0f; y < 5.0f; y += 0.5f)
-        {
-            for (float x = -5.0f; x < 5.0f; x += 0.5f)
-            {
-                glm::vec4 color = { (x + 5.0f) / 10.0f, (y + 5.0f) / 10.0f, 1.0f, 0.75f};
-                Apollo::Renderer2D::DrawQuad({x, y}, {0.45f, 0.45f}, color);
-            }
-        }
         Renderer2D::EndScene();
         m_framebuffer->Unbind();
 
@@ -116,6 +100,15 @@ namespace Apollo
 
                 ImGui::EndMenu();
             }
+
+            if (ImGui::BeginMenu("Help"))
+            {
+                if (ImGui::MenuItem("Exit"))
+                    Application::Get().Close();
+
+                ImGui::EndMenu();
+            }
+
             ImGui::EndMainMenuBar();
         }
 
@@ -157,7 +150,13 @@ namespace Apollo
 
         if (ImGui::Begin("Properties"))
         {
-
+            if (m_square)
+            {
+                auto& tag = m_square.GetComponent<TagComponent>().tag;
+                ImGui::Text("%s", tag.c_str());
+                auto& color = m_square.GetComponent<SpriteRendererComponent>().color;
+                ImGui::ColorEdit4("Color", glm::value_ptr(color));
+            }
         }
         ImGui::End(); // Properties
 

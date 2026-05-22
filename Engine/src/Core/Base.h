@@ -4,6 +4,12 @@
 
 #define BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
 
+#ifdef NDEBUG
+  #define APOLLO_ASSERT(condition, msg) ((void)0)
+#else
+  #define APOLLO_ASSERT(condition, msg) assert((condition) && (msg))
+#endif
+
 namespace Apollo
 {
     template<typename T>

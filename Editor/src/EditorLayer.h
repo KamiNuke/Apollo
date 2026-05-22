@@ -24,6 +24,8 @@ namespace Apollo
         bool m_viewportHovered = false;
 
         //temp
+        Ref<Scene> m_activeScene;
+        Entity m_square;
         Apollo::Ref<Apollo::Shader> m_flatColorShader;
         Apollo::Ref<Apollo::VertexArray> m_squareVA;
         Apollo::Ref<Apollo::Texture2D> m_texture;
