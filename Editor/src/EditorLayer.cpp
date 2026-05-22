@@ -31,7 +31,7 @@ namespace Apollo
         m_cameraEntity = m_activeScene->CreateEntity("CamEnt");
         m_cameraEntity.AddComponent<CameraComponent>();
 
-        m_secondCamera = m_activeScene->CreateEntity("Clip-Space Entity");
+        m_secondCamera = m_activeScene->CreateEntity("Clip-Space Camera");
         auto& cc = m_secondCamera.AddComponent<CameraComponent>();
         cc.primary = false;
 
@@ -40,8 +40,7 @@ namespace Apollo
         public:
             void OnCreate()
             {
-                auto& transform = GetComponent<TransformComponent>().transform;
-                transform[3][0] = rand() % 10;
+
             }
 
             void OnDestroy()
@@ -67,6 +66,8 @@ namespace Apollo
 
         m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_secondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
     }
 
     void EditorLayer::OnDetach()
@@ -92,7 +93,7 @@ namespace Apollo
         Renderer2D::ResetStats();
         m_framebuffer->Bind();
         // Clean viewport's framebuffer
-        RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
+        RenderCommand::SetClearColor({0.2f, 0.2f, 0.2f ,1.0f});
         RenderCommand::Clear();
 
         m_activeScene->OnUpdate(ts);
@@ -185,6 +186,7 @@ namespace Apollo
         ImGui::End();
         ImGui::PopStyleVar(); // Viewport
 
+        /*
         if (ImGui::Begin("Properties"))
         {
             if (m_square)
@@ -212,12 +214,10 @@ namespace Apollo
 
         }
         ImGui::End(); // Properties
+*/
 
-        if (ImGui::Begin("Scene"))
-        {
+        m_sceneHierarchyPanel.OnImGuiRender();
 
-        }
-        ImGui::End(); // Scene
         //static bool showDemo = true;
         //ImGui::ShowDemoWindow(&showDemo);
     }

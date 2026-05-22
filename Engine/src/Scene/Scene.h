@@ -23,5 +23,6 @@ namespace Apollo
         uint32_t m_viewportWidth = 0, m_viewportHeight = 0;
 
         friend class Entity;
+        friend class SceneHierarchyPanel;
     };
 }

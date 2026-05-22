@@ -6,7 +6,9 @@ set(SOURCES
 
 set(BUILD_NAME Apollo)
 
-add_executable(${BUILD_NAME})
+add_executable(${BUILD_NAME}
+        src/Panels/SceneHierarchyPanel.cpp
+        src/Panels/SceneHierarchyPanel.h)
 
 target_sources(${BUILD_NAME} PRIVATE ${SOURCES})
 
