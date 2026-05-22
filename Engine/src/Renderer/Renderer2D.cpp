@@ -113,10 +113,7 @@ namespace Apollo
         s_data->quadShader->Bind();
         s_data->quadShader->SetMat4("uViewProjection", viewProj);
 
-        s_data->quadIndexCount = 0;
-        s_data->quadVertexBufferPtr = s_data->quadVertexBufferBase;
-
-        s_data->textureSlotIndex = 1;
+        StartBatch();
     }
 
     void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -124,18 +121,13 @@ namespace Apollo
         s_data->quadShader->Bind();
         s_data->quadShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
 
-        s_data->quadIndexCount = 0;
-        s_data->quadVertexBufferPtr = s_data->quadVertexBufferBase;
-
-        s_data->textureSlotIndex = 1;
+        StartBatch();
     }
 
 
     void Renderer2D::EndScene()
     {
-        const uint32_t dataSize = static_cast<uint32_t>(reinterpret_cast<uint8_t*>(s_data->quadVertexBufferPtr) - reinterpret_cast<uint8_t*>(s_data->quadVertexBufferBase));
-        s_data->quadVertexBuffer->SetData(s_data->quadVertexBufferBase, dataSize);
-        Flush();
+        NextBatch();
     }
 
     void Renderer2D::Flush()
@@ -152,16 +144,6 @@ namespace Apollo
             RenderCommand::DrawIndexed(s_data->quadVertexArray, s_data->quadIndexCount);
             s_data->stats.drawCalls++;
         }
-    }
-
-    void Renderer2D::FlushAndReset()
-    {
-        EndScene();
-
-        s_data->quadIndexCount = 0;
-        s_data->quadVertexBufferPtr = s_data->quadVertexBufferBase;
-
-        s_data->textureSlotIndex = 1;
     }
 
     void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -198,7 +180,7 @@ namespace Apollo
         constexpr float tilingFactor = 1.0f;
 
         if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
-            FlushAndReset();
+            NextBatch();
 
         for (size_t i = 0; i < quadVertexCount; i++)
         {
@@ -223,7 +205,7 @@ namespace Apollo
         float textureIndex = 0.0f;
 
         if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
-            FlushAndReset();
+            NextBatch();
 
         for (uint32_t i = 1; i < s_data->textureSlotIndex; i++)
         {
@@ -237,7 +219,7 @@ namespace Apollo
         if (textureIndex == 0.0f)
         {
             if (s_data->textureSlotIndex >= Renderer2DData::maxTextureSlots)
-                FlushAndReset();
+                NextBatch();
 
             textureIndex = static_cast<float>(s_data->textureSlotIndex);
             s_data->textureSlots[s_data->textureSlotIndex] = texture;
@@ -300,5 +282,19 @@ namespace Apollo
     void Renderer2D::ResetStats()
     {
         memset(&s_data->stats, 0, sizeof(Statistics));
+    }
+
+    void Renderer2D::StartBatch()
+    {
+        s_data->quadIndexCount = 0;
+        s_data->quadVertexBufferPtr = s_data->quadVertexBufferBase;
+
+        s_data->textureSlotIndex = 1;
+    }
+
+    void Renderer2D::NextBatch()
+    {
+        Flush();
+        StartBatch();
     }
 } // Apollo
