@@ -106,6 +106,19 @@ namespace Apollo
         s_data = nullptr;
     }
 
+    void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+    {
+        glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
+
+        s_data->quadShader->Bind();
+        s_data->quadShader->SetMat4("uViewProjection", viewProj);
+
+        s_data->quadIndexCount = 0;
+        s_data->quadVertexBufferPtr = s_data->quadVertexBufferBase;
+
+        s_data->textureSlotIndex = 1;
+    }
+
     void Renderer2D::BeginScene(const OrthographicCamera& camera)
     {
         s_data->quadShader->Bind();

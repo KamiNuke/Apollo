@@ -16,6 +16,7 @@
 
 #include "Scene/Scene.h"
 #include "Scene/Entity.h"
+#include "Scene/ScriptableEntity.h"
 
 #include "Input/Input.h"
 #include "Input/KeyCodes.h"

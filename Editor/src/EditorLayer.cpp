@@ -27,6 +27,46 @@ namespace Apollo
         m_activeScene = CreateRef<Scene>();
         m_square = m_activeScene->CreateEntity("sQUARE");
         m_square.AddComponent<SpriteRendererComponent>(glm::vec4{0.1f, 1.0f, 0.2f, 1.0f});
+
+        m_cameraEntity = m_activeScene->CreateEntity("CamEnt");
+        m_cameraEntity.AddComponent<CameraComponent>();
+
+        m_secondCamera = m_activeScene->CreateEntity("Clip-Space Entity");
+        auto& cc = m_secondCamera.AddComponent<CameraComponent>();
+        cc.primary = false;
+
+        class CameraController : public ScriptableEntity
+        {
+        public:
+            void OnCreate()
+            {
+                auto& transform = GetComponent<TransformComponent>().transform;
+                transform[3][0] = rand() % 10;
+            }
+
+            void OnDestroy()
+            {
+
+            }
+
+            void OnUpdate(Timestep ts)
+            {
+                auto& transform = GetComponent<TransformComponent>().transform;
+                float speed = 5.0f;
+
+                if (Input::IsKeyPressed(APOLLO_KEY_A))
+                    transform[3][0] -= speed * ts;
+                if (Input::IsKeyPressed(APOLLO_KEY_D))
+                    transform[3][0] += speed * ts;
+                if (Input::IsKeyPressed(APOLLO_KEY_W))
+                    transform[3][1] += speed * ts;
+                if (Input::IsKeyPressed(APOLLO_KEY_S))
+                    transform[3][1] -= speed * ts;
+            }
+        };
+
+        m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+        m_secondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
     }
 
     void EditorLayer::OnDetach()
@@ -36,9 +76,6 @@ namespace Apollo
 
     void EditorLayer::OnUpdate(Timestep ts)
     {
-        if (m_viewportFocused)
-            m_cameraController.OnUpdate(ts);
-
         if (FramebufferSpecification spec = m_framebuffer->GetSpecification();
             m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f &&
             (spec.width != m_viewportSize.x || spec.height != m_viewportSize.y ))
@@ -46,8 +83,11 @@ namespace Apollo
             // we rescale the framebuffer to the actual window size here and reset the glViewport
             m_framebuffer->Resize(m_viewportSize.x, m_viewportSize.y);
             m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+            m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
         }
 
+        if (m_viewportFocused)
+            m_cameraController.OnUpdate(ts);
 
         Renderer2D::ResetStats();
         m_framebuffer->Bind();
@@ -55,10 +95,7 @@ namespace Apollo
         RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
         RenderCommand::Clear();
 
-        Renderer2D::BeginScene(m_cameraController.GetCamera());
         m_activeScene->OnUpdate(ts);
-
-        Renderer2D::EndScene();
         m_framebuffer->Unbind();
 
         //Clear main FBO
@@ -157,6 +194,22 @@ namespace Apollo
                 auto& color = m_square.GetComponent<SpriteRendererComponent>().color;
                 ImGui::ColorEdit4("Color", glm::value_ptr(color));
             }
+
+            ImGui::DragFloat3("Camera Transform",
+                glm::value_ptr(m_cameraEntity.GetComponent<TransformComponent>().transform[3]));
+
+            if (ImGui::Checkbox("Camera A", &m_primaryCamera))
+            {
+                m_cameraEntity.GetComponent<CameraComponent>().primary = m_primaryCamera;
+                m_secondCamera.GetComponent<CameraComponent>().primary = !m_primaryCamera;
+            }
+            {
+                auto& camera = m_cameraEntity.GetComponent<CameraComponent>().camera;
+                float orthoSize = camera.GetOrthographicSize();
+                if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+                    camera.SetOrthographicSize(orthoSize);
+            }
+
         }
         ImGui::End(); // Properties
 

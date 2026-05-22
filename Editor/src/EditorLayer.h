@@ -26,6 +26,11 @@ namespace Apollo
         //temp
         Ref<Scene> m_activeScene;
         Entity m_square;
+        Entity m_cameraEntity;
+        Entity m_secondCamera;
+
+        bool m_primaryCamera = true;
+
         Apollo::Ref<Apollo::Shader> m_flatColorShader;
         Apollo::Ref<Apollo::VertexArray> m_squareVA;
         Apollo::Ref<Apollo::Texture2D> m_texture;

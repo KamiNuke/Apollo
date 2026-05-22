@@ -3,6 +3,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
+#include "SceneCamera.h"
+#include "ScriptableEntity.h"
 #include "Core/Base.h"
 #include "Renderer/Texture.h"
 
@@ -41,5 +43,31 @@ namespace Apollo
         SpriteRendererComponent(const SpriteRendererComponent&) = default;
         SpriteRendererComponent(const glm::vec4& _color)
             : color(_color) {}
+    };
+
+    struct CameraComponent
+    {
+        SceneCamera camera;
+        bool primary = true; // TODO: MOVE TO SCENE
+        bool fixedAspectRatio = false;
+
+        CameraComponent() = default;
+        CameraComponent(const CameraComponent&) = default;
+    };
+
+    struct NativeScriptComponent
+    {
+        ScriptableEntity* instance = nullptr;
+
+        ScriptableEntity*(*InstantiateScript)();
+        void (*DestroyScript)(NativeScriptComponent*);
+
+        template<typename T>
+        void Bind()
+        {
+            InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+            DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->instance; nsc->instance = nullptr; };
+
+        }
     };
 }

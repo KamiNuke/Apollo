@@ -78,6 +78,9 @@ set(SOURCES
         src/Scene/Components.h
         src/Scene/Entity.cpp
         src/Scene/Entity.h
+        src/Scene/SceneCamera.cpp
+        src/Scene/SceneCamera.h
+        src/Scene/ScriptableEntity.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
