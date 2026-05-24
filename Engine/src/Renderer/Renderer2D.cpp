@@ -11,7 +11,7 @@ namespace Apollo
         glm::vec3 position;
         glm::vec4 color;
         glm::vec2 texCoord;
-        float texIndex;
+        int texIndex;
         float tilingFactor;
 
         //Editor-only
@@ -56,7 +56,7 @@ namespace Apollo
             { ShaderDataType::Float3, "aPos"},
             { ShaderDataType::Float4, "aColor"},
             { ShaderDataType::Float2, "aTexCoord"},
-            { ShaderDataType::Float, "aTexIndex"},
+            { ShaderDataType::Int, "aTexIndex"},
             { ShaderDataType::Float, "aTilingFactor"},
             {ShaderDataType::Int, "aEntityID"},
         });
@@ -191,7 +191,7 @@ namespace Apollo
     {
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-        constexpr float textureIndex = 0.0f;
+        constexpr int textureIndex = 0;
         constexpr float tilingFactor = 1.0f;
 
         if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
@@ -218,7 +218,7 @@ namespace Apollo
     {
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-        float textureIndex = 0.0f;
+        int textureIndex = 0;
 
         if (s_data->quadIndexCount >= Renderer2DData::maxIndices)
             NextBatch();

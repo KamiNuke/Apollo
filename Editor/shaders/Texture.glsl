@@ -5,7 +5,7 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec4 aColor;
 layout (location = 2) in vec2 aTexCoord;
-layout (location = 3) in float aTexIndex;
+layout (location = 3) in int aTexIndex;
 layout (location = 4) in float aTilingFactor;
 layout (location = 5) in int aEntityID;
 
@@ -13,7 +13,7 @@ uniform mat4 uViewProjection;
 
 out vec4 vColor;
 out vec2 vTexCoord;
-out float vTexIndex;
+flat out int vTexIndex;
 out float vTilingFactor;
 flat out int vEntityID;
 
@@ -34,7 +34,7 @@ layout(location = 1) out int color2;
 
 flat in int vEntityID;
 in float vTilingFactor;
-in float vTexIndex;
+flat in int vTexIndex;
 in vec2 vTexCoord;
 in vec4 vColor;
 
@@ -43,7 +43,7 @@ uniform sampler2D uTextures[32];
 void main()
 {
 	vec4 texColor = vColor;
-	switch(int(vTexIndex))
+	switch(vTexIndex)
 	{
 		case 0: texColor *= texture(uTextures[0], vTexCoord * vTilingFactor); break;
 		case 1: texColor *= texture(uTextures[1], vTexCoord * vTilingFactor); break;
