@@ -22,6 +22,7 @@ namespace Apollo
     void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
     {
         m_context = context;
+        m_selectionContext = {};
     }
 
     void SceneHierarchyPanel::OnImGuiRender()
@@ -51,26 +52,6 @@ namespace Apollo
         if (m_selectionContext)
         {
             DrawComponents(m_selectionContext);
-
-            if (ImGui::Button("Add component"))
-                ImGui::OpenPopup("AddComponent");
-
-            if (ImGui::BeginPopup("AddComponent"))
-            {
-                if (ImGui::MenuItem("Camera"))
-                {
-                    m_selectionContext.AddComponent<CameraComponent>();
-                    ImGui::CloseCurrentPopup();
-                }
-
-                if (ImGui::MenuItem("Sprite Renderer"))
-                {
-                    m_selectionContext.AddComponent<SpriteRendererComponent>();
-                    ImGui::CloseCurrentPopup();
-                }
-
-                ImGui::EndPopup();
-            }
         }
 
         ImGui::End();
@@ -81,6 +62,7 @@ namespace Apollo
         auto& tag = entity.GetComponent<TagComponent>().tag;
 
         ImGuiTreeNodeFlags flags = ((m_selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : ImGuiTreeNodeFlags_None) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DrawLinesFull;
+        flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
         bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
         if (ImGui::IsItemClicked())
@@ -112,6 +94,9 @@ namespace Apollo
 
     static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
     {
+        ImGuiIO& io = ImGui::GetIO();
+        auto boldFont = io.Fonts->Fonts[1];
+
         ImGui::PushID(label.c_str());
 
         ImGui::Columns(2);
@@ -130,8 +115,10 @@ namespace Apollo
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{0.9f, 0.15f, 0.2f, 1.0f});
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{0.6f, 0.075f, 0.10f, 1.0f});
 
+        ImGui::PushFont(boldFont);
         if (ImGui::Button("X", buttonSize))
             values.x = resetValue;
+        ImGui::PopFont();
 
         ImGui::PopStyleColor(3);
 
@@ -144,8 +131,10 @@ namespace Apollo
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{0.15f, 0.9f, 0.2f, 1.0f});
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{0.075f, 0.6f, 0.10f, 1.0f});
 
+        ImGui::PushFont(boldFont);
         if (ImGui::Button("Y", buttonSize))
             values.y = resetValue;
+        ImGui::PopFont();
 
         ImGui::PopStyleColor(3);
 
@@ -158,8 +147,10 @@ namespace Apollo
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{0.2f, 0.15f, 0.9f, 1.0f});
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{0.1f, 0.075f, 0.6f, 1.0f});
 
+        ImGui::PushFont(boldFont);
         if (ImGui::Button("Z", buttonSize))
             values.z = resetValue;
+        ImGui::PopFont();
 
         ImGui::PopStyleColor(3);
 
@@ -174,9 +165,62 @@ namespace Apollo
         ImGui::PopID();
     }
 
+    template<typename ComponentType, typename UIFunction>
+    static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunc)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        auto regularFont = io.Fonts->Fonts[0];
+        auto boldFont = io.Fonts->Fonts[1];
+
+        constexpr ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed
+            | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowOverlap | ImGuiTreeNodeFlags_FramePadding;
+
+        if (entity.HasComponent<ComponentType>())
+        {
+            auto& component = entity.GetComponent<ComponentType>();
+            ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{4,4});
+            float lineHeight = GImGui->Font->LegacySize + GImGui->Style.FramePadding.y * 2.0f;
+            ImGui::Separator();
+            bool open = ImGui::TreeNodeEx((void*)typeid(ComponentType).hash_code(), treeNodeFlags, name.c_str());
+            ImGui::PopStyleVar();
+
+            ImGui::SameLine( contentRegionAvailable.x - lineHeight * 0.5f);
+            ImGui::PushFont(boldFont);
+            if (ImGui::Button("+", ImVec2{lineHeight, lineHeight}))
+            {
+                ImGui::OpenPopup("ComponentSettings");
+
+            }
+            ImGui::PopFont();
+
+
+            bool removeComponent = false;
+            if (ImGui::BeginPopup("ComponentSettings"))
+            {
+                if (ImGui::MenuItem("Remove Component"))
+                    removeComponent = true;
+                ImGui::EndPopup();
+            }
+
+            if (open)
+            {
+                uiFunc(component);
+                ImGui::TreePop();
+            }
+
+            if (removeComponent)
+                entity.RemoveComponent<ComponentType>();
+        }
+    }
 
     void SceneHierarchyPanel::DrawComponents(Entity entity)
     {
+        ImGuiIO& io = ImGui::GetIO();
+        auto regularFont = io.Fonts->Fonts[0];
+        auto boldFont = io.Fonts->Fonts[1];
+
         if (entity.HasComponent<TagComponent>())
         {
             auto& tag = entity.GetComponent<TagComponent>().tag;
@@ -190,51 +234,51 @@ namespace Apollo
             }
         }
 
-        const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowOverlap;
+        ImGui::SameLine();
+        ImGui::PushItemWidth(-1);
 
-        if (entity.HasComponent<TransformComponent>())
+        if (ImGui::Button("Add component"))
+            ImGui::OpenPopup("AddComponent");
+
+        if (ImGui::BeginPopup("AddComponent"))
         {
-            bool open = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, "Transform");
-            ImGui::SameLine();
-            if (ImGui::Button("+"))
+            if (ImGui::MenuItem("Camera"))
             {
-                ImGui::OpenPopup("ComponentSettings");
-
+                m_selectionContext.AddComponent<CameraComponent>();
+                ImGui::CloseCurrentPopup();
             }
 
-            bool removeComponent = false;
-            if (ImGui::BeginPopup("ComponentSettings"))
+            if (ImGui::MenuItem("Sprite Renderer"))
             {
-                if (ImGui::MenuItem("Remove Component"))
-                    removeComponent = true;
-                ImGui::EndPopup();
+                m_selectionContext.AddComponent<SpriteRendererComponent>();
+                ImGui::CloseCurrentPopup();
             }
 
-            if (open)
-            {
-                auto& transform = entity.GetComponent<TransformComponent>();
-                DrawVec3Control("Position", transform.position);
-
-                glm::vec3 rotation = glm::degrees(transform.rotation);
-                DrawVec3Control("Rotation", rotation);
-                transform.rotation = glm::radians(rotation);
-
-                DrawVec3Control("Scale", transform.scale, 1.0f);
-                ImGui::TreePop();
-            }
-
-            if (removeComponent)
-                entity.RemoveComponent<TransformComponent>();
+            ImGui::EndPopup();
         }
 
-        if (entity.HasComponent<CameraComponent>())
+        ImGui::PopItemWidth();
+
+        DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
         {
+            DrawVec3Control("Position", component.position);
+
+            glm::vec3 rotation = glm::degrees(component.rotation);
+            DrawVec3Control("Rotation", rotation);
+            component.rotation = glm::radians(rotation);
+
+            DrawVec3Control("Scale", component.scale, 1.0f);
+        });
+
+        DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
+        {
+            const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowOverlap;
+
             if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), treeNodeFlags, "Camera"))
             {
-                auto& cameraComponent = entity.GetComponent<CameraComponent>();
-                auto& camera = cameraComponent.camera;
+                auto& camera = component.camera;
 
-                ImGui::Checkbox("Primary", &cameraComponent.primary); // TODO: Fix the bug where you can set two primary cameras through ui
+                ImGui::Checkbox("Primary", &component.primary); // TODO: Fix the bug where you can set two primary cameras through ui
 
                 const char* projectionTypeStrings[] = {"Perspective", "Orthographic"};
                 const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
@@ -270,7 +314,7 @@ namespace Apollo
                     if (ImGui::DragFloat("Far", &farClip))
                         camera.SetPerspectiveFarClip(farClip);
 
-                    ImGui::Checkbox("Fixed Aspect Ratio", &cameraComponent.fixedAspectRatio);
+                    ImGui::Checkbox("Fixed Aspect Ratio", &component.fixedAspectRatio);
                 }
 
 
@@ -288,41 +332,16 @@ namespace Apollo
                     if (ImGui::DragFloat("Far", &farClip))
                         camera.SetOrthographicFarClip(farClip);
 
-                    ImGui::Checkbox("Fixed Aspect Ratio", &cameraComponent.fixedAspectRatio);
+                    ImGui::Checkbox("Fixed Aspect Ratio", &component.fixedAspectRatio);
                 }
 
                 ImGui::TreePop();
             }
-        }
+        });
 
-        if (entity.HasComponent<SpriteRendererComponent>())
+        DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
         {
-            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{4,4});
-            bool open = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), treeNodeFlags, "Sprite Renderer");
-            ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
-            if (ImGui::Button("+", ImVec2{20, 20}))
-            {
-                ImGui::OpenPopup("ComponentSettings");
-
-            }
-            ImGui::PopStyleVar();
-            bool removeComponent = false;
-            if (ImGui::BeginPopup("ComponentSettings"))
-            {
-                if (ImGui::MenuItem("Remove Component"))
-                    removeComponent = true;
-                ImGui::EndPopup();
-            }
-
-            if (open)
-            {
-                auto& color = entity.GetComponent<SpriteRendererComponent>().color;
-                ImGui::ColorEdit4("Color", glm::value_ptr(color));
-                ImGui::TreePop();
-            }
-
-            if (removeComponent)
-                entity.RemoveComponent<SpriteRendererComponent>();
-        }
+            ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+        });
     }
 } // Apollo

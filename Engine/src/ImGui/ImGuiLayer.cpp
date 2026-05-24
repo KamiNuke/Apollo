@@ -28,17 +28,10 @@ namespace Apollo
         io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
         io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-        // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
-        //ImGui::StyleColorsLight();
+        io.FontDefault = io.Fonts->AddFontFromFileTTF("../../../Editor/assets/fonts/Monocraft-ttf/Monocraft.ttf", 14.0);
+        io.Fonts->AddFontFromFileTTF("../../../Editor/assets/fonts/Monocraft-ttf/weights/Monocraft-Bold.ttf", 14.0);
 
-        ImGuiStyle& style = ImGui::GetStyle();
-        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            style.WindowRounding = 0.0f;
-            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-        }
+        SetDarkThemeColors();
 
         Application& app = Application::Get();
         app.GetWindow().ImGuiInit();
@@ -69,6 +62,8 @@ namespace Apollo
 
     void ImGuiLayer::End()
     {
+        ImGui::ShowDemoWindow();
+
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         Application& app = Application::Get();
         io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
@@ -88,5 +83,32 @@ namespace Apollo
         // Rendering
         ImGui::Render();
         app.GetWindow().ImGuiEnd();
+    }
+
+    void ImGuiLayer::SetDarkThemeColors()
+    {
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        ImGui::StyleColorsDark();
+
+        SetStyle();
+    }
+
+    void ImGuiLayer::SetLightThemeColors()
+    {
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        ImGui::StyleColorsLight();
+
+        SetStyle();
+    }
+
+    void ImGuiLayer::SetStyle()
+    {
+        ImGuiStyle& style = ImGui::GetStyle();
+        style.TabRounding = 6.f;
+        style.FrameRounding = 2.f;
+        style.GrabRounding = 4.f;
+        style.WindowRounding = 4.f;
+        style.PopupRounding = 4.f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 } // Apollo

@@ -1,5 +1,5 @@
 #pragma once
-
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include "Core/Application.h"
 #include "Logger/Log.h"
 #include "ImGui/ImGuiLayer.h"

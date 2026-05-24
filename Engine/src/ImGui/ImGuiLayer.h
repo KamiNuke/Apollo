@@ -19,6 +19,10 @@ namespace Apollo
         void End();
 
         void BlockEvents(bool block) { m_blockEvents = block; }
+
+        void SetDarkThemeColors();
+        void SetLightThemeColors();
+        void SetStyle();
     private:
         bool m_blockEvents = true;
     };

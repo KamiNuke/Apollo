@@ -1,8 +1,10 @@
 #include "EditorLayer.h"
 
 #include "imgui.h"
+#include "ImGuiFileDialog.h"
 #include "imgui_internal.h"
 #include "Scene/Components.h"
+#include "Scene/SceneSerializer.h"
 
 namespace Apollo
 {
@@ -25,6 +27,8 @@ namespace Apollo
         m_texture = Texture2D::Create("../../../Editor/assets/klauncher.png");
 
         m_activeScene = CreateRef<Scene>();
+
+        /*
         m_square = m_activeScene->CreateEntity("sQUARE");
         m_square.AddComponent<SpriteRendererComponent>(glm::vec4{0.1f, 1.0f, 0.2f, 1.0f});
 
@@ -66,7 +70,7 @@ namespace Apollo
 
         m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_secondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
+*/
         m_sceneHierarchyPanel.SetContext(m_activeScene);
     }
 
@@ -130,6 +134,29 @@ namespace Apollo
         {
             if (ImGui::BeginMenu("File"))
             {
+                if (ImGui::MenuItem("New"))
+                {
+                    NewScene();
+                }
+
+                if (ImGui::MenuItem("Open"))
+                {
+                    IGFD::FileDialogConfig config;
+                    config.path = ".";
+                    config.countSelectionMax = 1;
+                    config.flags = ImGuiFileDialogFlags_Modal;
+                    ImGuiFileDialog::Instance()->OpenDialog("OpenFile", "Choose a File", ".apollo", config);
+                }
+
+                if (ImGui::MenuItem("Save As"))
+                {
+                    IGFD::FileDialogConfig config;
+                    config.path = ".";
+                    config.countSelectionMax = 1;
+                    config.flags = ImGuiFileDialogFlags_Modal;
+                    ImGuiFileDialog::Instance()->OpenDialog("SaveFileAs", "Save a File", ".apollo", config);
+                }
+
                 if (ImGui::MenuItem("Exit"))
                     Application::Get().Close();
 
@@ -138,13 +165,44 @@ namespace Apollo
 
             if (ImGui::BeginMenu("Help"))
             {
-                if (ImGui::MenuItem("Exit"))
-                    Application::Get().Close();
+                if (ImGui::MenuItem("About"))
+                    m_aboutUsModal = true;
 
                 ImGui::EndMenu();
             }
 
             ImGui::EndMainMenuBar();
+        }
+
+        if (m_aboutUsModal)
+        {
+            ImGui::OpenPopup("About");
+            m_aboutUsModal = false;
+        }
+
+        //About window
+        {
+            // Always center this window when appearing
+            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+            ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+            if (ImGui::BeginPopupModal("About", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+            {
+                ImGui::Text("About Apollo");
+                if (ImGui::Button("Close", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+                ImGui::EndPopup();
+            }
+        }
+
+        // File dialogue
+        {
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(600,300));
+
+            SaveSceneAs();
+
+            OpenScene();
+
+            ImGui::PopStyleVar();
         }
 
         if (ImGui::Begin("Statistics"))
@@ -186,9 +244,104 @@ namespace Apollo
         m_sceneHierarchyPanel.OnImGuiRender();
     }
 
+
     void EditorLayer::OnEvent(Event& event)
     {
         m_cameraController.OnEvent(event);
+
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyPressed));
     }
 
+    bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+    {
+        if (e.GetRepeat() > 0)
+            return false;
+
+        bool control = Input::IsKeyPressed(APOLLO_KEY_LCTRL) || Input::IsKeyPressed(APOLLO_KEY_RCTRL);
+        bool shift = Input::IsKeyPressed(APOLLO_KEY_LSHIFT) || Input::IsKeyPressed(APOLLO_KEY_RSHIFT);
+        switch (e.GetKeyCode())
+        {
+            case APOLLO_KEY_S:
+            {
+                if (control && shift)
+                {
+                    IGFD::FileDialogConfig config;
+                    config.path = ".";
+                    config.countSelectionMax = 1;
+                    config.flags = ImGuiFileDialogFlags_Modal;
+                    ImGuiFileDialog::Instance()->OpenDialog("SaveFileAs", "Save a File", ".apollo", config);
+                }
+
+                break;
+            }
+
+            case APOLLO_KEY_N:
+            {
+                if (control)
+                {
+                    NewScene();
+                }
+
+                break;
+            }
+
+            case APOLLO_KEY_O:
+            {
+                if (control)
+                {
+                    IGFD::FileDialogConfig config;
+                    config.path = ".";
+                    config.countSelectionMax = 1;
+                    config.flags = ImGuiFileDialogFlags_Modal;
+                    ImGuiFileDialog::Instance()->OpenDialog("OpenFile", "Choose a File", ".apollo", config);
+                }
+
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    void EditorLayer::NewScene()
+    {
+        m_activeScene = CreateRef<Scene>();
+        m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
+    }
+
+    void EditorLayer::OpenScene()
+    {
+        if (ImGuiFileDialog::Instance()->Display("OpenFile")) {
+            if (ImGuiFileDialog::Instance()->IsOk()) {
+                std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+                m_activeScene = CreateRef<Scene>();
+                m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
+                m_sceneHierarchyPanel.SetContext(m_activeScene);
+
+                SceneSerializer serializer(m_activeScene);
+                serializer.Deserialize(filePathName);
+            }
+            // close
+            ImGuiFileDialog::Instance()->Close();
+        }
+    }
+
+    void EditorLayer::SaveSceneAs()
+    {
+        if (ImGuiFileDialog::Instance()->Display("SaveFileAs")) {
+            if (ImGuiFileDialog::Instance()->IsOk()) {
+                std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+                SceneSerializer serializer(m_activeScene);
+                serializer.Serialize(filePathName);
+            }
+            // close
+            ImGuiFileDialog::Instance()->Close();
+        }
+    }
 }
