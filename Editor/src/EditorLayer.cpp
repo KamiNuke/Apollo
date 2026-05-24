@@ -117,7 +117,7 @@ namespace Apollo
         if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
         {
             int pixelData = m_framebuffer->ReadPixel(1, mouseX, mouseY);
-            APOLLO_LOGGER_INFO("{0}", pixelData);
+            m_hoveredEntity = pixelData == -1 ? Entity{} : Entity{ static_cast<entt::entity>(pixelData), m_activeScene.get() };
         }
         m_framebuffer->Unbind();
         //Clear main FBO
@@ -225,6 +225,12 @@ namespace Apollo
         if (ImGui::Begin("Statistics"))
         {
             const auto& stats = Renderer2D::GetStats();
+
+            std::string name = "None";
+            if (m_hoveredEntity)
+                name = m_hoveredEntity.GetComponent<TagComponent>().tag;
+
+            ImGui::Text("Hovered entity: %s", name.c_str());
             ImGui::Text("Renderer2D Stats:");
             ImGui::Text("Draw Calls: %d", stats.drawCalls);
             ImGui::Text("Quads: %d", stats.quadCount);
@@ -237,7 +243,12 @@ namespace Apollo
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0.0f, 0.0f});
         if (ImGui::Begin("Viewport"))
         {
-            auto viewportOffset = ImGui::GetCursorPos();
+            auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+            auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+            auto viewportOffset = ImGui::GetWindowPos();
+            m_viewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+            m_viewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
             m_viewportFocused = ImGui::IsWindowFocused();
             m_viewportHovered = ImGui::IsWindowHovered();
             if (!ImGui::IsAnyItemActive())
@@ -256,15 +267,7 @@ namespace Apollo
                 ImVec2(0, 1),
                 ImVec2(1, 0)
             );
-
-            auto windowSize = ImGui::GetWindowSize();
-            ImVec2 minBound = ImGui::GetWindowPos();
-            minBound.x += viewportOffset.x;
-            minBound.y += viewportOffset.y;
-
-            ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y};
-            m_viewportBounds[0] = { minBound.x, minBound.y };
-            m_viewportBounds[1] = { maxBound.x, maxBound.y };
+            
         }
 
         // Gizmos
@@ -274,9 +277,8 @@ namespace Apollo
             {
                 ImGuizmo::SetOrthographic(false);
                 ImGuizmo::SetDrawlist();
-                float windowWidth = ImGui::GetWindowWidth();
-                float windowHeight = ImGui::GetWindowHeight();
-                ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+                ImGuizmo::SetRect(m_viewportBounds[0].x, m_viewportBounds[0].y, m_viewportBounds[1].x - m_viewportBounds[0].x,
+                    m_viewportBounds[1].y - m_viewportBounds[0].y);
 
                 // Runtime camera
                 //auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
@@ -331,6 +333,17 @@ namespace Apollo
 
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+        dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+    }
+
+    bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+    {
+        if (e.GetMouseButton() == APOLLO_MOUSE_BUTTON_LEFT)
+        {
+            if (m_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(APOLLO_KEY_LALT))
+                m_sceneHierarchyPanel.SetSelectedEntity(m_hoveredEntity);
+        }
+        return false;
     }
 
     bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)

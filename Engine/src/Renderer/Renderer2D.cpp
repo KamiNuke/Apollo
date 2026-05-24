@@ -13,6 +13,9 @@ namespace Apollo
         glm::vec2 texCoord;
         float texIndex;
         float tilingFactor;
+
+        //Editor-only
+        int entityID;
     };
 
     struct Renderer2DData
@@ -55,6 +58,7 @@ namespace Apollo
             { ShaderDataType::Float2, "aTexCoord"},
             { ShaderDataType::Float, "aTexIndex"},
             { ShaderDataType::Float, "aTilingFactor"},
+            {ShaderDataType::Int, "aEntityID"},
         });
         s_data->quadVertexArray->AddVertexBuffer(s_data->quadVertexBuffer);
 
@@ -183,7 +187,7 @@ namespace Apollo
         DrawQuad(transform, texture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+    void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
     {
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
@@ -200,6 +204,7 @@ namespace Apollo
             s_data->quadVertexBufferPtr->texCoord = textureCoords[i];
             s_data->quadVertexBufferPtr->texIndex = textureIndex;
             s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_data->quadVertexBufferPtr->entityID = entityID;
             s_data->quadVertexBufferPtr++;
         }
 
@@ -209,7 +214,7 @@ namespace Apollo
     }
 
     void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor,
-        const glm::vec4& tintColor)
+        const glm::vec4& tintColor, int entityID)
     {
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
@@ -244,6 +249,7 @@ namespace Apollo
             s_data->quadVertexBufferPtr->texCoord = textureCoords[i];
             s_data->quadVertexBufferPtr->texIndex = textureIndex;
             s_data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_data->quadVertexBufferPtr->entityID = entityID;
             s_data->quadVertexBufferPtr++;
         }
 
@@ -283,6 +289,14 @@ namespace Apollo
             * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
 
         DrawQuad(transform, texture, tilingFactor, tintColor);
+    }
+
+    void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID)
+    {
+        if (src.texture)
+            DrawQuad(transform, src.texture, src.tilingFactor, src.color, entityID);
+        else
+            DrawQuad(transform, src.color, entityID);
     }
 
     Renderer2D::Statistics Renderer2D::GetStats()

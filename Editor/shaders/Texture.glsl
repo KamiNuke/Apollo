@@ -7,6 +7,7 @@ layout (location = 1) in vec4 aColor;
 layout (location = 2) in vec2 aTexCoord;
 layout (location = 3) in float aTexIndex;
 layout (location = 4) in float aTilingFactor;
+layout (location = 5) in int aEntityID;
 
 
 uniform mat4 uViewProjection;
@@ -15,6 +16,7 @@ out vec4 vColor;
 out vec2 vTexCoord;
 out float vTexIndex;
 out float vTilingFactor;
+flat out int vEntityID;
 
 void main()
 {
@@ -23,6 +25,7 @@ void main()
     vTexCoord = aTexCoord;
     vTexIndex = aTexIndex;
     vTilingFactor = aTilingFactor;
+    vEntityID = aEntityID;
 }
 
 #type fragment
@@ -30,7 +33,7 @@ void main()
 layout(location = 0) out vec4 FragColor;
 layout(location = 1) out int color2;
 
-
+flat in int vEntityID;
 in float vTilingFactor;
 in float vTexIndex;
 in vec2 vTexCoord;
@@ -40,7 +43,6 @@ uniform sampler2D uTextures[32];
 
 void main()
 {
-    //FragColor = texture(uTexture[int(vTexIndex)], vTexCoord * vTilingFactor) * vColor;
 	vec4 texColor = vColor;
 	switch(int(vTexIndex))
 	{
@@ -78,5 +80,5 @@ void main()
 		case 31: texColor *= texture(uTextures[31], vTexCoord * vTilingFactor); break;
 	}
 	FragColor = texColor;
-	color2 = 50;
+	color2 = vEntityID;
 }

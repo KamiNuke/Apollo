@@ -16,6 +16,7 @@ namespace Apollo
         void OnImGuiRender() override;
         void OnEvent(Event& event) override;
     private:
+        bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
         bool OnKeyPressed(KeyPressedEvent& e);
 
         void NewScene();
@@ -33,6 +34,7 @@ namespace Apollo
         Entity m_square;
         Entity m_cameraEntity;
         Entity m_secondCamera;
+        Entity m_hoveredEntity;
 
         bool m_primaryCamera = true;
 
