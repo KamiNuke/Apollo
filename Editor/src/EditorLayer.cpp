@@ -23,6 +23,7 @@ namespace Apollo
         FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
+        fbSpec.attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::DEPTH_24_STENCIL_8 };
         m_framebuffer = Framebuffer::Create(fbSpec);
 
         m_texture = Texture2D::Create("../../../Editor/assets/klauncher.png");
@@ -102,10 +103,23 @@ namespace Apollo
         // Clean viewport's framebuffer
         RenderCommand::SetClearColor({0.2f, 0.2f, 0.2f ,1.0f});
         RenderCommand::Clear();
+        m_framebuffer->ClearAttachment(1, -1);
 
         m_activeScene->OnUpdateEditor(ts, m_editorCamera);
-        m_framebuffer->Unbind();
 
+        auto [mx, my] = ImGui::GetMousePos();
+        mx -= m_viewportBounds[0].x;
+        my -= m_viewportBounds[0].y;
+        glm::vec2 viewportSize = m_viewportBounds[1] - m_viewportBounds[0];
+        my = viewportSize.y - my;
+        int mouseX = static_cast<int>(mx);
+        int mouseY = static_cast<int>(my);
+        if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+        {
+            int pixelData = m_framebuffer->ReadPixel(1, mouseX, mouseY);
+            APOLLO_LOGGER_INFO("{0}", pixelData);
+        }
+        m_framebuffer->Unbind();
         //Clear main FBO
         RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f ,1.0f});
         RenderCommand::Clear();
@@ -223,6 +237,7 @@ namespace Apollo
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0.0f, 0.0f});
         if (ImGui::Begin("Viewport"))
         {
+            auto viewportOffset = ImGui::GetCursorPos();
             m_viewportFocused = ImGui::IsWindowFocused();
             m_viewportHovered = ImGui::IsWindowHovered();
             if (!ImGui::IsAnyItemActive())
@@ -235,12 +250,21 @@ namespace Apollo
             ImVec2 pos = ImGui::GetCursorScreenPos();
 
             ImGui::GetWindowDrawList()->AddImage(
-                m_framebuffer->GetColorAttachmentRendererID(),
+                m_framebuffer->GetColorAttachmentRendererID(0),
                 ImVec2(pos.x, pos.y),
                 ImVec2(pos.x + m_viewportSize.x, pos.y + m_viewportSize.y),
                 ImVec2(0, 1),
                 ImVec2(1, 0)
             );
+
+            auto windowSize = ImGui::GetWindowSize();
+            ImVec2 minBound = ImGui::GetWindowPos();
+            minBound.x += viewportOffset.x;
+            minBound.y += viewportOffset.y;
+
+            ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y};
+            m_viewportBounds[0] = { minBound.x, minBound.y };
+            m_viewportBounds[1] = { maxBound.x, maxBound.y };
         }
 
         // Gizmos

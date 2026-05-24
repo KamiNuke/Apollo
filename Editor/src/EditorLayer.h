@@ -26,6 +26,7 @@ namespace Apollo
         glm::vec2 m_viewportSize = {0.0f, 0.0f};
         bool m_viewportFocused = false;
         bool m_viewportHovered = false;
+        glm::vec2 m_viewportBounds[2];
 
         //temp
         Ref<Scene> m_activeScene;

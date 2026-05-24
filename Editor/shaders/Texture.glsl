@@ -27,7 +27,9 @@ void main()
 
 #type fragment
 #version 330 core
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out int color2;
+
 
 in float vTilingFactor;
 in float vTexIndex;
@@ -76,4 +78,5 @@ void main()
 		case 31: texColor *= texture(uTextures[31], vTexCoord * vTilingFactor); break;
 	}
 	FragColor = texColor;
+	color2 = 50;
 }

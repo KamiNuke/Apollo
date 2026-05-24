@@ -87,7 +87,8 @@ namespace Apollo
         for (uint32_t i = 0; i < s_data->maxTextureSlots; i++)
             samplers[i] = i;
 
-        s_data->quadShader = Shader::Create("../../../Sandbox/shaders/Texture.glsl");
+        // TODO: DO SMTH ABOUT THIS PLEASE
+        s_data->quadShader = Shader::Create("../../../Editor/shaders/Texture.glsl");
         s_data->quadShader->Bind();
         s_data->quadShader->SetIntArray("uTextures", samplers, s_data->maxTextureSlots);
 

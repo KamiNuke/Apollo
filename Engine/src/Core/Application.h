@@ -3,7 +3,6 @@
 
 #include "Base.h"
 #include "LayerStack.h"
-#include "Timestep.h"
 #include "Window.h"
 #include "Event/ApplicationEvent.h"
 #include "ImGui/ImGuiLayer.h"
