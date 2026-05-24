@@ -53,14 +53,23 @@ set(STB_INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/stb/
 )
 
-# Export to parent scope
-set(IMGUI_SOURCES ${IMGUI_SOURCES} PARENT_SCOPE)
-set(IMGUI_INCLUDE_DIRS ${IMGUI_INCLUDE_DIRS} PARENT_SCOPE)
-set(GLAD_SOURCES ${GLAD_SOURCES} PARENT_SCOPE)
-set(GLAD_INCLUDE_DIRS ${GLAD_INCLUDE_DIRS} PARENT_SCOPE)
-set(STB_SOURCES ${STB_SOURCES} PARENT_SCOPE)
-set(STB_INCLUDE_DIRS ${STB_INCLUDE_DIRS} PARENT_SCOPE)
-
 add_subdirectory(spdlog)
 add_subdirectory(glm)
 add_subdirectory(entt)
+add_subdirectory(yaml-cpp)
+
+add_library(stb STATIC ${STB_SOURCES})
+target_include_directories(stb PUBLIC ${STB_INCLUDE_DIRS})
+
+add_library(glad STATIC ${GLAD_SOURCES})
+target_include_directories(glad PUBLIC ${GLAD_INCLUDE_DIRS})
+
+add_library(imgui STATIC ${IMGUI_SOURCES})
+target_include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIRS})
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
+add_library(imgui::imgui ALIAS imgui)
+
+add_subdirectory(ImGuiFileDialog EXCLUDE_FROM_ALL)
+
+target_include_directories(ImGuiFileDialog PRIVATE ${IMGUI_INCLUDE_DIRS})
+target_link_libraries(ImGuiFileDialog PRIVATE imgui)

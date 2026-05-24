@@ -14,3 +14,9 @@
 [submodule "thirdparty/entt"]
 	path = thirdparty/entt
 	url = https://github.com/skypjack/entt.git
+[submodule "thirdparty/yaml-cpp"]
+	path = thirdparty/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "thirdparty/ImGuiFileDialog"]
+	path = thirdparty/ImGuiFileDialog
+	url = https://github.com/aiekick/ImGuiFileDialog.git

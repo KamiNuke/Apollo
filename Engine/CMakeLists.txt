@@ -2,8 +2,6 @@
 set(BUILD_NAME Engine)
 
 set(SOURCES
-        ${IMGUI_SOURCES}
-        ${GLAD_SOURCES}
         ${STB_SOURCES}
         src/Logger/Log.cpp
         src/Logger/Log.h
@@ -81,6 +79,8 @@ set(SOURCES
         src/Scene/SceneCamera.cpp
         src/Scene/SceneCamera.h
         src/Scene/ScriptableEntity.h
+        src/Scene/SceneSerializer.cpp
+        src/Scene/SceneSerializer.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
@@ -91,13 +91,16 @@ target_link_libraries(${BUILD_NAME}
         spdlog::spdlog
         EnTT::EnTT
         glm::glm
+        yaml-cpp::yaml-cpp
+        imgui
+        glad
+        stb
+        ImGuiFileDialog
 )
 
 target_include_directories(${BUILD_NAME}
         PUBLIC
         src
-        ${GLAD_INCLUDE_DIRS}
-        ${IMGUI_INCLUDE_DIRS}
         ${STB_INCLUDE_DIRS}
 )
 
