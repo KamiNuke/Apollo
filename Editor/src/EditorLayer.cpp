@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 #include "ImGuiFileDialog.h"
+#include "ImGuizmo.h"
 #include "imgui_internal.h"
 #include "Scene/Components.h"
 #include "Scene/SceneSerializer.h"
@@ -134,12 +135,12 @@ namespace Apollo
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("New"))
+                if (ImGui::MenuItem("New", "CTRL+N"))
                 {
                     NewScene();
                 }
 
-                if (ImGui::MenuItem("Open"))
+                if (ImGui::MenuItem("Open", "CTRL+O"))
                 {
                     IGFD::FileDialogConfig config;
                     config.path = ".";
@@ -148,7 +149,7 @@ namespace Apollo
                     ImGuiFileDialog::Instance()->OpenDialog("OpenFile", "Choose a File", ".apollo", config);
                 }
 
-                if (ImGui::MenuItem("Save As"))
+                if (ImGui::MenuItem("Save As", "CTRL+SHIFT+S"))
                 {
                     IGFD::FileDialogConfig config;
                     config.path = ".";
@@ -222,7 +223,8 @@ namespace Apollo
         {
             m_viewportFocused = ImGui::IsWindowFocused();
             m_viewportHovered = ImGui::IsWindowHovered();
-            Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered);
+            if (!ImGui::IsAnyItemActive())
+                Application::Get().GetImGuiLayer()->BlockEvents(!m_viewportHovered && !m_viewportFocused);
 
             // we access the ImGui window size
             ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -238,12 +240,59 @@ namespace Apollo
                 ImVec2(1, 0)
             );
         }
+
+        // Gizmos
+        {
+            Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity();
+            if (selectedEntity && m_gizmoType != -1)
+            {
+                ImGuizmo::SetOrthographic(false);
+                ImGuizmo::SetDrawlist();
+                float windowWidth = ImGui::GetWindowWidth();
+                float windowHeight = ImGui::GetWindowHeight();
+                ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+                auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
+                const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+                const glm::mat4& cameraProjection = camera.GetProjection();
+                glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+                auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+                glm::mat4 transform = transformComponent.GetTransform();
+
+                bool snap = Input::IsKeyPressed(APOLLO_KEY_LCTRL);
+                float snapValue = 0.5f; // snap to 0.5f for translation/scale
+
+                if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+                    snapValue = 45.0f;
+
+                float snapValues[3] = {snapValue, snapValue, snapValue};
+
+                ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+                    static_cast<ImGuizmo::OPERATION>(m_gizmoType), ImGuizmo::MODE::LOCAL, glm::value_ptr(transform),
+                    nullptr, snap ? snapValues : nullptr);
+
+                if (ImGuizmo::IsUsing())
+                {
+                    glm::vec3 translation, rotation, scale;
+                    ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(transform), glm::value_ptr(translation), glm::value_ptr(rotation), glm::value_ptr(scale));
+                    transformComponent.position = translation;
+                    transformComponent.rotation = glm::radians(rotation);
+                    transformComponent.scale = scale;
+
+                    // Do i even need it?
+                    //ImGuizmo::RecomposeMatrixFromComponents(glm::value_ptr(translation), glm::value_ptr(rotation), glm::value_ptr(scale), glm::value_ptr(transform));
+
+                }
+            }
+
+        }
+
         ImGui::End();
         ImGui::PopStyleVar(); // Viewport
 
         m_sceneHierarchyPanel.OnImGuiRender();
     }
-
 
     void EditorLayer::OnEvent(Event& event)
     {
@@ -297,6 +346,32 @@ namespace Apollo
                     ImGuiFileDialog::Instance()->OpenDialog("OpenFile", "Choose a File", ".apollo", config);
                 }
 
+                break;
+            }
+
+            //Gizmo
+            case APOLLO_KEY_Q:
+            {
+                if (!ImGuizmo::IsUsing())
+                    m_gizmoType = -1;
+                break;
+            }
+            case APOLLO_KEY_W:
+            {
+                if (!ImGuizmo::IsUsing())
+                    m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+                break;
+            }
+            case APOLLO_KEY_E:
+            {
+                if (!ImGuizmo::IsUsing())
+                    m_gizmoType = ImGuizmo::OPERATION::ROTATE;
+                break;
+            }
+            case APOLLO_KEY_R:
+            {
+                if (!ImGuizmo::IsUsing())
+                    m_gizmoType = ImGuizmo::OPERATION::SCALE;
                 break;
             }
 

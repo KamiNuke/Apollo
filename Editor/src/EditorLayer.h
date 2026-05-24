@@ -43,6 +43,8 @@ namespace Apollo
         glm::vec3 m_texturePosition {0.0f, 0.5f, -0.1f};
         glm::vec4 m_squareColor {0.9f, 0.2f, 0.4f, 1.0f};
 
+        int m_gizmoType = -1;
+
         // Panels
         SceneHierarchyPanel m_sceneHierarchyPanel;
         bool m_aboutUsModal = false;

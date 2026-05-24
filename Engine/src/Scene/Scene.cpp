@@ -101,6 +101,18 @@ namespace Apollo
         }
     }
 
+    Entity Scene::GetPrimaryCameraEntity()
+    {
+        auto view = m_registry.view<CameraComponent>();
+        for (auto entity : view)
+        {
+            const auto& camera = view.get<CameraComponent>(entity);
+            if (camera.primary)
+                return Entity {entity, this};
+        }
+        return {};
+    }
+
     template<typename T>
     void Scene::OnComponentAdded(Entity entity, T& component)
     {

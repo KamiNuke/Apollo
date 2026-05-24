@@ -15,6 +15,8 @@ namespace Apollo
         void SetContext(const Ref<Scene>& context);
 
         void OnImGuiRender();
+
+        Entity GetSelectedEntity() const { return m_selectionContext; }
     private:
         void DrawEntityNode(Entity entity);
         void DrawComponents(Entity entity);
