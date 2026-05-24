@@ -218,7 +218,7 @@ namespace Apollo
         std::stringstream strStream;
         strStream << stream.rdbuf();
 
-        YAML::Node data = YAML::Load(strStream.str());
+        YAML::Node data = YAML::LoadFile(strStream.str());
         if (!data["Scene"])
             return false;
 
