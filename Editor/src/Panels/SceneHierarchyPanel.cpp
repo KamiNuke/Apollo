@@ -2,6 +2,7 @@
 
 #include "Scene/Components.h"
 #include <cstring>
+#include <filesystem>
 
 #include "imgui_internal.h"
 
@@ -353,6 +354,20 @@ namespace Apollo
         DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
         {
             ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+
+            ImGui::Button("Texture", ImVec2{100.0f, 100.0f});
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+                {
+                    const std::filesystem::path::value_type* path = static_cast<const std::filesystem::path::value_type*>(payload->Data);
+                    APOLLO_LOGGER_INFO(path);
+                    component.texture = Texture2D::Create(path);
+                }
+                ImGui::EndDragDropTarget();
+            }
+
+            ImGui::DragFloat("Tiling Factor", &component.tilingFactor, 0.1f, 0.0f, 100.0f);
         });
     }
 } // Apollo
