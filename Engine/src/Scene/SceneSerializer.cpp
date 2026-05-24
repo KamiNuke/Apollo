@@ -214,11 +214,17 @@ namespace Apollo
 
     bool SceneSerializer::Deserialize(const std::string& filepath)
     {
-        std::ifstream stream(filepath);
-        std::stringstream strStream;
-        strStream << stream.rdbuf();
+        YAML::Node data;
+        try
+        {
+            data = YAML::LoadFile(filepath);
+        }
+        catch (YAML::ParserException& e)
+        {
+            APOLLO_LOGGER_ERROR("Failed to load .apollo file '{0}'\n   {1}", filepath, e.what());
+            return false;
+        }
 
-        YAML::Node data = YAML::LoadFile(strStream.str());
         if (!data["Scene"])
             return false;
 
