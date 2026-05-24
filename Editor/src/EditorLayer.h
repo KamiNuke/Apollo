@@ -22,8 +22,6 @@ namespace Apollo
         void OpenScene();
         void SaveSceneAs();
     private:
-        OrthographicCameraController m_cameraController;
-
         Ref<Framebuffer> m_framebuffer;
         glm::vec2 m_viewportSize = {0.0f, 0.0f};
         bool m_viewportFocused = false;
@@ -36,6 +34,8 @@ namespace Apollo
         Entity m_secondCamera;
 
         bool m_primaryCamera = true;
+
+        EditorCamera m_editorCamera;
 
         Apollo::Ref<Apollo::Shader> m_flatColorShader;
         Apollo::Ref<Apollo::VertexArray> m_squareVA;

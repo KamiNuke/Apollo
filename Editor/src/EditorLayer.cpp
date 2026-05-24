@@ -10,7 +10,7 @@
 namespace Apollo
 {
     EditorLayer::EditorLayer()
-        : Layer("EditorLayer"), m_cameraController(1280.0f / 720.0f)
+        : Layer("EditorLayer")
     {
     }
 
@@ -28,6 +28,8 @@ namespace Apollo
         m_texture = Texture2D::Create("../../../Editor/assets/klauncher.png");
 
         m_activeScene = CreateRef<Scene>();
+
+        m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
         /*
         m_square = m_activeScene->CreateEntity("sQUARE");
@@ -88,12 +90,12 @@ namespace Apollo
         {
             // we rescale the framebuffer to the actual window size here and reset the glViewport
             m_framebuffer->Resize(m_viewportSize.x, m_viewportSize.y);
-            m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+            m_editorCamera.SetViewportSize(m_viewportSize.x, m_viewportSize.y);
             m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
         }
 
         if (m_viewportFocused)
-            m_cameraController.OnUpdate(ts);
+            m_editorCamera.OnUpdate(ts);
 
         Renderer2D::ResetStats();
         m_framebuffer->Bind();
@@ -101,7 +103,7 @@ namespace Apollo
         RenderCommand::SetClearColor({0.2f, 0.2f, 0.2f ,1.0f});
         RenderCommand::Clear();
 
-        m_activeScene->OnUpdate(ts);
+        m_activeScene->OnUpdateEditor(ts, m_editorCamera);
         m_framebuffer->Unbind();
 
         //Clear main FBO
@@ -252,10 +254,15 @@ namespace Apollo
                 float windowHeight = ImGui::GetWindowHeight();
                 ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
-                auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
-                const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
-                const glm::mat4& cameraProjection = camera.GetProjection();
-                glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+                // Runtime camera
+                //auto cameraEntity = m_activeScene->GetPrimaryCameraEntity();
+                //const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+                //const glm::mat4& cameraProjection = camera.GetProjection();
+                //glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+                // Editor CAMERA
+                const glm::mat4& cameraProjection = m_editorCamera.GetProjection();
+                glm::mat4 cameraView = m_editorCamera.GetViewMatrix();
 
                 auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
                 glm::mat4 transform = transformComponent.GetTransform();
@@ -296,7 +303,7 @@ namespace Apollo
 
     void EditorLayer::OnEvent(Event& event)
     {
-        m_cameraController.OnEvent(event);
+        m_editorCamera.OnEvent(event);
 
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(EditorLayer::OnKeyPressed));

@@ -80,6 +80,8 @@ set(SOURCES
         src/Scene/ScriptableEntity.h
         src/Scene/SceneSerializer.cpp
         src/Scene/SceneSerializer.h
+        src/Renderer/EditorCamera.cpp
+        src/Renderer/EditorCamera.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

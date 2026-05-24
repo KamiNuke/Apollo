@@ -116,6 +116,16 @@ namespace Apollo
         StartBatch();
     }
 
+    void Renderer2D::BeginScene(const EditorCamera& camera)
+    {
+        glm::mat4 viewProj = camera.GetViewProjectionMatrix();
+
+        s_data->quadShader->Bind();
+        s_data->quadShader->SetMat4("uViewProjection", viewProj);
+
+        StartBatch();
+    }
+
     void Renderer2D::BeginScene(const OrthographicCamera& camera)
     {
         s_data->quadShader->Bind();

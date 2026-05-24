@@ -11,6 +11,7 @@
 #include "Renderer/Renderer2D.h"
 #include "Renderer/Texture.h"
 #include "Renderer/OrthographicCameraController.h"
+#include "Renderer/EditorCamera.h"
 
 #include "Core/Timestep.h"
 
