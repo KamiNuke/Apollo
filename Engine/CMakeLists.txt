@@ -2,7 +2,6 @@
 set(BUILD_NAME Engine)
 
 set(SOURCES
-        ${STB_SOURCES}
         src/Logger/Log.cpp
         src/Logger/Log.h
         src/Logger/Log.cpp
@@ -96,11 +95,11 @@ target_link_libraries(${BUILD_NAME}
         glad
         stb
         ImGuiFileDialog
+        imguizmo::imguizmo
 )
 
 target_include_directories(${BUILD_NAME}
         PUBLIC
         src
-        ${STB_INCLUDE_DIRS}
 )
 

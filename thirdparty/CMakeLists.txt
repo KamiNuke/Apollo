@@ -73,3 +73,7 @@ add_subdirectory(ImGuiFileDialog EXCLUDE_FROM_ALL)
 
 target_include_directories(ImGuiFileDialog PRIVATE ${IMGUI_INCLUDE_DIRS})
 target_link_libraries(ImGuiFileDialog PRIVATE imgui)
+
+add_subdirectory(ImGuizmo)
+target_link_libraries(imguizmo PRIVATE imgui)
+

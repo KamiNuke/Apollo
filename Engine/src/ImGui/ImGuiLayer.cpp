@@ -1,8 +1,9 @@
 #include "ImGuiLayer.h"
 
-#include "../Core/Application.h"
-#include "imgui.h"
-#include "SDL3/SDL_video.h"
+#include "Core/Application.h"
+#include <imgui.h>
+#include <SDL3/SDL_video.h>
+#include <ImGuizmo.h>
 
 namespace Apollo
 {
@@ -58,6 +59,7 @@ namespace Apollo
         Application& app = Application::Get();
         app.GetWindow().ImGuiBegin();
         ImGui::NewFrame();
+        ImGuizmo::BeginFrame();
     }
 
     void ImGuiLayer::End()
