@@ -175,6 +175,8 @@ namespace Apollo
 
             auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
             out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.color;
+            if (spriteRendererComponent.texture)
+                out << YAML::Key << "Texture" << YAML::Value << spriteRendererComponent.texture->GetPath();
 
             out << YAML::EndMap;
         }
@@ -281,6 +283,10 @@ namespace Apollo
                 {
                     auto& spriteComponent = deserializedEntity.AddComponent<SpriteRendererComponent>();
                     spriteComponent.color = spriteRendererComponent["Color"].as<glm::vec4>();
+                    if (spriteRendererComponent["Texture"])
+                    {
+                        spriteComponent.texture = Texture2D::Create(spriteRendererComponent["Texture"].as<std::string>());
+                    }
                 }
             }
         }
