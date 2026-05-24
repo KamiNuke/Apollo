@@ -8,18 +8,19 @@ namespace Apollo
     class Editor : public Application
     {
     public:
-        Editor(const Window::Properties& props)
-            : Application(props)
+        Editor(const ApplicationSpecification& spec)
+            : Application(spec)
         {
             PushLayer(new EditorLayer());
         }
     };
 
-    Application* CreateApplication()
+    Application* CreateApplication(ApplicationCommandLineArgs args)
     {
-        Window::Properties props;
-        props.title = "Apollo Editor";
+        ApplicationSpecification spec;
+        spec.name = "Apollo Editor";
+        spec.cmdArgs = args;
 
-        return new Editor(props);
+        return new Editor(spec);
     }
 }

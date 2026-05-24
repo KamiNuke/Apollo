@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <memory>
 
 #include "Base.h"
@@ -11,10 +12,29 @@ int main(int argc, char* argv[]);
 
 namespace Apollo
 {
+    struct ApplicationCommandLineArgs
+    {
+        int count = 0;
+        char** args = nullptr;
+
+        const char* operator[](int index) const
+        {
+            APOLLO_ASSERT(index < count, "overflow");
+            return args[index];
+        }
+    };
+
+    struct ApplicationSpecification
+    {
+        std::string name = "Apollo";
+        std::string workingDirectory;
+        ApplicationCommandLineArgs cmdArgs;
+    };
+
     class Application
     {
     public:
-        explicit Application(const Window::Properties& props);
+        explicit Application(const ApplicationSpecification& specification);
 
         virtual ~Application();
 
@@ -37,11 +57,13 @@ namespace Apollo
         Application* CreateApplication();
 
         static inline Application& Get() { return *s_instance; };
+        ApplicationSpecification GetSpecification() const { return m_specification; }
     private:
         bool OnWindowClose(WindowCloseEvent& e);
         bool OnWindowResize(WindowResizeEvent& e);
 
     private:
+        ApplicationSpecification m_specification;
         Scope<Window> m_window;
 
         ImGuiLayer* m_imGuiLayer;
@@ -55,4 +77,6 @@ namespace Apollo
         static Application* s_instance;
         friend int ::main(int argc, char** argv);
     };
+
+    Application* CreateApplication(ApplicationCommandLineArgs args);
 } // Apollo

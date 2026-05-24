@@ -13,13 +13,13 @@ namespace Apollo
 {
     Application* Application::s_instance = nullptr;
 
-    Application::Application(const Window::Properties& props)
+    Application::Application(const ApplicationSpecification& specification)
+        : m_specification(specification)
     {
-
-        assert(!s_instance && "Application already exists");
+        APOLLO_ASSERT(!s_instance, "Application already exists");
         s_instance = this;
 
-        m_window = Window::Create(Window::Properties(props.title));
+        m_window = Window::Create(specification.name);
         m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
         //m_window->SetVsync(false);
 
