@@ -264,16 +264,19 @@ namespace Apollo
             ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
             m_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-            ImVec2 pos = ImGui::GetCursorScreenPos();
+            ImGui::Image(m_framebuffer->GetColorAttachmentRendererID(0),
+                ImVec2{ m_viewportSize.x, m_viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        }
 
-            ImGui::GetWindowDrawList()->AddImage(
-                m_framebuffer->GetColorAttachmentRendererID(0),
-                ImVec2(pos.x, pos.y),
-                ImVec2(pos.x + m_viewportSize.x, pos.y + m_viewportSize.y),
-                ImVec2(0, 1),
-                ImVec2(1, 0)
-            );
-            
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+            {
+                const std::filesystem::path::value_type* path = static_cast<const std::filesystem::path::value_type*>(payload->Data);
+                OpenScene(path);
+            }
+
+            ImGui::EndDragDropTarget();
         }
 
         // Gizmos
@@ -321,7 +324,6 @@ namespace Apollo
 
                     // Do i even need it?
                     //ImGuizmo::RecomposeMatrixFromComponents(glm::value_ptr(translation), glm::value_ptr(rotation), glm::value_ptr(scale), glm::value_ptr(transform));
-
                 }
             }
 
@@ -331,6 +333,7 @@ namespace Apollo
         ImGui::PopStyleVar(); // Viewport
 
         m_sceneHierarchyPanel.OnImGuiRender();
+        m_contentBrowserPanel.OnImGuiRender();
     }
 
     void EditorLayer::OnEvent(Event& event)
@@ -442,19 +445,27 @@ namespace Apollo
     void EditorLayer::OpenScene()
     {
         if (ImGuiFileDialog::Instance()->Display("OpenFile")) {
-            if (ImGuiFileDialog::Instance()->IsOk()) {
-                std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+            if (ImGuiFileDialog::Instance()->IsOk())
+                OpenScene(ImGuiFileDialog::Instance()->GetFilePathName());
 
-                m_activeScene = CreateRef<Scene>();
-                m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
-                m_sceneHierarchyPanel.SetContext(m_activeScene);
-
-                SceneSerializer serializer(m_activeScene);
-                serializer.Deserialize(filePathName);
-            }
             // close
             ImGuiFileDialog::Instance()->Close();
         }
+    }
+
+    void EditorLayer::OpenScene(const std::filesystem::path& path)
+    {
+        if (path.extension().string() != ".apollo")
+        {
+            APOLLO_LOGGER_WARN("Could not load {0} - not a scene file", path.filename().string());
+            return;
+        }
+        m_activeScene = CreateRef<Scene>();
+        m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
+
+        SceneSerializer serializer(m_activeScene);
+        serializer.Deserialize(path.string());
     }
 
     void EditorLayer::SaveSceneAs()

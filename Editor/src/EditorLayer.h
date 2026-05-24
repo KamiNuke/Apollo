@@ -1,5 +1,7 @@
 #pragma once
 #include <Apollo.h>
+
+#include "Panels/ContentBrowserPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
 
 namespace Apollo
@@ -21,6 +23,7 @@ namespace Apollo
 
         void NewScene();
         void OpenScene();
+        void OpenScene(const std::filesystem::path& path);
         void SaveSceneAs();
     private:
         Ref<Framebuffer> m_framebuffer;
@@ -40,6 +43,7 @@ namespace Apollo
 
         // Panels
         SceneHierarchyPanel m_sceneHierarchyPanel;
+        ContentBrowserPanel m_contentBrowserPanel;
         bool m_aboutUsModal = false;
     };
 }

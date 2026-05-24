@@ -1,0 +1,78 @@
+[2026-05-25 01:20:59.080] [Core] [info] Initializing window Apollo Editor (1280, 720)
+[2026-05-25 01:20:59.080] [Core] [info] Initializing SDL
+[2026-05-25 01:20:59.214] [Core] [info] OpenGL info:
+[2026-05-25 01:20:59.214] [Core] [info]     Vendor: NVIDIA Corporation
+[2026-05-25 01:20:59.214] [Core] [info]     Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2026-05-25 01:20:59.214] [Core] [info]     Version: 4.6.0 NVIDIA 595.71.05
+[2026-05-25 01:20:59.220] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:20:59.220] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 01:20:59.220] [Core] [trace] Deserealized entity with ID = 1234, name = Top
+[2026-05-25 01:20:59.220] [Core] [trace] Deserealized entity with ID = 1234, name = Right
+[2026-05-25 01:20:59.221] [Core] [trace] Deserealized entity with ID = 1234, name = Left
+[2026-05-25 01:21:00.073] [Core] [warning] Could not load LICENSE - not a scene file
+[2026-05-25 01:21:00.515] [Core] [warning] Could not load Sandbox - not a scene file
+[2026-05-25 01:21:00.932] [Core] [warning] Could not load Engine - not a scene file
+[2026-05-25 01:21:01.482] [Core] [warning] Could not load Engine - not a scene file
+[2026-05-25 01:21:01.957] [Core] [warning] Could not load CMakeLists.txt - not a scene file
+[2026-05-25 01:21:02.465] [Core] [warning] Could not load Logs - not a scene file
+[2026-05-25 01:21:02.998] [Core] [warning] Could not load Sandbox - not a scene file
+[2026-05-25 01:21:04.874] [Core] [warning] Could not load Engine - not a scene file
+[2026-05-25 01:21:07.075] [Core] [warning] Could not load CMakeLists.txt - not a scene file
+[2026-05-25 01:21:13.819] [Core] [warning] Could not load assets - not a scene file
+[2026-05-25 01:21:15.809] [Core] [warning] Could not load shaders - not a scene file
+[2026-05-25 01:21:17.484] [Core] [warning] Could not load scenes - not a scene file
+[2026-05-25 01:21:18.830] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:18.830] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:18.830] [Core] [trace] Deserealized entity with ID = 1234, name = Square2
+[2026-05-25 01:21:18.830] [Core] [trace] Deserealized entity with ID = 1234, name = Square
+[2026-05-25 01:21:18.830] [Core] [trace] Deserealized entity with ID = 1234, name = Camera A
+[2026-05-25 01:21:18.831] [Core] [trace] Deserealized entity with ID = 1234, name = Camera B
+[2026-05-25 01:21:18.831] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:19.603] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:19.603] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 01:21:19.603] [Core] [trace] Deserealized entity with ID = 1234, name = Top
+[2026-05-25 01:21:19.604] [Core] [trace] Deserealized entity with ID = 1234, name = Right
+[2026-05-25 01:21:19.604] [Core] [trace] Deserealized entity with ID = 1234, name = Left
+[2026-05-25 01:21:21.004] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:21.004] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:21.005] [Core] [trace] Deserealized entity with ID = 1234, name = Camera B
+[2026-05-25 01:21:21.005] [Core] [trace] Deserealized entity with ID = 1234, name = Camera A
+[2026-05-25 01:21:21.005] [Core] [trace] Deserealized entity with ID = 1234, name = Square
+[2026-05-25 01:21:21.005] [Core] [trace] Deserealized entity with ID = 1234, name = Square2
+[2026-05-25 01:21:21.496] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:21.496] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:21.497] [Core] [trace] Deserealized entity with ID = 1234, name = Square2
+[2026-05-25 01:21:21.497] [Core] [trace] Deserealized entity with ID = 1234, name = Square
+[2026-05-25 01:21:21.497] [Core] [trace] Deserealized entity with ID = 1234, name = Camera A
+[2026-05-25 01:21:21.497] [Core] [trace] Deserealized entity with ID = 1234, name = Camera B
+[2026-05-25 01:21:21.497] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:21.945] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:21.945] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 01:21:21.945] [Core] [trace] Deserealized entity with ID = 1234, name = Top
+[2026-05-25 01:21:21.946] [Core] [trace] Deserealized entity with ID = 1234, name = Right
+[2026-05-25 01:21:21.946] [Core] [trace] Deserealized entity with ID = 1234, name = Left
+[2026-05-25 01:21:22.528] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:22.528] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 01:21:22.529] [Core] [trace] Deserealized entity with ID = 1234, name = Top
+[2026-05-25 01:21:22.529] [Core] [trace] Deserealized entity with ID = 1234, name = Right
+[2026-05-25 01:21:22.529] [Core] [trace] Deserealized entity with ID = 1234, name = Left
+[2026-05-25 01:21:23.054] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:23.054] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 01:21:23.054] [Core] [trace] Deserealized entity with ID = 1234, name = Top
+[2026-05-25 01:21:23.054] [Core] [trace] Deserealized entity with ID = 1234, name = Right
+[2026-05-25 01:21:23.054] [Core] [trace] Deserealized entity with ID = 1234, name = Left
+[2026-05-25 01:21:23.539] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:23.539] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:23.539] [Core] [trace] Deserealized entity with ID = 1234, name = Square2
+[2026-05-25 01:21:23.539] [Core] [trace] Deserealized entity with ID = 1234, name = Square
+[2026-05-25 01:21:23.539] [Core] [trace] Deserealized entity with ID = 1234, name = Camera A
+[2026-05-25 01:21:23.540] [Core] [trace] Deserealized entity with ID = 1234, name = Camera B
+[2026-05-25 01:21:23.540] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:25.330] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 01:21:25.330] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:25.330] [Core] [trace] Deserealized entity with ID = 1234, name = Square2
+[2026-05-25 01:21:25.330] [Core] [trace] Deserealized entity with ID = 1234, name = Square
+[2026-05-25 01:21:25.330] [Core] [trace] Deserealized entity with ID = 1234, name = Camera A
+[2026-05-25 01:21:25.331] [Core] [trace] Deserealized entity with ID = 1234, name = Camera B
+[2026-05-25 01:21:25.331] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
+[2026-05-25 01:21:25.574] [Core] [info] Terminating SDL
