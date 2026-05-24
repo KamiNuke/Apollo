@@ -9,7 +9,6 @@ layout (location = 3) in float aTexIndex;
 layout (location = 4) in float aTilingFactor;
 layout (location = 5) in int aEntityID;
 
-
 uniform mat4 uViewProjection;
 
 out vec4 vColor;

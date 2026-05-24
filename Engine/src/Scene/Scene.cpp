@@ -111,7 +111,8 @@ namespace Apollo
             auto& cameraComponent = view.get<CameraComponent>(entity);
             if (!cameraComponent.fixedAspectRatio)
             {
-                cameraComponent.camera.SetViewportSize(width, height);
+                if (m_viewportWidth > 0 && m_viewportHeight > 0)
+                    cameraComponent.camera.SetViewportSize(width, height);
             }
         }
     }
@@ -144,7 +145,8 @@ namespace Apollo
     template<>
     void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
     {
-        component.camera.SetViewportSize(m_viewportWidth, m_viewportHeight);
+        if (m_viewportWidth > 0 && m_viewportHeight > 0)
+            component.camera.SetViewportSize(m_viewportWidth, m_viewportHeight);
     }
 
     template<>

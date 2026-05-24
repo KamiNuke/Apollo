@@ -1,5 +1,6 @@
 #include "Application.h"
 
+#include <filesystem>
 #include <memory>
 #include <X11/Xproto.h>
 

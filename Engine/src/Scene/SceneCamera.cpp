@@ -2,6 +2,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Core/Base.h"
+
 namespace Apollo
 {
     SceneCamera::SceneCamera()
@@ -29,6 +31,7 @@ namespace Apollo
 
     void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
     {
+        APOLLO_ASSERT(width > 0 && height > 0, "Incorrect viewport size in SceneCamera::SetViewportSize(uint32_t, uint32_t)");
         m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
         RecalculateProjection();
     }

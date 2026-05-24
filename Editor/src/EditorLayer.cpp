@@ -26,9 +26,15 @@ namespace Apollo
         fbSpec.attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::DEPTH_24_STENCIL_8 };
         m_framebuffer = Framebuffer::Create(fbSpec);
 
-        m_texture = Texture2D::Create("../../../Editor/assets/klauncher.png");
-
         m_activeScene = CreateRef<Scene>();
+
+        auto cmdArgs = Application::Get().GetSpecification().cmdArgs;
+        if (cmdArgs.count > 1)
+        {
+            auto sceneFilePath = cmdArgs.args[1];
+            SceneSerializer serializer(m_activeScene);
+            serializer.Deserialize(sceneFilePath);
+        }
 
         m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 

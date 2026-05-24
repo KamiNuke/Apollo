@@ -64,8 +64,8 @@ namespace Apollo
 
     private:
         ApplicationSpecification m_specification;
-        Scope<Window> m_window;
 
+        Scope<Window> m_window;
         ImGuiLayer* m_imGuiLayer;
         LayerStack m_layerStack;
 

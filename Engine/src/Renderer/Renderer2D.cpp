@@ -92,7 +92,7 @@ namespace Apollo
             samplers[i] = i;
 
         // TODO: DO SMTH ABOUT THIS PLEASE
-        s_data->quadShader = Shader::Create("../../../Editor/shaders/Texture.glsl");
+        s_data->quadShader = Shader::Create("Editor/shaders/Texture.glsl");
         s_data->quadShader->Bind();
         s_data->quadShader->SetIntArray("uTextures", samplers, s_data->maxTextureSlots);
 

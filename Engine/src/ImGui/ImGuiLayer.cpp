@@ -29,8 +29,8 @@ namespace Apollo
         io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
         io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-        io.FontDefault = io.Fonts->AddFontFromFileTTF("../../../Editor/assets/fonts/Monocraft-ttf/Monocraft.ttf", 14.0);
-        io.Fonts->AddFontFromFileTTF("../../../Editor/assets/fonts/Monocraft-ttf/weights/Monocraft-Bold.ttf", 14.0);
+        io.FontDefault = io.Fonts->AddFontFromFileTTF("Editor/assets/fonts/Monocraft-ttf/Monocraft.ttf", 14.0);
+        io.Fonts->AddFontFromFileTTF("Editor/assets/fonts/Monocraft-ttf/weights/Monocraft-Bold.ttf", 14.0);
 
         SetDarkThemeColors();
 
