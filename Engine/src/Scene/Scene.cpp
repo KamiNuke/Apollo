@@ -92,7 +92,7 @@ namespace Apollo
             {
                 auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-                Renderer2D::DrawSprite(transform.GetTransform(), sprite);
+                Renderer2D::DrawSprite(transform.GetTransform(), sprite, static_cast<int>(entity));
             }
 
             Renderer2D::EndScene();

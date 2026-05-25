@@ -25,6 +25,11 @@ namespace Apollo
         void OpenScene();
         void OpenScene(const std::filesystem::path& path);
         void SaveSceneAs();
+
+        void OnScenePlay();
+        void OnSceneStop();
+
+        void UIToolbar();
     private:
         Ref<Framebuffer> m_framebuffer;
         glm::vec2 m_viewportSize = {0.0f, 0.0f};
@@ -45,5 +50,12 @@ namespace Apollo
         SceneHierarchyPanel m_sceneHierarchyPanel;
         ContentBrowserPanel m_contentBrowserPanel;
         bool m_aboutUsModal = false;
+
+        enum class SceneState
+        {
+            Edit = 0, Play = 1
+        };
+
+        SceneState m_sceneState = SceneState::Edit;
     };
 }

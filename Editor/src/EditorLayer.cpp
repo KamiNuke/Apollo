@@ -101,9 +101,6 @@ namespace Apollo
             m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
         }
 
-        if (m_viewportFocused)
-            m_editorCamera.OnUpdate(ts);
-
         Renderer2D::ResetStats();
         m_framebuffer->Bind();
         // Clean viewport's framebuffer
@@ -111,7 +108,20 @@ namespace Apollo
         RenderCommand::Clear();
         m_framebuffer->ClearAttachment(1, -1);
 
-        m_activeScene->OnUpdateEditor(ts, m_editorCamera);
+        switch (m_sceneState)
+        {
+            case SceneState::Edit:
+            {
+                m_editorCamera.OnUpdate(ts);
+
+                m_activeScene->OnUpdateEditor(ts, m_editorCamera);
+                break;
+            }
+            case SceneState::Play:
+                m_activeScene->OnUpdateRuntime(ts);
+            default:
+                break;
+        }
 
         auto [mx, my] = ImGui::GetMousePos();
         mx -= m_viewportBounds[0].x;
@@ -331,7 +341,7 @@ namespace Apollo
 
         ImGui::End();
         ImGui::PopStyleVar(); // Viewport
-
+        UIToolbar();
         m_sceneHierarchyPanel.OnImGuiRender();
         m_contentBrowserPanel.OnImGuiRender();
     }
@@ -479,5 +489,48 @@ namespace Apollo
             // close
             ImGuiFileDialog::Instance()->Close();
         }
+    }
+
+    void EditorLayer::OnScenePlay()
+    {
+        m_sceneState = SceneState::Play;
+    }
+
+    void EditorLayer::OnSceneStop()
+    {
+        m_sceneState = SceneState::Edit;
+
+    }
+
+    void EditorLayer::UIToolbar()
+    {
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 {0, 2});
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2 {0, 0});
+
+
+        ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+        const std::string buttonLabel = m_sceneState == SceneState::Play ? "Stop" : "Play";
+        const float size = ImGui::GetWindowHeight() - 4.0f;
+
+        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+        if (ImGui::Button(buttonLabel.c_str(), ImVec2{ size + 10.0f, size }))
+        {
+            switch (m_sceneState)
+            {
+                case SceneState::Edit:
+                    OnScenePlay();
+                    break;
+                case SceneState::Play:
+                    OnSceneStop();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        ImGui::PopStyleVar(2);
+
+        ImGui::End();
     }
 }
