@@ -1,8 +1,5 @@
 #include "Font.h"
 
-
-
-
 namespace Apollo
 {
     void Font::DrawText(const std::string& text, ImVec2 pos)

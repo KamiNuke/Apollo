@@ -86,6 +86,8 @@ set(SOURCES
         src/Core/UUID.cpp
         src/Renderer/Font.cpp
         src/Renderer/Font.h
+        src/Core/ResourceManager.cpp
+        src/Core/ResourceManager.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

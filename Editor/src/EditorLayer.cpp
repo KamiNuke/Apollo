@@ -348,7 +348,7 @@ namespace Apollo
         m_contentBrowserPanel.OnImGuiRender();
 
         ImVec2 pos = ImGui::GetMousePos();
-        APOLLO_LOGGER_INFO("{0}, {1}", pos.x, pos.y);
+        //APOLLO_LOGGER_INFO("{0}, {1}", pos.x, pos.y);
         Font::DrawText("Slop", pos);
     }
 
