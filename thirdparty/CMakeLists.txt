@@ -77,3 +77,4 @@ target_link_libraries(ImGuiFileDialog PRIVATE imgui)
 add_subdirectory(ImGuizmo)
 target_link_libraries(imguizmo PRIVATE imgui)
 
+add_subdirectory(Box2D)

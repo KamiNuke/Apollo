@@ -98,6 +98,7 @@ target_link_libraries(${BUILD_NAME}
         stb
         ImGuiFileDialog
         imguizmo::imguizmo
+        box2d::box2d
 )
 
 target_include_directories(${BUILD_NAME}
