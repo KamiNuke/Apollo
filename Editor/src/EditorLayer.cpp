@@ -470,12 +470,16 @@ namespace Apollo
             APOLLO_LOGGER_WARN("Could not load {0} - not a scene file", path.filename().string());
             return;
         }
-        m_activeScene = CreateRef<Scene>();
-        m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
-        m_sceneHierarchyPanel.SetContext(m_activeScene);
 
-        SceneSerializer serializer(m_activeScene);
-        serializer.Deserialize(path.string());
+        Ref<Scene> newScene = CreateRef<Scene>();
+
+        SceneSerializer serializer(newScene);
+        if (serializer.Deserialize(path.string()))
+        {
+            m_activeScene = newScene;
+            m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
+            m_sceneHierarchyPanel.SetContext(m_activeScene);
+        }
     }
 
     void EditorLayer::SaveSceneAs()

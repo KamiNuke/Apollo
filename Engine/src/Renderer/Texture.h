@@ -19,6 +19,8 @@ namespace Apollo
         [[nodiscard]] virtual const std::string& GetPath() const = 0;
         [[nodiscard]] virtual uint32_t GetID() const = 0;
 
+        virtual bool IsLoaded() const = 0;
+
         virtual bool operator==(const Texture& other) const = 0;
     };
 

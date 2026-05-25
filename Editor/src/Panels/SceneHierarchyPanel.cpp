@@ -362,7 +362,11 @@ namespace Apollo
                 {
                     const std::filesystem::path::value_type* path = static_cast<const std::filesystem::path::value_type*>(payload->Data);
                     APOLLO_LOGGER_INFO(path);
-                    component.texture = Texture2D::Create(path);
+                    Ref<Texture2D> texture = Texture2D::Create(path);
+                    if (texture->IsLoaded())
+                        component.texture = texture;
+                    else
+                        APOLLO_LOGGER_WARN("Could not load a texture {0}", path);
                 }
                 ImGui::EndDragDropTarget();
             }
