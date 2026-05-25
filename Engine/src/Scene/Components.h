@@ -6,6 +6,7 @@
 
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
+#include "box2d/types.h"
 #include "Core/Base.h"
 
 #include "Renderer/Texture.h"
@@ -80,5 +81,29 @@ namespace Apollo
             DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->instance; nsc->instance = nullptr; };
 
         }
+    };
+
+    struct RigidBody2DComponent
+    {
+        b2BodyType type = b2BodyType::b2_staticBody;
+        b2BodyId bodyId;
+
+        RigidBody2DComponent() = default;
+        RigidBody2DComponent(const RigidBody2DComponent&) = default;
+    };
+
+    struct BoxCollider2DComponent
+    {
+        glm::vec2 offset = {0.0f, 0.0f};
+        glm::vec2 size = {0.5f, 0.5f};
+
+        float density = 1.0f;
+        float friction = 0.3f;
+        float restitution = 0.0f;
+
+        b2ShapeId shapeId;
+
+        BoxCollider2DComponent() = default;
+        BoxCollider2DComponent(const BoxCollider2DComponent&) = default;
     };
 }

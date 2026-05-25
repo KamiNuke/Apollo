@@ -1,0 +1,54 @@
+Scene: Untitled
+Entities:
+  - Entity: 1234
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.7853982
+        PerspectiveNear: 0.01
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 1234
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [-3.387787, 3.2034569, 0.00012206985]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 1234
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Position: [0, -2.2, 0]
+      Rotation: [0, -0, -0.38679406]
+      Scale: [10.399999, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.18606813, 0.65581393, 0.19043775, 1]
+    RigidBody2DComponent:
+      BodyType: 0
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0

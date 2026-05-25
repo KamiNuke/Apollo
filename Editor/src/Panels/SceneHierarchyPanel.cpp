@@ -248,22 +248,40 @@ namespace Apollo
 
         if (ImGui::BeginPopup("AddComponent"))
         {
-            if (ImGui::MenuItem("Camera"))
+            if (!m_selectionContext.HasComponent<CameraComponent>())
             {
-                if (!m_selectionContext.HasComponent<CameraComponent>())
+                if (ImGui::MenuItem("Camera"))
+                {
                     m_selectionContext.AddComponent<CameraComponent>();
-                else
-                    APOLLO_LOGGER_WARN("This entity already has the camera component");
-                ImGui::CloseCurrentPopup();
+                    ImGui::CloseCurrentPopup();
+                }
             }
 
-            if (ImGui::MenuItem("Sprite Renderer"))
+            if (!m_selectionContext.HasComponent<SpriteRendererComponent>())
             {
-                if (!m_selectionContext.HasComponent<SpriteRendererComponent>())
+                if (ImGui::MenuItem("Sprite Renderer"))
+                {
                     m_selectionContext.AddComponent<SpriteRendererComponent>();
-                else
-                    APOLLO_LOGGER_WARN("This entity already has the sprite renderer component");
-                ImGui::CloseCurrentPopup();
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+
+            if (!m_selectionContext.HasComponent<RigidBody2DComponent>())
+            {
+                if (ImGui::MenuItem("Rigid Body 2D"))
+                {
+                    m_selectionContext.AddComponent<RigidBody2DComponent>();
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+
+            if (!m_selectionContext.HasComponent<BoxCollider2DComponent>())
+            {
+                if (ImGui::MenuItem("Box Collider 2D"))
+                {
+                    m_selectionContext.AddComponent<BoxCollider2DComponent>();
+                    ImGui::CloseCurrentPopup();
+                }
             }
 
             ImGui::EndPopup();
@@ -372,6 +390,38 @@ namespace Apollo
             }
 
             ImGui::DragFloat("Tiling Factor", &component.tilingFactor, 0.1f, 0.0f, 100.0f);
+        });
+
+        DrawComponent<RigidBody2DComponent>("Rigid Body 2D", entity, [](auto& component)
+        {
+            const char* bodyTypeStrings[] = { "Static", "Kinematic", "Dynamic" };
+            const char* currentBodyTypeString = bodyTypeStrings[component.type];
+            if (ImGui::BeginCombo("Type", currentBodyTypeString))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
+                    if (ImGui::Selectable(bodyTypeStrings[i], isSelected))
+                    {
+                        currentBodyTypeString = bodyTypeStrings[i];
+                        component.type = static_cast<b2BodyType>(i);
+                    }
+
+                    if (isSelected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+        });
+
+        DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
+        {
+            ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+            ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+            ImGui::DragFloat("Density", &component.density);
+            ImGui::DragFloat("Friction", &component.friction);
+            ImGui::DragFloat("Restitution", &component.restitution);
         });
     }
 } // Apollo

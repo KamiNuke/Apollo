@@ -498,12 +498,13 @@ namespace Apollo
     void EditorLayer::OnScenePlay()
     {
         m_sceneState = SceneState::Play;
+        m_activeScene->OnRuntimeStart();
     }
 
     void EditorLayer::OnSceneStop()
     {
         m_sceneState = SceneState::Edit;
-
+        m_activeScene->OnRuntimeStop();
     }
 
     void EditorLayer::UIToolbar()

@@ -4,47 +4,11 @@ Entities:
     TagComponent:
       Tag: Empty entity
     TransformComponent:
-      Position: [0, 1.4667771, 0]
-      Rotation: [0, -0, 0]
+      Position: [-0.26420927, 0, -0.6]
+      Rotation: [0, -0, -0.9714535]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-  - Entity: 1234
-    TagComponent:
-      Tag: Square2
-    TransformComponent:
-      Position: [3.4, 2, -29.5]
-      Rotation: [0.054105204, 0, 1.5882496]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.83255816, 0.5456251, 0.13940507, 1]
-  - Entity: 1234
-    TagComponent:
-      Tag: Square
-    TransformComponent:
-      Position: [-5.3, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.037598696, 0.7348837, 0.11507469, 1]
-  - Entity: 1234
-    TagComponent:
-      Tag: Camera A
-    TransformComponent:
-      Position: [0, 0, 11.9]
-      Rotation: [0, 0, 0]
-      Scale: [1.9, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 0
-        PerspectiveFOV: 0.7853982
-        PerspectiveNear: 3.01
-        PerspectiveFar: 1006
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: true
-      FixedAspectRatio: false
+      Color: [1, 0, 0, 1]
   - Entity: 1234
     TagComponent:
       Tag: Camera B
@@ -65,10 +29,46 @@ Entities:
       FixedAspectRatio: false
   - Entity: 1234
     TagComponent:
-      Tag: Empty entity
+      Tag: Camera A
     TransformComponent:
-      Position: [0, 0, -0.6]
-      Rotation: [0, 0, -0.40142572]
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.7853982
+        PerspectiveNear: 3.01
+        PerspectiveFar: 1006
+        OrthographicSize: 6
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 1234
+    TagComponent:
+      Tag: Square
+    TransformComponent:
+      Position: [-2.9321108, 0.6314543, 0]
+      Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 0, 0, 1]
+      Color: [0.037598696, 0.7348837, 0.11507469, 1]
+  - Entity: 1234
+    TagComponent:
+      Tag: Square2
+    TransformComponent:
+      Position: [3.4, 2, -29.5]
+      Rotation: [0.054105204, 0, 1.5882496]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.83255816, 0.5456251, 0.13940507, 1]
+  - Entity: 1234
+    TagComponent:
+      Tag: Empty entity
+    TransformComponent:
+      Position: [-0.7558954, -2.1806686, 6.1035156e-05]
+      Rotation: [0, -0, 0]
+      Scale: [8.005421, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]

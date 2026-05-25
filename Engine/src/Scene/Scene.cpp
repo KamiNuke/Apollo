@@ -5,6 +5,9 @@
 #include <glm/glm.hpp>
 
 #include "Entity.h"
+#include "box2d/box2d.h"
+#include "box2d/types.h"
+#include "Logger/Log.h"
 #include "Renderer/Renderer2D.h"
 
 namespace Apollo
@@ -30,6 +33,49 @@ namespace Apollo
     void Scene::DestroyEntity(Entity entity)
     {
         m_registry.destroy(entity);
+    }
+
+    void Scene::OnRuntimeStart()
+    {
+        b2Vec2 gravity = {0.0f, -100.0f };
+        b2WorldDef worldDef = b2DefaultWorldDef();
+        worldDef.gravity = gravity;
+        m_physicsWorldID = b2CreateWorld(&worldDef);
+
+        auto view = m_registry.view<RigidBody2DComponent>();
+        for (auto e : view)
+        {
+            Entity entity = {e, this};
+            auto& transform = entity.GetComponent<TransformComponent>();
+            auto& rb2d = entity.GetComponent<RigidBody2DComponent>();
+
+            b2BodyDef bodyDef = b2DefaultBodyDef();
+            bodyDef.type = rb2d.type;
+            bodyDef.position = {transform.position.x, transform.position.y};
+            bodyDef.rotation = b2MakeRot(transform.rotation.z);
+
+            b2BodyId bodyId = b2CreateBody(m_physicsWorldID, &bodyDef);
+            rb2d.bodyId = bodyId;
+
+            if (entity.HasComponent<BoxCollider2DComponent>())
+            {
+                auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
+
+                b2Polygon box = b2MakeBox(bc2d.size.x * transform.scale.x, bc2d.size.y * transform.scale.y);
+                b2ShapeDef shapeDef = b2DefaultShapeDef();
+                shapeDef.density = bc2d.density;
+                shapeDef.material.friction = bc2d.friction;
+                shapeDef.material.restitution = bc2d.restitution;
+                b2ShapeId shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &box);
+                bc2d.shapeId = shapeId;
+            }
+        }
+    }
+
+    void Scene::OnRuntimeStop()
+    {
+        b2DestroyWorld(m_physicsWorldID);
+        m_physicsWorldID = b2_nullWorldId;
     }
 
     void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
@@ -63,6 +109,26 @@ namespace Apollo
 
                  nsc.instance->OnUpdate(ts);
             });
+        }
+
+        // Physics
+        {
+            constexpr int subStepCount = 1;
+            b2World_Step(m_physicsWorldID, ts, subStepCount);
+
+            auto view = m_registry.view<RigidBody2DComponent>();
+            for (auto e : view)
+            {
+                Entity entity = {e, this};
+                auto& transform = entity.GetComponent<TransformComponent>();
+                auto& rb2d = entity.GetComponent<RigidBody2DComponent>();
+
+                b2Vec2 position = b2Body_GetPosition(rb2d.bodyId);
+                b2Rot rotation = b2Body_GetRotation(rb2d.bodyId);
+                transform.position.x = position.x;
+                transform.position.y = position.y;
+                transform.rotation.z = b2Rot_GetAngle(rotation);
+            }
         }
 
         // Render 2D
@@ -167,4 +233,15 @@ namespace Apollo
 
     }
 
+    template<>
+    void Scene::OnComponentAdded<RigidBody2DComponent>(Entity entity, RigidBody2DComponent& component)
+    {
+
+    }
+
+    template<>
+    void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
+    {
+
+    }
 }

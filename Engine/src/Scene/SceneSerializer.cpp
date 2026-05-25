@@ -181,6 +181,33 @@ namespace Apollo
             out << YAML::EndMap;
         }
 
+
+        if (entity.HasComponent<RigidBody2DComponent>())
+        {
+            out << YAML::Key << "RigidBody2DComponent";
+            out << YAML::BeginMap;
+
+            auto& rigidBody2DComponent = entity.GetComponent<RigidBody2DComponent>();
+            out << YAML::Key << "BodyType" << YAML::Value << rigidBody2DComponent.type;
+
+            out << YAML::EndMap;
+        }
+
+        if (entity.HasComponent<BoxCollider2DComponent>())
+        {
+            out << YAML::Key << "BoxCollider2DComponent";
+            out << YAML::BeginMap;
+
+            auto& boxCollider2DComponent = entity.GetComponent<BoxCollider2DComponent>();
+            out << YAML::Key << "Offset" << YAML::Value << boxCollider2DComponent.offset;
+            out << YAML::Key << "Size" << YAML::Value << boxCollider2DComponent.size;
+            out << YAML::Key << "Density" << YAML::Value << boxCollider2DComponent.density;
+            out << YAML::Key << "Friction" << YAML::Value << boxCollider2DComponent.friction;
+            out << YAML::Key << "Restitution" << YAML::Value << boxCollider2DComponent.restitution;
+
+            out << YAML::EndMap;
+        }
+
         out << YAML::EndMap;
     }
 
@@ -288,6 +315,26 @@ namespace Apollo
                         spriteComponent.texture = Texture2D::Create(spriteRendererComponent["Texture"].as<std::string>());
                     }
                 }
+
+
+                YAML::Node rigidBody2DComponent = entity["RigidBody2DComponent"];
+                if (rigidBody2DComponent)
+                {
+                    auto& r2bd = deserializedEntity.AddComponent<RigidBody2DComponent>();
+                    r2bd.type = static_cast<b2BodyType>(rigidBody2DComponent["BodyType"].as<int>());
+                }
+
+                YAML::Node boxCollider2DComponent = entity["BoxCollider2DComponent"];
+                if (boxCollider2DComponent)
+                {
+                    auto& bc2d = deserializedEntity.AddComponent<BoxCollider2DComponent>();
+                    bc2d.offset = boxCollider2DComponent["Offset"].as<glm::vec2>();
+                    bc2d.size = boxCollider2DComponent["Size"].as<glm::vec2>();
+                    bc2d.density = boxCollider2DComponent["Density"].as<float>();
+                    bc2d.friction = boxCollider2DComponent["Friction"].as<float>();
+                    bc2d.restitution = boxCollider2DComponent["Restitution"].as<float>();
+                }
+
             }
         }
 

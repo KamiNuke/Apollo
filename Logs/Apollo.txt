@@ -1,12 +1,16 @@
-[2026-05-25 16:25:25.220] [Core] [info] Initializing window Apollo Editor (1280, 720)
-[2026-05-25 16:25:25.220] [Core] [info] Initializing SDL
-[2026-05-25 16:25:25.378] [Core] [info] OpenGL info:
-[2026-05-25 16:25:25.378] [Core] [info]     Vendor: NVIDIA Corporation
-[2026-05-25 16:25:25.378] [Core] [info]     Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2026-05-25 16:25:25.378] [Core] [info]     Version: 4.6.0 NVIDIA 595.71.05
-[2026-05-25 16:25:25.384] [Core] [trace] Dserealizing scene Untitled
-[2026-05-25 16:25:25.384] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
-[2026-05-25 16:25:25.384] [Core] [trace] Deserealized entity with ID = 1234, name = Top
-[2026-05-25 16:25:25.384] [Core] [trace] Deserealized entity with ID = 1234, name = Right
-[2026-05-25 16:25:25.384] [Core] [trace] Deserealized entity with ID = 1234, name = Left
-[2026-05-25 16:25:30.607] [Core] [info] Terminating SDL
+[2026-05-25 20:04:00.514] [Core] [info] Initializing window Apollo Editor (1280, 720)
+[2026-05-25 20:04:00.514] [Core] [info] Initializing SDL
+[2026-05-25 20:04:00.626] [Core] [info] OpenGL info:
+[2026-05-25 20:04:00.626] [Core] [info]     Vendor: NVIDIA Corporation
+[2026-05-25 20:04:00.626] [Core] [info]     Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2026-05-25 20:04:00.626] [Core] [info]     Version: 4.6.0 NVIDIA 595.71.05
+[2026-05-25 20:04:00.631] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 20:04:00.631] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 20:04:00.632] [Core] [trace] Deserealized entity with ID = 1234, name = Top
+[2026-05-25 20:04:00.632] [Core] [trace] Deserealized entity with ID = 1234, name = Right
+[2026-05-25 20:04:00.632] [Core] [trace] Deserealized entity with ID = 1234, name = Left
+[2026-05-25 20:04:05.571] [Core] [trace] Dserealizing scene Untitled
+[2026-05-25 20:04:05.571] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 20:04:05.572] [Core] [trace] Deserealized entity with ID = 1234, name = Box
+[2026-05-25 20:04:05.572] [Core] [trace] Deserealized entity with ID = 1234, name = Ground
+[2026-05-25 20:06:04.640] [Core] [info] Terminating SDL
