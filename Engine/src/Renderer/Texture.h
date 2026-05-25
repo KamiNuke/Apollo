@@ -2,6 +2,7 @@
 #include <cstdint>
 
 #include "Core/Base.h"
+#include "Logger/Log.h"
 
 namespace Apollo
 {

@@ -7,6 +7,7 @@
 
 namespace Apollo
 {
+    class Texture2D;
     class ResourceManager
     {
     public:
@@ -21,6 +22,6 @@ namespace Apollo
         ResourceManager() {}
 
         static ResourceManager* s_instance;
-        std::unordered_map<std::string, Ref<Texture2D>> m_map;
+        std::unordered_map<std::string, std::weak_ptr<Texture2D>> m_map;
     };
 } // Apollo
