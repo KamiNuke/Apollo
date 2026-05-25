@@ -5,14 +5,23 @@
 #include "glm/gtx/quaternion.hpp"
 
 #include "SceneCamera.h"
-#include "ScriptableEntity.h"
 #include "box2d/types.h"
 #include "Core/Base.h"
+#include "Core/UUID.h"
 
 #include "Renderer/Texture.h"
 
 namespace Apollo
 {
+    struct IDComponent
+    {
+        UUID ID;
+
+        IDComponent() =default;
+        IDComponent(const IDComponent&) = default;
+        IDComponent(UUID id) { ID = id; }
+    };
+
     struct TagComponent
     {
         std::string tag{};
@@ -66,6 +75,8 @@ namespace Apollo
         CameraComponent() = default;
         CameraComponent(const CameraComponent&) = default;
     };
+
+    class ScriptableEntity;
 
     struct NativeScriptComponent
     {

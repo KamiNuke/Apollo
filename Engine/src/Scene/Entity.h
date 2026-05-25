@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include <entt/entt.hpp>
 
+#include "Components.h"
 #include "Core/Base.h"
 
 namespace Apollo
@@ -47,6 +48,10 @@ namespace Apollo
         operator bool() const { return m_entityHandle != entt::null; }
         operator entt::entity() const { return m_entityHandle; }
         operator uint32_t() const { return (uint32_t)m_entityHandle; }
+
+        UUID GetUUID() { return GetComponent<IDComponent>().ID; }
+        const std::string& GetName() { return GetComponent<TagComponent>().tag; }
+
         bool operator==(const Entity& other) const
         {
             return m_entityHandle == other.m_entityHandle && m_scene == other.m_scene;

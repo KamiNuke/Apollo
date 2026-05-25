@@ -9,6 +9,7 @@
 #include "box2d/types.h"
 #include "Logger/Log.h"
 #include "Renderer/Renderer2D.h"
+#include "ScriptableEntity.h"
 
 namespace Apollo
 {
@@ -22,7 +23,13 @@ namespace Apollo
 
     Entity Scene::CreateEntity(const std::string& name)
     {
+        return CreateEntityWithUUID(UUID(), name);
+    }
+
+    Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
+    {
         Entity entity = { m_registry.create(), this };
+        entity.AddComponent<IDComponent>(uuid);
         entity.AddComponent<TransformComponent>();
         auto& tag = entity.AddComponent<TagComponent>(name);
         tag.tag = name.empty() ? "Entity" : name;
@@ -198,9 +205,13 @@ namespace Apollo
     template<typename T>
     void Scene::OnComponentAdded(Entity entity, T& component)
     {
-        static_assert(false);
     }
 
+    template<>
+    void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+    {
+
+    }
 
     template<>
     void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)

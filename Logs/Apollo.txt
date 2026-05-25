@@ -1,13 +1,20 @@
-[2026-05-25 20:25:05.401] [Core] [info] Initializing window Apollo Editor (1280, 720)
-[2026-05-25 20:25:05.401] [Core] [info] Initializing SDL
-[2026-05-25 20:25:05.566] [Core] [info] OpenGL info:
-[2026-05-25 20:25:05.566] [Core] [info]     Vendor: NVIDIA Corporation
-[2026-05-25 20:25:05.566] [Core] [info]     Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2026-05-25 20:25:05.566] [Core] [info]     Version: 4.6.0 NVIDIA 595.71.05
-[2026-05-25 20:25:05.572] [Core] [trace] Dserealizing scene Untitled
-[2026-05-25 20:25:05.572] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
-[2026-05-25 20:25:05.572] [Core] [trace] Deserealized entity with ID = 1234, name = Top
-[2026-05-25 20:25:05.573] [Core] [trace] Deserealized entity with ID = 1234, name = Right
-[2026-05-25 20:25:05.573] [Core] [trace] Deserealized entity with ID = 1234, name = Left
-[2026-05-25 20:25:10.905] [Core] [info] assets/klauncher.png
-[2026-05-25 20:25:13.018] [Core] [info] Terminating SDL
+[2026-05-25 21:53:47.094] [Core] [info] Initializing window Apollo Editor (1280, 720)
+[2026-05-25 21:53:47.094] [Core] [info] Initializing SDL
+[2026-05-25 21:53:47.264] [Core] [info] OpenGL info:
+[2026-05-25 21:53:47.264] [Core] [info]     Vendor: NVIDIA Corporation
+[2026-05-25 21:53:47.264] [Core] [info]     Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2026-05-25 21:53:47.264] [Core] [info]     Version: 4.6.0 NVIDIA 595.71.05
+[2026-05-25 21:53:47.269] [Core] [trace] Deserializing scene Untitled
+[2026-05-25 21:53:47.269] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
+[2026-05-25 21:53:47.270] [Core] [trace] Deserealized entity with ID = 1234, name = Top
+[2026-05-25 21:53:47.270] [Core] [trace] Deserealized entity with ID = 1234, name = Right
+[2026-05-25 21:53:47.270] [Core] [trace] Deserealized entity with ID = 1234, name = Left
+[2026-05-25 21:53:51.320] [Core] [trace] Deserializing scene Untitled
+[2026-05-25 21:53:51.320] [Core] [trace] Deserealized entity with ID = 14254912456886783142, name = Ground
+[2026-05-25 21:53:51.321] [Core] [trace] Deserealized entity with ID = 13474181212188358508, name = Box
+[2026-05-25 21:53:51.321] [Core] [trace] Deserealized entity with ID = 8914090695587104439, name = Camera
+[2026-05-25 21:54:06.523] [Core] [trace] Deserializing scene Untitled
+[2026-05-25 21:54:06.523] [Core] [trace] Deserealized entity with ID = 8914090695587104439, name = Camera
+[2026-05-25 21:54:06.523] [Core] [trace] Deserealized entity with ID = 13474181212188358508, name = Box
+[2026-05-25 21:54:06.524] [Core] [trace] Deserealized entity with ID = 14254912456886783142, name = Ground
+[2026-05-25 21:54:14.633] [Core] [info] Terminating SDL

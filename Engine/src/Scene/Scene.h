@@ -4,6 +4,7 @@
 #include <box2d/id.h>
 
 #include "Core/Timestep.h"
+#include "Core/UUID.h"
 #include "Renderer/EditorCamera.h"
 
 namespace Apollo
@@ -17,6 +18,7 @@ namespace Apollo
         ~Scene();
 
         Entity CreateEntity(const std::string& name = std::string());
+        Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
         void DestroyEntity(Entity entity);
 
         void OnRuntimeStart();

@@ -116,8 +116,10 @@ namespace Apollo
 
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
     {
+        APOLLO_ASSERT(entity.HasComponent<IDComponent>(), "Entity does not have IDComponent");
+
         out << YAML::BeginMap;
-        out << YAML::Key << "Entity" << YAML::Value << "1234";
+        out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 
         if (entity.HasComponent<TagComponent>())
         {
@@ -258,7 +260,7 @@ namespace Apollo
             return false;
 
         std::string sceneName = data["Scene"].as<std::string>();
-        APOLLO_LOGGER_TRACE("Dserealizing scene {0}", sceneName);
+        APOLLO_LOGGER_TRACE("Deserializing scene {0}", sceneName);
 
         auto entities = data["Entities"];
         if (entities)
@@ -274,7 +276,7 @@ namespace Apollo
 
                 APOLLO_LOGGER_TRACE("Deserealized entity with ID = {0}, name = {1}", uuid, name);
 
-                Entity deserializedEntity = m_scene->CreateEntity(name);
+                Entity deserializedEntity = m_scene->CreateEntityWithUUID(uuid, name);
 
                 auto transformComponent = entity["TransformComponent"];
                 if (transformComponent)

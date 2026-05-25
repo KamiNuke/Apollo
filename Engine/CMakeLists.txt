@@ -82,6 +82,8 @@ set(SOURCES
         src/Scene/SceneSerializer.h
         src/Renderer/EditorCamera.cpp
         src/Renderer/EditorCamera.h
+        src/Core/UUID.h
+        src/Core/UUID.cpp
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})
