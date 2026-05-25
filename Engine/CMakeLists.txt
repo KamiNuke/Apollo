@@ -84,6 +84,8 @@ set(SOURCES
         src/Renderer/EditorCamera.h
         src/Core/UUID.h
         src/Core/UUID.cpp
+        src/Renderer/Font.cpp
+        src/Renderer/Font.h
 )
 
 add_library(${BUILD_NAME} STATIC ${SOURCES})

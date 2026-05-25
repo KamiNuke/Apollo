@@ -4,6 +4,7 @@
 #include "ImGuiFileDialog.h"
 #include "ImGuizmo.h"
 #include "imgui_internal.h"
+#include "Renderer/Font.h"
 #include "Scene/Components.h"
 #include "Scene/SceneSerializer.h"
 
@@ -275,6 +276,8 @@ namespace Apollo
 
             ImGui::Image(m_framebuffer->GetColorAttachmentRendererID(0),
                 ImVec2{ m_viewportSize.x, m_viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+
         }
 
         if (ImGui::BeginDragDropTarget())
@@ -343,6 +346,10 @@ namespace Apollo
         UIToolbar();
         m_sceneHierarchyPanel.OnImGuiRender();
         m_contentBrowserPanel.OnImGuiRender();
+
+        ImVec2 pos = ImGui::GetMousePos();
+        APOLLO_LOGGER_INFO("{0}, {1}", pos.x, pos.y);
+        Font::DrawText("Slop", pos);
     }
 
     void EditorLayer::OnEvent(Event& event)
