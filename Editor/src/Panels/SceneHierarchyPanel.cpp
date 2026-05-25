@@ -373,7 +373,11 @@ namespace Apollo
         {
             ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
-            ImGui::Button("Texture", ImVec2{100.0f, 100.0f});
+            if (component.texture)
+                ImGui::ImageButton("Texture", component.texture->GetID(), ImVec2{100.0f, 100.0f},
+                    ImVec2{0, 1}, ImVec2{1, 0});
+            else
+                ImGui::Button("Texture", ImVec2{100.0f, 100.0f});
             if (ImGui::BeginDragDropTarget())
             {
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
