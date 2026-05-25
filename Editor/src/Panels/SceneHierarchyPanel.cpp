@@ -30,21 +30,24 @@ namespace Apollo
     {
         ImGui::Begin("Scene");
 
-        for(auto entityID : m_context->m_registry.view<entt::entity>())
+        if (m_context)
         {
-            Entity entity { entityID, m_context.get() };
-            DrawEntityNode(entity);
-        }
+            for(auto entityID : m_context->m_registry.view<entt::entity>())
+            {
+                Entity entity { entityID, m_context.get() };
+                DrawEntityNode(entity);
+            }
 
-        if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(0))
-            m_selectionContext = {};
+            if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(0))
+                m_selectionContext = {};
 
-        if (ImGui::BeginPopupContextWindow(nullptr, ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
-        {
-            if (ImGui::MenuItem("Create Empty Entity"))
-                m_context->CreateEntity("Empty entity");
+            if (ImGui::BeginPopupContextWindow(nullptr, ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems))
+            {
+                if (ImGui::MenuItem("Create Empty Entity"))
+                    m_context->CreateEntity("Empty entity");
 
-            ImGui::EndPopup();
+                ImGui::EndPopup();
+            }
         }
 
         ImGui::End();

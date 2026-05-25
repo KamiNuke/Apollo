@@ -77,7 +77,6 @@ namespace Apollo
     };
 
     class ScriptableEntity;
-
     struct NativeScriptComponent
     {
         ScriptableEntity* instance = nullptr;

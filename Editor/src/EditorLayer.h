@@ -24,10 +24,15 @@ namespace Apollo
         void NewScene();
         void OpenScene();
         void OpenScene(const std::filesystem::path& path);
+        void SaveScene();
         void SaveSceneAs();
+
+        void SerializeScene(Ref<Scene> scene, const std::filesystem::path& path);
 
         void OnScenePlay();
         void OnSceneStop();
+
+        void OnDuplicateEntity();
 
         void UIToolbar();
     private:
@@ -38,6 +43,8 @@ namespace Apollo
         glm::vec2 m_viewportBounds[2];
 
         Ref<Scene> m_activeScene;
+        Ref<Scene> m_editorScene;
+        std::filesystem::path m_currentScenePath;
         Entity m_hoveredEntity;
 
         bool m_primaryCamera = true;

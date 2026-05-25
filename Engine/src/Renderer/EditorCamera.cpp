@@ -22,9 +22,9 @@ namespace Apollo
             glm::vec2 delta = (mouse - m_initialMousePosition) * 0.003f;
             m_initialMousePosition = mouse;
 
-            if (Input::IsMouseButtonPressed(APOLLO_MOUSE_BUTTON_MIDDLE))
+            if (Input::IsMouseButtonPressed(APOLLO_MOUSE_BUTTON_LEFT))
                 MousePan(delta);
-            else if (Input::IsMouseButtonPressed(APOLLO_MOUSE_BUTTON_LEFT))
+            else if (Input::IsMouseButtonPressed(APOLLO_MOUSE_BUTTON_MIDDLE))
                 MouseRotate(delta);
             else if (Input::IsMouseButtonPressed(APOLLO_MOUSE_BUTTON_RIGHT))
                 MouseZoom(delta.y);

@@ -23,6 +23,14 @@ namespace Apollo
             return component;
         }
 
+        template<typename T, typename... Args>
+        T& AddOrReplaceComponent(Args&&... args)
+        {
+            T& component = m_scene->m_registry.emplace_or_replace<T>(m_entityHandle, std::forward<Args>(args)...);
+            m_scene->OnComponentAdded<T>(*this, component);
+            return component;
+        }
+
         template<typename T>
         T& GetComponent()
         {

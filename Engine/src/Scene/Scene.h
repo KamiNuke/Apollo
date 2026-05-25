@@ -3,6 +3,7 @@
 #include <entt/entt.hpp>
 #include <box2d/id.h>
 
+#include "Core/Base.h"
 #include "Core/Timestep.h"
 #include "Core/UUID.h"
 #include "Renderer/EditorCamera.h"
@@ -16,10 +17,13 @@ namespace Apollo
     public:
         Scene();
         ~Scene();
+        static Ref<Scene> Copy(Ref<Scene> other);
 
         Entity CreateEntity(const std::string& name = std::string());
         Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
+        void DuplicateEntity(Entity entity);
         void DestroyEntity(Entity entity);
+
 
         void OnRuntimeStart();
         void OnRuntimeStop();

@@ -1,28 +1,10 @@
 Scene: Untitled
 Entities:
-  - Entity: 8914090695587104439
-    TagComponent:
-      Tag: Camera
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 1
-        PerspectiveFOV: 0.7853982
-        PerspectiveNear: 0.01
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 1
-      Primary: true
-      FixedAspectRatio: false
-  - Entity: 13474181212188358508
+  - Entity: 8952492027255357426
     TagComponent:
       Tag: Box
     TransformComponent:
-      Position: [-3.387787, 3.2034569, 0.00012206985]
+      Position: [8.62307, 5.6326103, -0.03894043]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -35,17 +17,197 @@ Entities:
       Density: 1
       Friction: 0.3
       Restitution: 0
-  - Entity: 14254912456886783142
+  - Entity: 15596078326433843145
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [4.034622, -0.62918377, -0.03894043]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 3572862597919908772
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [3.7917173, 5.3357277, -0.03894043]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 10312662740637115099
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [-3.387787, 3.2034569, -106.44078]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 5765538343440328476
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [6.3962855, 3.2034569, 0.00012206985]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 5416538899262363149
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [-3.387787, 3.2034569, -14.389379]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 16713048460864046553
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [-1.255562, 3.878231, -0.03894043]
+      Rotation: [0, -0, 0]
+      Scale: [3.7526176, 4.674634, 1.14]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+      Texture: assets/klauncher.png
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 11456912736518331919
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Position: [0, -2.2, 0]
+      Position: [9.612202, -3.9254494, 6.1035025e-05]
+      Rotation: [0, -0, 0.037309658]
+      Scale: [10.399999, 0.9999999, 1]
+    SpriteRendererComponent:
+      Color: [0.18606813, 0.65581393, 0.19043775, 1]
+    RigidBody2DComponent:
+      BodyType: 0
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 1477961819053256995
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Position: [-0.06583816, -2.1731834, 0]
       Rotation: [0, -0, -0.38679406]
       Scale: [10.399999, 1, 1]
     SpriteRendererComponent:
       Color: [0.18606813, 0.65581393, 0.19043775, 1]
     RigidBody2DComponent:
       BodyType: 0
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 14254912456886783142
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Position: [20.206936, -5.4081383, 6.1035025e-05]
+      Rotation: [0, -0, 0.41240498]
+      Scale: [10.399999, 0.9999943, 1]
+    SpriteRendererComponent:
+      Color: [0.18606813, 0.65581393, 0.19043775, 1]
+    RigidBody2DComponent:
+      BodyType: 0
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 13474181212188358508
+    TagComponent:
+      Tag: Box
+    TransformComponent:
+      Position: [11.358473, 4.3626595, 0.00012206985]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.7069768, 0.10851273, 0.10851273, 1]
+    RigidBody2DComponent:
+      BodyType: 2
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.3
+      Restitution: 0
+  - Entity: 8914090695587104439
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [6.906885, 0.79407597, -6.1035156e-05]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.7853982
+        PerspectiveNear: 0.01
+        PerspectiveFar: 1000
+        OrthographicSize: 16
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+    RigidBody2DComponent:
+      BodyType: 2
     BoxCollider2DComponent:
       Offset: [0, 0]
       Size: [0.5, 0.5]

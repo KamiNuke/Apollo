@@ -32,8 +32,7 @@ namespace Apollo
         if (cmdArgs.count > 1)
         {
             auto sceneFilePath = cmdArgs.args[1];
-            SceneSerializer serializer(m_activeScene);
-            serializer.Deserialize(sceneFilePath);
+            OpenScene(sceneFilePath);
         }
 
         m_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
@@ -81,7 +80,7 @@ namespace Apollo
         m_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_secondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 */
-        m_sceneHierarchyPanel.SetContext(m_activeScene);
+        //m_sceneHierarchyPanel.SetContext(m_activeScene);
     }
 
     void EditorLayer::OnDetach()
@@ -384,6 +383,10 @@ namespace Apollo
                     config.flags = ImGuiFileDialogFlags_Modal;
                     ImGuiFileDialog::Instance()->OpenDialog("SaveFileAs", "Save a File", ".apollo", config);
                 }
+                else if (control)
+                {
+                    SaveScene();
+                }
 
                 break;
             }
@@ -438,6 +441,14 @@ namespace Apollo
                 break;
             }
 
+            case APOLLO_KEY_D:
+            {
+                if (control)
+                    OnDuplicateEntity();
+                break;
+
+            }
+
             default:
                 break;
         }
@@ -450,6 +461,7 @@ namespace Apollo
         m_activeScene = CreateRef<Scene>();
         m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
         m_sceneHierarchyPanel.SetContext(m_activeScene);
+        m_currentScenePath.clear();
     }
 
     void EditorLayer::OpenScene()
@@ -465,6 +477,9 @@ namespace Apollo
 
     void EditorLayer::OpenScene(const std::filesystem::path& path)
     {
+        if (m_sceneState != SceneState::Edit)
+            OnSceneStop();
+
         if (path.extension().string() != ".apollo")
         {
             APOLLO_LOGGER_WARN("Could not load {0} - not a scene file", path.filename().string());
@@ -476,9 +491,28 @@ namespace Apollo
         SceneSerializer serializer(newScene);
         if (serializer.Deserialize(path.string()))
         {
-            m_activeScene = newScene;
-            m_activeScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
-            m_sceneHierarchyPanel.SetContext(m_activeScene);
+            m_editorScene = newScene;
+            m_editorScene->OnViewportResize(m_viewportSize.x, m_viewportSize.y);
+            m_sceneHierarchyPanel.SetContext(m_editorScene);
+
+            m_activeScene = m_editorScene;
+            m_currentScenePath = path;
+        }
+    }
+
+    void EditorLayer::SaveScene()
+    {
+        if (!m_currentScenePath.empty())
+        {
+            SerializeScene(m_activeScene, m_currentScenePath.string());
+        }
+        else
+        {
+            IGFD::FileDialogConfig config;
+            config.path = ".";
+            config.countSelectionMax = 1;
+            config.flags = ImGuiFileDialogFlags_Modal;
+            ImGuiFileDialog::Instance()->OpenDialog("SaveFileAs", "Save a File", ".apollo", config);
         }
     }
 
@@ -487,24 +521,49 @@ namespace Apollo
         if (ImGuiFileDialog::Instance()->Display("SaveFileAs")) {
             if (ImGuiFileDialog::Instance()->IsOk()) {
                 std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-                SceneSerializer serializer(m_activeScene);
-                serializer.Serialize(filePathName);
+                SerializeScene(m_activeScene, filePathName);
+                m_currentScenePath = filePathName;
             }
             // close
             ImGuiFileDialog::Instance()->Close();
         }
     }
 
+    void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)
+    {
+        SceneSerializer serializer(scene);
+        serializer.Serialize(path);
+    }
+
     void EditorLayer::OnScenePlay()
     {
         m_sceneState = SceneState::Play;
+
+        m_activeScene = Scene::Copy(m_editorScene);
         m_activeScene->OnRuntimeStart();
+
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
     }
 
     void EditorLayer::OnSceneStop()
     {
         m_sceneState = SceneState::Edit;
+
         m_activeScene->OnRuntimeStop();
+        m_activeScene = m_editorScene;
+
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
+
+    }
+
+    void EditorLayer::OnDuplicateEntity()
+    {
+        if (m_sceneState != SceneState::Edit)
+            return;
+
+        Entity selectedEntity = m_sceneHierarchyPanel.GetSelectedEntity();
+        if (selectedEntity)
+            m_editorScene->DuplicateEntity(selectedEntity);
     }
 
     void EditorLayer::UIToolbar()
