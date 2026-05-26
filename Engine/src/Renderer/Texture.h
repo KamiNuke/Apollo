@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <string>
 
 #include "Core/Base.h"
 #include "Logger/Log.h"

@@ -39,8 +39,13 @@ namespace Apollo
             if (ImGui::BeginDragDropSource())
             {
                 const std::filesystem::path::value_type* itemPath = relativePath.c_str();
+#if defined(PLATFORM_WINDOWS)
                 ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath,
-                    (strlen(itemPath) + 1) * sizeof(std::filesystem::path::value_type));
+                    (wcslen(itemPath) + 1) * sizeof(std::filesystem::path::value_type));
+#else
+                ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath,
+                (strlen(itemPath) + 1) * sizeof(std::filesystem::path::value_type));
+#endif
                 ImGui::Text("%s", filenameString.c_str());
                 ImGui::EndDragDropSource();
             }

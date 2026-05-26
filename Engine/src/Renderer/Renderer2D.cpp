@@ -1,5 +1,7 @@
 #include "Renderer2D.h"
 
+#include <array>
+
 #include "RenderCommand.h"
 #include "Shader.h"
 #include "VertexArray.h"

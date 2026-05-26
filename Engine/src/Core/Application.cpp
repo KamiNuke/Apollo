@@ -2,7 +2,6 @@
 
 #include <filesystem>
 #include <memory>
-#include <X11/Xproto.h>
 
 #include "Logger/Log.h"
 #include "Base.h"

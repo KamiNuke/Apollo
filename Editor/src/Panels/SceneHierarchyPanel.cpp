@@ -386,8 +386,9 @@ namespace Apollo
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
                 {
                     const std::filesystem::path::value_type* path = static_cast<const std::filesystem::path::value_type*>(payload->Data);
+                    std::filesystem::path texturePath(path);
                     APOLLO_LOGGER_INFO(path);
-                    Ref<Texture2D> texture = Texture2D::Create(path);
+                    Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
                     if (texture->IsLoaded())
                         component.texture = texture;
                     else

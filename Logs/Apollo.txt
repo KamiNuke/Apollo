@@ -1,65 +1,21 @@
-[2026-05-26 02:24:03.963] [Core] [info] Initializing window Apollo Editor (1280, 720)
-[2026-05-26 02:24:03.963] [Core] [info] Initializing SDL
-[2026-05-26 02:24:04.088] [Core] [info] OpenGL info:
-[2026-05-26 02:24:04.088] [Core] [info]     Vendor: NVIDIA Corporation
-[2026-05-26 02:24:04.088] [Core] [info]     Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2026-05-26 02:24:04.088] [Core] [info]     Version: 4.6.0 NVIDIA 595.71.05
-[2026-05-26 02:24:04.103] [Core] [trace] Deserializing scene Untitled
-[2026-05-26 02:24:04.103] [Core] [trace] Deserealized entity with ID = 8952492027255357426, name = Box
-[2026-05-26 02:24:04.103] [Core] [trace] Deserealized entity with ID = 15596078326433843145, name = Box
-[2026-05-26 02:24:04.103] [Core] [trace] Deserealized entity with ID = 3572862597919908772, name = Box
-[2026-05-26 02:24:04.103] [Core] [trace] Deserealized entity with ID = 10312662740637115099, name = Box
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 5765538343440328476, name = Box
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 5416538899262363149, name = Box
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 16713048460864046553, name = Box
-[2026-05-26 02:24:04.104] [Core] [info] Loading a texture: assets/klauncher.png
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 11456912736518331919, name = Ground
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 1477961819053256995, name = Ground
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 14254912456886783142, name = Ground
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 13474181212188358508, name = Box
-[2026-05-26 02:24:04.104] [Core] [trace] Deserealized entity with ID = 8914090695587104439, name = Camera
-[2026-05-26 02:24:09.019] [Core] [info] assets/klauncher.png
-[2026-05-26 02:24:10.577] [Core] [info] assets/eye1.png
-[2026-05-26 02:24:10.577] [Core] [info] Loading a texture: assets/eye1.png
-[2026-05-26 02:24:14.011] [Core] [info] assets/eye1.png
-[2026-05-26 02:24:15.686] [Core] [info] assets/eye1.png
-[2026-05-26 02:24:17.536] [Core] [info] assets/klauncher.png
-[2026-05-26 02:24:19.267] [Core] [trace] Deserializing scene Untitled
-[2026-05-26 02:24:19.267] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
-[2026-05-26 02:24:19.267] [Core] [trace] Deserealized entity with ID = 1234, name = Camera B
-[2026-05-26 02:24:19.267] [Core] [trace] Deserealized entity with ID = 1234, name = Camera A
-[2026-05-26 02:24:19.267] [Core] [trace] Deserealized entity with ID = 1234, name = Square
-[2026-05-26 02:24:19.267] [Core] [trace] Deserealized entity with ID = 1234, name = Square2
-[2026-05-26 02:24:19.267] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
-[2026-05-26 02:24:23.075] [Core] [trace] Deserializing scene Untitled
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 8952492027255357426, name = Box
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 15596078326433843145, name = Box
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 3572862597919908772, name = Box
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 10312662740637115099, name = Box
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 5765538343440328476, name = Box
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 5416538899262363149, name = Box
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 16713048460864046553, name = Box
-[2026-05-26 02:24:23.075] [Core] [trace] Deserealized entity with ID = 11456912736518331919, name = Ground
-[2026-05-26 02:24:23.076] [Core] [trace] Deserealized entity with ID = 1477961819053256995, name = Ground
-[2026-05-26 02:24:23.076] [Core] [trace] Deserealized entity with ID = 14254912456886783142, name = Ground
-[2026-05-26 02:24:23.076] [Core] [trace] Deserealized entity with ID = 13474181212188358508, name = Box
-[2026-05-26 02:24:23.076] [Core] [trace] Deserealized entity with ID = 8914090695587104439, name = Camera
-[2026-05-26 02:24:24.007] [Core] [trace] Deserializing scene Untitled
-[2026-05-26 02:24:24.007] [Core] [trace] Deserealized entity with ID = 1234, name = Left
-[2026-05-26 02:24:24.008] [Core] [trace] Deserealized entity with ID = 1234, name = Right
-[2026-05-26 02:24:24.008] [Core] [trace] Deserealized entity with ID = 1234, name = Top
-[2026-05-26 02:24:24.008] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
-[2026-05-26 02:24:25.066] [Core] [trace] Deserializing scene Untitled
-[2026-05-26 02:24:25.066] [Core] [trace] Deserealized entity with ID = 1234, name = Left
-[2026-05-26 02:24:25.066] [Core] [trace] Deserealized entity with ID = 1234, name = Right
-[2026-05-26 02:24:25.066] [Core] [trace] Deserealized entity with ID = 1234, name = Top
-[2026-05-26 02:24:25.066] [Core] [trace] Deserealized entity with ID = 1234, name = Camera
-[2026-05-26 02:24:25.926] [Core] [trace] Deserializing scene Untitled
-[2026-05-26 02:24:25.926] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
-[2026-05-26 02:24:25.926] [Core] [trace] Deserealized entity with ID = 1234, name = Camera B
-[2026-05-26 02:24:25.926] [Core] [trace] Deserealized entity with ID = 1234, name = Camera A
-[2026-05-26 02:24:25.926] [Core] [trace] Deserealized entity with ID = 1234, name = Square
-[2026-05-26 02:24:25.926] [Core] [trace] Deserealized entity with ID = 1234, name = Square2
-[2026-05-26 02:24:25.926] [Core] [trace] Deserealized entity with ID = 1234, name = Empty entity
-[2026-05-26 02:24:30.370] [Core] [info] assets/eye1.png
-[2026-05-26 02:24:34.035] [Core] [info] Terminating SDL
+[2026-05-26 02:56:39.750] [Core] [info] Initializing window Apollo Editor (1280, 720)
+[2026-05-26 02:56:39.750] [Core] [info] Initializing SDL
+[2026-05-26 02:56:39.885] [Core] [info] OpenGL info:
+[2026-05-26 02:56:39.885] [Core] [info]     Vendor: NVIDIA Corporation
+[2026-05-26 02:56:39.885] [Core] [info]     Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2026-05-26 02:56:39.885] [Core] [info]     Version: 4.6.0 NVIDIA 595.71.05
+[2026-05-26 02:56:39.889] [Core] [trace] Deserializing scene Untitled
+[2026-05-26 02:56:39.889] [Core] [trace] Deserealized entity with ID = 8952492027255357426, name = Box
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 15596078326433843145, name = Box
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 3572862597919908772, name = Box
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 10312662740637115099, name = Box
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 5765538343440328476, name = Box
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 5416538899262363149, name = Box
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 16713048460864046553, name = Box
+[2026-05-26 02:56:39.890] [Core] [info] Loading a texture: assets/klauncher.png
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 11456912736518331919, name = Ground
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 1477961819053256995, name = Ground
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 14254912456886783142, name = Ground
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 13474181212188358508, name = Box
+[2026-05-26 02:56:39.890] [Core] [trace] Deserealized entity with ID = 8914090695587104439, name = Camera
+[2026-05-26 02:56:48.508] [Core] [info] Terminating SDL

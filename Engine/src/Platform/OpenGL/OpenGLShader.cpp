@@ -1,6 +1,7 @@
 #include "glad/glad.h"
 #include "OpenGLShader.h"
 #include <array>
+#include <fstream>
 #include "Logger/Log.h"
 
 namespace Apollo

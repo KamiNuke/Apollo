@@ -539,7 +539,7 @@ namespace Apollo
     void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)
     {
         SceneSerializer serializer(scene);
-        serializer.Serialize(path);
+        serializer.Serialize(path.string());
     }
 
     void EditorLayer::OnScenePlay()

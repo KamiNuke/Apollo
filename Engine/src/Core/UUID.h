@@ -23,7 +23,7 @@ namespace std
     template<>
     struct hash<Apollo::UUID>
     {
-        std::size_t operator()(const Apollo::UUID& uuid) const
+        size_t operator()(const Apollo::UUID& uuid) const
         {
             return uuid;
         }
